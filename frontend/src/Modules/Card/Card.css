@@ -1,0 +1,84 @@
+
+
+  .card {
+      flex-basis: 50%;
+      margin: 20px;
+      padding: 25px;
+      height: 350px;
+      max-width: 400px;
+      background-color: white;
+      box-shadow: 0px 0px 30px -7px #525d6b;
+      
+  /*   display:flex; */
+  /*   flex-direction:column; */
+  }
+  /* @media only screen and (max-width:856px){
+    #wrapper{
+      flex-direction:column;
+    }
+  } */
+  .card .work-rate{
+    display:flex;
+    justify-content:space-between;
+    margin: 0px;
+  }
+  .card-1 .work-rate p{
+    color:#eee;
+    background-color:#3498DB;
+    padding:5px 10px;
+    border-radius:20px; 
+  }
+  
+  .card .pos-nd-loc{
+    align-self:center;
+  }
+  .pos-nd-loc {
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#3498DB;
+    text-align:center;
+    margin:0px;
+  }
+  .pos-nd-loc p {
+    margin: 15px 5px; /* Zmniejsza odstępy między job_title a job_type */
+}
+  .tags{
+    text-align:center;
+  }
+  .tags button{
+    background-color:white;
+    border:0.5px solid #3498DB;
+    padding:5px 10px;
+    border-radius:20px;
+  }
+  .tags button:last-child{
+    color:white;
+    background-color:#3498DB;
+  }
+  .card .job-desc{
+    padding: 2px 20px;
+    line-height:1.3;
+  }
+  .card .job-toggle{
+    margin:auto;
+    padding: 10px 20px;
+    text-align:center;
+    width:100px;
+    align-self:center;
+    
+  }
+  .card .job-toggle:hover{
+    color:white;
+    background-color:#3498DB;
+    transition:0.5s;
+    transition-timing-function:ease-in-out;
+    cursor:pointer;
+    
+  }
+  .job-type{
+    font-size:20px;
+    color:black;
+  }
+
+  
