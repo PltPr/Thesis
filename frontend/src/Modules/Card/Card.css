@@ -8,6 +8,9 @@
       max-width: 400px;
       background-color: white;
       box-shadow: 0px 0px 30px -7px #525d6b;
+
+
+  
       
   /*   display:flex; */
   /*   flex-direction:column; */
@@ -65,24 +68,30 @@
     
   
   .job-type{
-    font-size:20px;
+    font-size:18px;
+    text-transform: uppercase;
     color:black;
   }
 
   .button {
-    border-radius: 4px;
+    border-radius: 6px;
     background-color: #0f63ec;
     color: #FFFFFF;
     text-align: center;
-    font-size: 28px;
-    padding: 20px 30px;
+    font-size: 20px;
+    padding: 10px 20px;
     cursor: pointer;
     position: relative;
     transition: all 0.5s;
     text-transform: uppercase;
-  }
+    display: block; /* Zmieniamy na block, jeśli nie jest elementem blokowym */
+    width: 150px; /* Dodajemy szerokość, żeby margin:auto działał */
+    margin: 0 auto; /* Wyrównujemy do środka */
+    border:none;
+}
+
   .button:hover{
-      background-color: #155ccd;
+      background-color: #135dd3;
   }
   .button :first-child{
       padding-left: 10px;
@@ -100,3 +109,5 @@
       opacity: 1;
       padding-left: 10px;
   }
+
+ 

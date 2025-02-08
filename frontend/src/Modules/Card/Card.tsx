@@ -30,7 +30,7 @@ const Card: React.FC<Props> = ({ job_tittle, job_type, salary, programming_langu
         <p className="job-desc">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut saepe expedita similique quasi molestias quis! Nisi incidunt provident doloribus et!
         </p>
-        <button className="button"><span>Button</span><span>&#11166;</span></button>
+        <button className="button"><span>Details</span><span>&#11166;</span></button>
       </div>
     </>
   )
