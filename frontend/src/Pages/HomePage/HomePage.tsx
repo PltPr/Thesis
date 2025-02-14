@@ -1,18 +1,17 @@
 import React from 'react'
 import CardList from '../../Modules/CardList/CardList.tsx'
+import './HomePage.css'
 
 interface Props {}
 
 const HomePage = (props: Props) => {
   return (
-    <div>
-    <CardList></CardList>
+    <div className='container'>
+    <div className="filters">Filters</div>
 
-    <nav>
-    <div style={{ backgroundColor: "white", padding: "10px" }}>
-  <img src="itrack-logo.svg" alt="logo" />
-</div>
-    </nav>
+    <div className='card-list2'>
+    <CardList></CardList>
+    </div>
     </div>
   )
 }
