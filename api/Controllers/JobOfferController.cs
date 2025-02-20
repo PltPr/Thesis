@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.JobOffer;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -14,9 +16,11 @@ namespace api.Controllers
     public class JobOfferController : Controller
     {
         private readonly IJobOfferRepository _offerRepository;
-        public JobOfferController(IJobOfferRepository offerRepository)
+        private readonly ApplicationDBContext _context;
+        public JobOfferController(IJobOfferRepository offerRepository, ApplicationDBContext context)
         {
             _offerRepository=offerRepository;
+            _context=context;
         }
 
 
@@ -42,6 +46,20 @@ namespace api.Controllers
 
             return Ok(resultDto);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddJobOffer(AddJobOfferDto jobOfferDto)
+        {
+            if(!ModelState.IsValid)
+            return BadRequest(ModelState);
+            
+            await _offerRepository.AddJobOfferAsync(jobOfferDto);
+
+            return Ok(jobOfferDto);
+            
+        }
+
+        
 
 
     }

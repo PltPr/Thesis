@@ -24,5 +24,21 @@ namespace api.Mappers
                 
             };
         }
+
+        public static JobOffer ToJobOffer(AddJobOfferDto model, List<Technology> technologies)
+        {
+            return new JobOffer
+            {
+                JobTitle=model.JobTitle,
+                JobType=model.JobType,
+                Salary=model.Salary,
+                ProgrammingLanguage=model.ProgrammingLanguage,
+                Description=model.Description,
+                JobOfferTechnology=technologies.Select(t=>new JobOfferTechnology
+                {
+                    TechnologyId=t.Id
+                }).ToList()
+            };
+        }
     }
 }
