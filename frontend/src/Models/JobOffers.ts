@@ -1,13 +1,13 @@
 export type Technology={
-    Name:string,
+    name:string,
 }
 
 export type JobOfferGet ={
-    Id:number,
-    JobTittle:string,
-    JobType:string,
-    Salary:number,
-    ProgrammingLanguage:string,
-    Description:string,
-    JobOfferTechnology: Technology[]
+    id:number,
+    jobTittle:string,
+    jobType:string,
+    salary:number,
+    programmingLanguage:string,
+    description:string,
+    jobOfferTechnology: Technology[]
 }

@@ -1,24 +1,22 @@
 import React, { JSX } from 'react'
 import './Card.css'
+import { JobOfferGet } from '../../Models/JobOffers';
 
 interface Props {
-  job_tittle: string;
-  job_type: string;
-  salary: number;
-  programming_language: string;
+  jobOffer:JobOfferGet;
 }
 
-const Card: React.FC<Props> = ({ job_tittle, job_type, salary, programming_language }: Props): JSX.Element => {
+const Card: React.FC<Props> = ({ jobOffer }: Props): JSX.Element => {
   return (
     <>
       <div className="card card-1">
         <div className="work-rate">
-          <p>{programming_language}</p>
-          <p>${salary} / hr</p>
+          <p>{jobOffer.programmingLanguage}</p>
+          <p>${jobOffer.salary} / hr</p>
         </div>
         <div className="pos-nd-loc">
-          <p className="job-title">{job_tittle}</p>
-          <p className="job-type">{job_type}</p>
+          <p className="job-title">{jobOffer.jobTittle}</p>
+          <p className="job-type">{jobOffer.jobType}</p>
         </div>
         <div className="tags">
           <button>UI</button>

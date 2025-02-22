@@ -1,15 +1,29 @@
-import React, { JSX } from 'react'
+import React, { JSX, useEffect, useState } from 'react'
 import Card from '../Card/Card.tsx'
 import './CardList.css'
+import { JobOfferGet } from '../../Models/JobOffers.ts'
+import { getJobOffersApi } from '../../Api/JobOfferServices.tsx'
 
-type Props = {}
 
-const CardList : React.FC<Props> = (props: Props) : JSX.Element => {
+const CardList : React.FC = () : JSX.Element => {
+  const[jobOffer,setJobOffer]=useState<JobOfferGet[]>([]);
+
+  useEffect(()=>{
+    const getData=async()=>{
+      const value = await getJobOffersApi()
+      if(value){
+        setJobOffer(value);
+      }
+    };
+    getData();
+  },[]);
+
   return (
     <div className='card-list'>
-    <Card job_tittle='Junior backend developer' job_type='full-time' salary={20} programming_language='C#'/>
-    <Card job_tittle='Senior backend developer' job_type='full-time' salary={50} programming_language='C#'/>
-    <Card job_tittle='Junior frontend developer' job_type='full-time' salary={20} programming_language='Java'/>
+    {jobOffer.map((offer)=>(
+      <Card key={offer.id} jobOffer={offer}/>
+    ))}
+    
     </div>
   )
 }
