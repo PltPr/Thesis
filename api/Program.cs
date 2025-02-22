@@ -24,6 +24,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options=>{
 });
 
 
+
+
 builder.Services.AddScoped<IJobOfferRepository,JobOfferRepository>();
 
 
@@ -40,6 +42,13 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+    DatabaseSeeder.Seed(context);
+}//Wczytajnie danych do bazy
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

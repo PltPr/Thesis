@@ -4,7 +4,7 @@ export type Technology={
 
 export type JobOfferGet ={
     id:number,
-    jobTittle:string,
+    jobTitle:string,
     jobType:string,
     salary:number,
     programmingLanguage:string,

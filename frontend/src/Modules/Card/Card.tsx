@@ -15,9 +15,12 @@ const Card: React.FC<Props> = ({ jobOffer }: Props): JSX.Element => {
           <p>${jobOffer.salary} / hr</p>
         </div>
         <div className="pos-nd-loc">
-          <p className="job-title">{jobOffer.jobTittle}</p>
+          <p className="job-tittle">{jobOffer.jobTitle}</p>
           <p className="job-type">{jobOffer.jobType}</p>
         </div>
+
+
+
         <div className="tags">
           <button>UI</button>
           <button>UX</button>
@@ -25,9 +28,9 @@ const Card: React.FC<Props> = ({ jobOffer }: Props): JSX.Element => {
           <button>web design</button>
           <button>+4</button>
         </div>
-        <p className="job-desc">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut saepe expedita similique quasi molestias quis! Nisi incidunt provident doloribus et!
-        </p>
+
+        
+        
         <button className="button"><span>Details</span><span>&#11166;</span></button>
       </div>
     </>

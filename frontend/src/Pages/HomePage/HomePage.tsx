@@ -10,7 +10,7 @@ const HomePage = (props: Props) => {
     <div className='container'>
     <div className="filters">Filters</div>
 
-    <div className='card-list2'>
+    <div className='card-list-container'>
     <CardList></CardList>
     </div>
     </div>

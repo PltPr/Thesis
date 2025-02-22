@@ -17,12 +17,18 @@ const CardList : React.FC = () : JSX.Element => {
     };
     getData();
   },[]);
+  console.log(jobOffer);
 
   return (
+    
     <div className='card-list'>
+      
     {jobOffer.map((offer)=>(
       <Card key={offer.id} jobOffer={offer}/>
-    ))}
+   ))}
+
+   
+   
     
     </div>
   )

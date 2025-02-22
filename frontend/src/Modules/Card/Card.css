@@ -1,113 +1,122 @@
 
 
-  .card {
+.card {
 
-      margin: 20px;
-      padding: 25px;
-      height: 350px;
-      width: 350px;
-      background-color: white;
-      border:1px solid 
+  margin: 20px;
+  padding: 25px;
+  height: 350px;
+  width: 350px;
+  background-color: white;
+  border:1px solid 
+
 
 
   
-      
-  /*   display:flex; */
-  /*   flex-direction:column; */
-  }
-  /* @media only screen and (max-width:856px){
-    #wrapper{
-      flex-direction:column;
-    }
-  } */
-  .card .work-rate{
-    display:flex;
-    justify-content:space-between;
-    margin: 0px;
-  }
-  .card-1 .work-rate p{
-    color:#eee;
-    background-color:#0f63ec;
-    padding:5px 10px;
-    border-radius:20px; 
-  }
-  
-  .card .pos-nd-loc{
-    align-self:center;
-  }
-  .pos-nd-loc {
-    text-align:center;
-    font-size:30px;
-    font-weight:bold;
-    color:#0f63ec;
-    text-align:center;
-    margin:0px;
-  }
-  .pos-nd-loc p {
-    margin: 15px 5px; /* Zmniejsza odstępy między job_title a job_type */
+/*   display:flex; */
+/*   flex-direction:column; */
 }
-  .tags{
-    text-align:center;
-  }
-  .tags button{
-    background-color:white;
-    border:0.5px solid #0f63ec;
-    padding:5px 10px;
-    border-radius:20px;
-  }
-  .tags button:last-child{
-    color:white;
-    background-color:#0f63ec;
-  }
-  .card .job-desc{
-    padding: 2px 20px;
-    line-height:1.3;
-  }
- 
-
-    
-  
-  .job-type{
-    font-size:18px;
-    text-transform: uppercase;
-    color:black;
-  }
-
-  .button {
-    border-radius: 6px;
-    background-color: #0f63ec;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.5s;
-    text-transform: uppercase;
-    display: block; /* Zmieniamy na block, jeśli nie jest elementem blokowym */
-    width: 150px; /* Dodajemy szerokość, żeby margin:auto działał */
-    margin: 0 auto; /* Wyrównujemy do środka */
-    border:none;
+/* @media only screen and (max-width:856px){
+#wrapper{
+  flex-direction:column;
+}
+} */
+.card .work-rate{
+display:flex;
+justify-content:space-between;
+margin: 0px;
+}
+.card-1 .work-rate p{
+color:#eee;
+background-color:#0f63ec;
+padding:5px 10px;
+border-radius:20px; 
 }
 
-  .button:hover{
-      background-color: #135dd3;
-  }
-  .button :first-child{
-      padding-left: 10px;
-      transition: all 0.5s;
-  }
-  .button:hover :first-child{
-      padding-left: 0px;
-  }
-  .button :last-child{
-      opacity: 0;
-      transition: all 0.5s;
-      padding-left: 0px;
-  }
-  .button:hover :last-child {
-      opacity: 1;
-      padding-left: 10px;
+.card .pos-nd-loc{
+align-self:center;
+}
+.pos-nd-loc {
+text-align:center;
+font-size:30px;
+font-weight:bold;
+color:#0f63ec;
+text-align:center;
+margin:0px;
+}
+.pos-nd-loc p {
+margin: 15px 5px; /* Zmniejsza odstępy między job_title a job_type */
+}
+.tags{
+text-align:center;
+}
+.tags button{
+background-color:white;
+border:0.5px solid #0f63ec;
+padding:5px 10px;
+border-radius:20px;
+}
+.tags button:last-child{
+color:white;
+background-color:#0f63ec;
+}
+.card .job-desc{
+padding: 2px 20px;
+line-height:1.3;
+}
+
+
+
+
+.job-type{
+font-size:18px;
+text-transform: uppercase;
+color:black;
+}
+
+.job-tittle{
+  font-size:25px;
+  text-transform: uppercase;
+  color:#0f63ec;
+  height:50px;
   }
 
- 
+.button {
+border-radius: 6px;
+background-color: #0f63ec;
+color: #FFFFFF;
+text-align: center;
+font-size: 20px;
+padding: 10px 20px;
+cursor: pointer;
+position: relative;
+transition: all 0.5s;
+text-transform: uppercase;
+display: block; /* Zmieniamy na block, jeśli nie jest elementem blokowym */
+width: 150px; /* Dodajemy szerokość, żeby margin:auto działał */
+margin: 0 auto; /* Wyrównujemy do środka */
+border:none;
+max-width:100%;
+margin-top:50px;
+
+}
+
+.button:hover{
+  background-color: #135dd3;
+}
+.button :first-child{
+  padding-left: 10px;
+  transition: all 0.5s;
+}
+.button:hover :first-child{
+  padding-left: 0px;
+}
+.button :last-child{
+  opacity: 0;
+  transition: all 0.5s;
+  padding-left: 0px;
+}
+.button:hover :last-child {
+  opacity: 1;
+  padding-left: 10px;
+}
+
