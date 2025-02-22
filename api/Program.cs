@@ -27,7 +27,15 @@ builder.Services.AddDbContext<ApplicationDBContext>(options=>{
 builder.Services.AddScoped<IJobOfferRepository,JobOfferRepository>();
 
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
     
 
 
@@ -41,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.MapControllers();
 

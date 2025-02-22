@@ -56,7 +56,7 @@ namespace api.Controllers
             await _offerRepository.AddJobOfferAsync(jobOfferDto);
 
             return Ok(jobOfferDto);
-            
+            //technologia musi istniec, w przeciwnym wypadku doda sie oferta bez technologi
         }
 
         
