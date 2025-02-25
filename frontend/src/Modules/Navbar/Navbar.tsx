@@ -1,5 +1,6 @@
 import React from 'react'
 import "./Navbar.css";
+import { Link } from 'react-router-dom';
 
 type Props = {}
 
@@ -7,15 +8,18 @@ const Navbar = (props: Props) => {
     return (
         <nav className="navbar">
           {/* Logo */}
+          
           <div className="logo">
-            <img src="/itrack-logo.svg" alt="Logo" />
+          <Link to ="/" className="logo-link">
+            <img src="/itrack-logo2.svg" alt="Logo" />
+          </Link>
           </div>
-    
+        
           {/* Menu */}
           <ul className="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
           </ul>
         </nav>
       );
