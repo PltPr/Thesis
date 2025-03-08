@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -36,6 +39,25 @@ namespace api.Data
                 .HasOne(jot=>jot.Technology)
                 .WithMany()
                 .HasForeignKey(jot=>jot.TechnologyId);
+
+
+
+                List<IdentityRole> roles = new List<IdentityRole>
+                {
+                    new IdentityRole
+                    {
+                        Id="Admin",
+                        Name="Admin",
+                        NormalizedName="ADMIN"
+                    },
+                    new IdentityRole
+                    {
+                        Id="User",
+                        Name="User",
+                        NormalizedName="USER"
+                    },
+                };
+                modelBuilder.Entity<IdentityRole>().HasData(roles);
         }
     }
 }

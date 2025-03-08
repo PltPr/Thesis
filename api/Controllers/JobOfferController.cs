@@ -13,7 +13,7 @@ namespace api.Controllers
 {
     [Route("api/jobOffer")]
     [ApiController]
-    public class JobOfferController : Controller
+    public class JobOfferController : ControllerBase
     {
         private readonly IJobOfferRepository _offerRepository;
         private readonly ApplicationDBContext _context;
