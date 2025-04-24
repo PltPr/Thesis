@@ -21,12 +21,17 @@ namespace api.Services
             _config=config;
             _key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
         }
-        public string CreateToken(AppUser user)
+        public string CreateToken(AppUser user, IList<string>roles)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
             };
+
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role,role));
+            }
 
             var creds = new SigningCredentials(_key,SecurityAlgorithms.HmacSha512Signature);
 
