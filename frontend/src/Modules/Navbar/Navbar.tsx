@@ -1,28 +1,43 @@
 import React from 'react'
-import "./Navbar.css";
 import { Link } from 'react-router-dom';
 
 type Props = {}
 
 const Navbar = (props: Props) => {
-    return (
-        <nav className="navbar">
-          {/* Logo */}
-          
-          <div className="logo">
-          <Link to ="/" className="logo-link">
-            <img src="/itrack-logo2.svg" alt="Logo" />
+  return (
+    <nav className="flex justify-between items-center bg-white px-[30px] py-[15px] h-[80px] text-black shadow-[0px_4px_5px_rgba(0,0,0,0.5)]">
+      {/* Logo */}
+      <div className="flex items-center">
+        <Link to="/" className="inline-block w-auto mr-auto">
+          <img
+            src="/itrack-logo2.svg"
+            alt="Logo"
+            className="block w-auto h-[80px]"
+          />
+        </Link>
+      </div>
+
+      {/* Menu */}
+      <ul className="list-none flex gap-[20px]">
+        <li className="inline">
+          <Link
+            to="/about"
+            className="no-underline text-black text-[18px] hover:text-[#6f00ff]"
+          >
+            About
           </Link>
-          </div>
-        
-          {/* Menu */}
-          <ul className="nav-links">
-            <li>Home</li>
-            <li>About</li>
-            <li>Contact</li>
-          </ul>
-        </nav>
-      );
+        </li>
+        <li className="inline">
+          <Link
+            to="/contact"
+            className="no-underline text-black text-[18px] hover:text-[#6f00ff]"
+          >
+            Contact
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  );
 }
 
 export default Navbar
