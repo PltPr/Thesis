@@ -69,7 +69,6 @@ const registerUser = async(email:string, password:string)=>{
 const loginUser = async (email: string, password: string) => {
     try {
         const res = await loginAPI(email, password);
-        console.log("Response:", res);
         if (res) {
             console.log("Token from API:", res.data.token);
             localStorage.setItem("token", res.data.token);
@@ -77,7 +76,6 @@ const loginUser = async (email: string, password: string) => {
             const decodedToken: any = jwtDecode(res.data.token);
 
             const roles = decodedToken?.role || [];
-            console.log("Roles: ", roles);
 
             const userObj = {
                 email: res?.data.email,

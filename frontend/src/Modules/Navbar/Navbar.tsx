@@ -5,14 +5,14 @@ type Props = {}
 
 const Navbar = (props: Props) => {
   return (
-    <nav className="flex justify-between items-center bg-white px-[30px] py-[15px] h-[80px] text-black shadow-[0px_4px_5px_rgba(0,0,0,0.5)]">
+    <nav className="flex justify-between items-center bg-white px-[30px] py-[15px] h-[60px] text-black shadow-[0px_4px_5px_rgba(0,0,0,0.5)]">
       {/* Logo */}
       <div className="flex items-center">
         <Link to="/" className="inline-block w-auto mr-auto">
           <img
             src="/itrack-logo2.svg"
             alt="Logo"
-            className="block w-auto h-[80px]"
+            className="block w-auto h-[60px]"
           />
         </Link>
       </div>

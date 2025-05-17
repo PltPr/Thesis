@@ -56,6 +56,12 @@ namespace api.Data
                         Name="User",
                         NormalizedName="USER"
                     },
+                    new IdentityRole
+                    {
+                        Id="Examiner",
+                        Name="Examiner",
+                        NormalizedName="EXAMINER"
+                    }
                 };
                 modelBuilder.Entity<IdentityRole>().HasData(roles);
         }

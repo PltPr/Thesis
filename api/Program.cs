@@ -6,6 +6,7 @@ using api.Repository;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -28,13 +29,17 @@ builder.Services.AddDbContext<ApplicationDBContext>(options=>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections"));
 });
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options=>{
-    options.Password.RequireDigit=false;
-    options.Password.RequiredLength=1;
-    options.Password.RequireNonAlphanumeric=false;
-    options.Password.RequireLowercase=false;
-    options.Password.RequireUppercase=false;
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 1;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    
+    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
 })
+.AddDefaultTokenProviders()
 .AddEntityFrameworkStores<ApplicationDBContext>();
 
 builder.Services.AddAuthentication(options=>{
@@ -61,7 +66,9 @@ builder.Services.AddAuthentication(options=>{
 
 
 builder.Services.AddScoped<IJobOfferRepository,JobOfferRepository>();
-builder.Services.AddScoped<ITokenService,TokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
+
 
 
 builder.Services.AddCors(options =>
