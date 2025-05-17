@@ -30,3 +30,15 @@ export const registerAPI = async(name:string,surname:string,phoneNumber:string,e
         throw error;
     }
 }
+
+
+export const forgotPasswordApi = async (email:string)=>{
+    try{
+        const response = await axios.post(`http://localhost:5116/api/account/forgot-password`,{
+            email:email
+        })
+        return response.data
+    }catch(error){
+        throw error;
+    }
+}
