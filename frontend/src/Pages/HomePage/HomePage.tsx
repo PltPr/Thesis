@@ -1,5 +1,5 @@
 import React from 'react'
-import CardList from '../../Modules/CardList/CardList.tsx'
+import CardList from '../../Modules/CardList/CardList'
 
 
 

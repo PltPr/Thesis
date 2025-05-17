@@ -1,8 +1,28 @@
 import React from 'react'
+import { useForm } from 'react-hook-form';
+import { useAuth } from '../../Context/useAuth';
+
+
+
+
 
 type Props = {}
 
-const RegisterPage = (props: Props) => {
+type LoginFormInput = {
+  email: string;
+  password: string;
+};
+
+
+
+const LoginPage = (props: Props) => {
+  const {loginUser}=useAuth();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInput>();
+
+  const handleLogin=(form:LoginFormInput)=>{
+    loginUser(form.email,form.password)
+  }
+  
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -13,7 +33,7 @@ const RegisterPage = (props: Props) => {
   </div>
 
   <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form className="space-y-6" action="#" method="POST">
+    <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-900">
           Email address
@@ -21,11 +41,11 @@ const RegisterPage = (props: Props) => {
         <div className="mt-2">
           <input
             type="email"
-            name="email"
             id="email"
             autoComplete="email"
             required
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
+            {...register("email")}
           />
         </div>
       </div>
@@ -44,11 +64,11 @@ const RegisterPage = (props: Props) => {
         <div className="mt-2">
           <input
             type="password"
-            name="password"
             id="password"
             autoComplete="current-password"
             required
             className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
+            {...register("password")}
           />
         </div>
       </div>
@@ -75,4 +95,4 @@ const RegisterPage = (props: Props) => {
   )
 }
 
-export default RegisterPage
+export default LoginPage

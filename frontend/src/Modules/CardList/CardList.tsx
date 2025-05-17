@@ -1,8 +1,8 @@
 import React, { JSX, useEffect, useState } from 'react'
-import Card from '../Card/Card.tsx'
+import Card from '../Card/Card'
 import './CardList.css'
-import { JobOfferGet } from '../../Models/JobOffers.ts'
-import { getJobOffersApi } from '../../Api/JobOfferServices.tsx'
+import { JobOfferGet } from '../../Models/JobOffers'
+import { getJobOffersApi } from '../../Api/JobOfferServices'
 
 
 const CardList : React.FC = () : JSX.Element => {

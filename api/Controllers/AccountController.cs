@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using api.Dtos.AccountDto;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,10 @@ namespace api.Controllers
                 {
                     UserName = registerDto.Email,
                     Email = registerDto.Email,
+                    PhoneNumber = registerDto.PhoneNumber,
+                    Name = registerDto.Name,
+                    Surname=registerDto.Surname
+                    
                 };
 
 
@@ -55,6 +60,7 @@ namespace api.Controllers
                         return Ok(
                             new NewUserDto
                             {
+
                                 Email = appUser.Email,
                                 Token = _tokenService.CreateToken(appUser, roles)
                             }
@@ -102,20 +108,35 @@ namespace api.Controllers
             );
         }
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Ok();
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            var url ="http://localhost:3000/forgot-password";
-            var resetLink = $"{url}?email={email}&token={encodedToken}";
+            var url = "http://localhost:3000/forgot-password";
+            var resetLink = $"{url}?email={model.Email}&token={encodedToken}";
 
-            await _emailSender.SendEmailAsync(email,"Password reset", $"Kliknij link, aby zresetować hasło: <a href=\"{resetLink}\">Resetuj hasło</a>");
+            await _emailSender.SendEmailAsync(model.Email, "Password reset", $"Kliknij link, aby zresetować hasło: <a href=\"{resetLink}\">Resetuj hasło</a>");
 
-            return Ok();
+            return Ok(token);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto model)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest();
+
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
+
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
+            if (result.Succeeded) return Ok();
+            else return BadRequest();
         }
     }
     

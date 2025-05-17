@@ -4,11 +4,11 @@ import { JobOfferGet } from "../../Models/JobOffers";
 
 
 const CardDetailPage: React.FC = () => {
-  const { offerId } = useParams(); // Pobieramy ID z URL
+  const { offerId } = useParams(); 
   const location = useLocation();
-  const jobOffer = location.state?.jobOffer as JobOfferGet; // Pobieramy przekazane dane
+  const jobOffer = location.state?.jobOffer as JobOfferGet; 
 
-  // Obsługa sytuacji, gdy użytkownik odświeży stronę
+  
   if (!jobOffer) {
     return <Navigate to="/" />;
   }

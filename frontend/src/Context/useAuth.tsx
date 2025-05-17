@@ -10,7 +10,7 @@ import {jwtDecode} from "jwt-decode"
 type UserContextType={
     user:UserProfile | null;
     token:string | null;
-    registerUser:(email:string,password:string)=>void;
+    registerUser:(name:string,surname:string,phoneNumber:string,email:string,password:string,repeatPassword:string)=>void;
     loginUser:(email:string,password:string)=>void;
     logout:()=>void;
     isLoggedIn:()=>boolean;
@@ -40,9 +40,9 @@ export const UserProvider=({children}:Props)=>{
     },[])
 
 
-const registerUser = async(email:string, password:string)=>{
+const registerUser = async(name:string,surname:string,phoneNumber:string,email:string,password:string,repeatPassword:string)=>{
     try {
-        const res = await registerAPI(email, password);
+        const res = await registerAPI(name,surname,phoneNumber,email, password,repeatPassword);
         if (res) {
             localStorage.setItem("token", res?.data.token);
             const userObj = {
@@ -78,6 +78,9 @@ const loginUser = async (email: string, password: string) => {
             const roles = decodedToken?.role || [];
 
             const userObj = {
+                name:res?.data.name,
+                surname:res?.data.surname,
+                phoneNumber:res?.data.phoneNumber,
                 email: res?.data.email,
                 role:roles
             };
