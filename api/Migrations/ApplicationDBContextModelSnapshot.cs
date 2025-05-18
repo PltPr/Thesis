@@ -248,6 +248,40 @@ namespace api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("api.Models.Application", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CV")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("JobOfferId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("JobOfferId");
+
+                    b.ToTable("Applications");
+                });
+
             modelBuilder.Entity("api.Models.JobOffer", b =>
                 {
                     b.Property<int>("Id")
@@ -276,7 +310,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JobOffer");
+                    b.ToTable("JobOffers");
                 });
 
             modelBuilder.Entity("api.Models.JobOfferTechnology", b =>
@@ -291,7 +325,7 @@ namespace api.Migrations
 
                     b.HasIndex("TechnologyId");
 
-                    b.ToTable("JobOfferTechnology");
+                    b.ToTable("JobOfferTechnologies");
                 });
 
             modelBuilder.Entity("api.Models.Technology", b =>
@@ -308,7 +342,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Technology");
+                    b.ToTable("Technologies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,6 +394,25 @@ namespace api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("api.Models.Application", b =>
+                {
+                    b.HasOne("api.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.JobOffer", "JobOffer")
+                        .WithMany()
+                        .HasForeignKey("JobOfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("JobOffer");
                 });
 
             modelBuilder.Entity("api.Models.JobOfferTechnology", b =>

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class mod : Migration
+    public partial class App : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,7 +55,7 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobOffer",
+                name: "JobOffers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -68,11 +68,11 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobOffer", x => x.Id);
+                    table.PrimaryKey("PK_JobOffers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Technology",
+                name: "Technologies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -81,7 +81,7 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Technology", x => x.Id);
+                    table.PrimaryKey("PK_Technologies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,7 +191,36 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobOfferTechnology",
+                name: "Applications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CV = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JobOfferId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Applications_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Applications_JobOffers_JobOfferId",
+                        column: x => x.JobOfferId,
+                        principalTable: "JobOffers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobOfferTechnologies",
                 columns: table => new
                 {
                     JobOfferId = table.Column<int>(type: "int", nullable: false),
@@ -199,17 +228,17 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobOfferTechnology", x => new { x.JobOfferId, x.TechnologyId });
+                    table.PrimaryKey("PK_JobOfferTechnologies", x => new { x.JobOfferId, x.TechnologyId });
                     table.ForeignKey(
-                        name: "FK_JobOfferTechnology_JobOffer_JobOfferId",
+                        name: "FK_JobOfferTechnologies_JobOffers_JobOfferId",
                         column: x => x.JobOfferId,
-                        principalTable: "JobOffer",
+                        principalTable: "JobOffers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_JobOfferTechnology_Technology_TechnologyId",
+                        name: "FK_JobOfferTechnologies_Technologies_TechnologyId",
                         column: x => x.TechnologyId,
-                        principalTable: "Technology",
+                        principalTable: "Technologies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -223,6 +252,16 @@ namespace api.Migrations
                     { "Examiner", null, "Examiner", "EXAMINER" },
                     { "User", null, "User", "USER" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_AppUserId",
+                table: "Applications",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_JobOfferId",
+                table: "Applications",
+                column: "JobOfferId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -264,14 +303,17 @@ namespace api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobOfferTechnology_TechnologyId",
-                table: "JobOfferTechnology",
+                name: "IX_JobOfferTechnologies_TechnologyId",
+                table: "JobOfferTechnologies",
                 column: "TechnologyId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Applications");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -288,7 +330,7 @@ namespace api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "JobOfferTechnology");
+                name: "JobOfferTechnologies");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -297,10 +339,10 @@ namespace api.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "JobOffer");
+                name: "JobOffers");
 
             migrationBuilder.DropTable(
-                name: "Technology");
+                name: "Technologies");
         }
     }
 }

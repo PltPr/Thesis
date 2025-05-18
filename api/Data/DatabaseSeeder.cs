@@ -7,7 +7,7 @@ namespace api.Data
     {
         public static void Seed(ApplicationDBContext context)
 {
-    if (!context.Technology.Any()) // If the Technologies table is empty
+    if (!context.Technologies.Any()) // If the Technologies table is empty
     {
         var technologies = new[]
         {
@@ -23,11 +23,11 @@ namespace api.Data
             new Technology { Name = "HTML/CSS" }
         };
 
-        context.Technology.AddRange(technologies);
+        context.Technologies.AddRange(technologies);
         context.SaveChanges(); // Commit technologies to the database
     }
 
-    if (!context.JobOffer.Any()) // If the JobOffers table is empty
+    if (!context.JobOffers.Any()) // If the JobOffers table is empty
     {
         var jobOffers = new[]
         {
@@ -43,11 +43,11 @@ namespace api.Data
             new JobOffer { JobTitle = "UI/UX Designer", JobType = "Full-Time", Salary = 7000, ProgrammingLanguage = "Design Tools", Description = "Creative UI/UX designer focusing on user-centered design" }
         };
 
-        context.JobOffer.AddRange(jobOffers);
+        context.JobOffers.AddRange(jobOffers);
         context.SaveChanges(); // Commit job offers to the database
     }
 
-    if (!context.JobOfferTechnology.Any()) // If the JobOfferTechnology table is empty
+    if (!context.JobOfferTechnologies.Any()) // If the JobOfferTechnology table is empty
     {
         var jobOfferTechnologies = new[]
         {
@@ -65,7 +65,7 @@ namespace api.Data
             new JobOfferTechnology { JobOfferId = 10, TechnologyId = 10 }, // UI/UX Designer - HTML/CSS
         };
 
-        context.JobOfferTechnology.AddRange(jobOfferTechnologies);
+        context.JobOfferTechnologies.AddRange(jobOfferTechnologies);
         context.SaveChanges(); // Commit job offer technologies to the database
     }
 }

@@ -20,29 +20,30 @@ namespace api.Data
             
         }
 
-        public DbSet<JobOffer> JobOffer {get;set;}
-        public DbSet<Technology> Technology {get;set;}
-        public DbSet<JobOfferTechnology> JobOfferTechnology {get;set;}
+        public DbSet<JobOffer> JobOffers {get;set;}
+        public DbSet<Technology> Technologies {get;set;}
+        public DbSet<JobOfferTechnology> JobOfferTechnologies {get;set;}
+        public DbSet<Application> Applications {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<JobOfferTechnology>(x=>x.HasKey(jot=>new{jot.JobOfferId,jot.TechnologyId}));
+            modelBuilder.Entity<JobOfferTechnology>(x => x.HasKey(jot => new { jot.JobOfferId, jot.TechnologyId }));
 
             modelBuilder.Entity<JobOfferTechnology>()
-                .HasOne(jot=>jot.JobOffer)
-                .WithMany(u=>u.JobOfferTechnology)
-                .HasForeignKey(jot=>jot.JobOfferId);
+                .HasOne(jot => jot.JobOffer)
+                .WithMany(u => u.JobOfferTechnology)
+                .HasForeignKey(jot => jot.JobOfferId);
 
             modelBuilder.Entity<JobOfferTechnology>()
-                .HasOne(jot=>jot.Technology)
+                .HasOne(jot => jot.Technology)
                 .WithMany()
-                .HasForeignKey(jot=>jot.TechnologyId);
+                .HasForeignKey(jot => jot.TechnologyId);
 
 
 
-                List<IdentityRole> roles = new List<IdentityRole>
+            List<IdentityRole> roles = new List<IdentityRole>
                 {
                     new IdentityRole
                     {
@@ -63,7 +64,7 @@ namespace api.Data
                         NormalizedName="EXAMINER"
                     }
                 };
-                modelBuilder.Entity<IdentityRole>().HasData(roles);
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos.Technology;
 using api.Models;
 
-namespace api.Dtos.JobOffer
+namespace api.Dtos.JobOfferDto
 {
     public class JobOfferDto
     {

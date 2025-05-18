@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
-using api.Dtos.JobOffer;
+using api.Dtos.JobOfferDto;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +56,6 @@ namespace api.Controllers
             await _offerRepository.AddJobOfferAsync(jobOfferDto);
 
             return Ok(jobOfferDto);
-            //technologia musi istniec, w przeciwnym wypadku doda sie oferta bez technologi
         }
 
         
