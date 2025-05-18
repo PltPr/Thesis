@@ -42,3 +42,15 @@ export const forgotPasswordApi = async (email:string)=>{
         throw error;
     }
 }
+export const resetPasswordApi = async (token:string,email:string,newPassword:string)=>{
+    try{
+        const response = await axios.post(`http://localhost:5116/api/account/reset-password`,{
+            token:token,
+            email:email,
+            newPassword:newPassword
+        })
+        return response.data
+    }catch(error){
+        throw error;
+    }
+}

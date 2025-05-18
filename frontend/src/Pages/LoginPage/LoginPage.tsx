@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../Context/useAuth';
+import { Link } from 'react-router-dom';
 
 
 
@@ -56,9 +57,11 @@ const LoginPage = (props: Props) => {
             Password
           </label>
           <div className="text-sm">
-            <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link to="/forgot-password-page">
+            <a className="font-semibold text-indigo-600 hover:text-indigo-500">
               Forgot password?
             </a>
+            </Link>
           </div>
         </div>
         <div className="mt-2">
@@ -85,9 +88,10 @@ const LoginPage = (props: Props) => {
 
     <p className="mt-10 text-center text-sm text-gray-500">
       Not a member? 
-      <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+      <Link to="/register-page" className="font-semibold text-indigo-600 hover:text-indigo-500">
         {" Create an account"}
-      </a>
+      </Link>
+      
     </p>
   </div>
 </div>
