@@ -17,6 +17,7 @@ namespace api.Models
         public string ProgrammingLanguage { get; set; }
         public string? Description { get; set; }
 
-        public List<JobOfferTechnology> JobOfferTechnology { get; set; } = new List<JobOfferTechnology>();
+        public ICollection<JobOfferTechnologyRequired> JobOfferTechnologyRequired { get; set; } = new List<JobOfferTechnologyRequired>();
+        public ICollection<JobOfferTechnologyNiceToHave> JobOfferTechnologyNiceToHave { get; set; } = new List<JobOfferTechnologyNiceToHave>();
     }
 }

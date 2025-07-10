@@ -19,8 +19,8 @@ namespace api.Controllers
         private readonly ApplicationDBContext _context;
         public JobOfferController(IJobOfferRepository offerRepository, ApplicationDBContext context)
         {
-            _offerRepository=offerRepository;
-            _context=context;
+            _offerRepository = offerRepository;
+            _context = context;
         }
 
 
@@ -28,13 +28,13 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var offers =await _offerRepository.GetAllAsync();
+            var offers = await _offerRepository.GetAllAsync();
 
-            var result = offers.Select(o=>o.ToJobOfferDto()).ToList();
+            var result = offers.Select(o => o.ToJobOfferDto()).ToList();
 
             return Ok(result);
 
-            
+
         }
 
         [HttpGet("technologies")]
@@ -42,7 +42,7 @@ namespace api.Controllers
         {
             var result = await _offerRepository.GetAllTechnologiesAsync();
 
-            var resultDto = result.Select(r=>r.asDto()).ToList();
+            var resultDto = result.Select(r => r.asDto()).ToList();
 
             return Ok(resultDto);
         }
@@ -50,16 +50,13 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddJobOffer(AddJobOfferDto jobOfferDto)
         {
-            if(!ModelState.IsValid)
-            return BadRequest(ModelState);
-            
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             await _offerRepository.AddJobOfferAsync(jobOfferDto);
 
             return Ok(jobOfferDto);
         }
-
         
-
-
     }
 }

@@ -12,32 +12,40 @@ namespace api.Mappers
     {
         public static JobOfferDto ToJobOfferDto(this JobOffer model)
         {
-            return new JobOfferDto{
-                Id=model.Id,
-                JobTitle=model.JobTitle,
-                JobType=model.JobType,
-                Salary=model.Salary,
-                ProgrammingLanguage=model.ProgrammingLanguage,
-                Description=model.Description,
-                JobOfferTechnology = model.JobOfferTechnology
-                .Select(jot => jot.Technology.asDto()).ToList()
+            return new JobOfferDto
+            {
+                Id = model.Id,
+                JobTitle = model.JobTitle,
+                JobType = model.JobType,
+                Salary = model.Salary,
+                ProgrammingLanguage = model.ProgrammingLanguage,
+                Description = model.Description,
+                JobOfferTechnologyRequired = model.JobOfferTechnologyRequired
+                .Select(t => t.Technology.asDto()).ToList(),
+                JobOfferTechnologyNiceToHave = model.JobOfferTechnologyNiceToHave
+                .Select(t=>t.Technology.asDto()).ToList()
                 
             };
         }
 
-        public static JobOffer ToJobOffer(AddJobOfferDto model, List<Technology> technologies)
+        public static JobOffer ToJobOffer(AddJobOfferDto model, List<Technology> technologiesRequired, List<Technology>technologiesAdditional)
         {
             return new JobOffer
             {
-                JobTitle=model.JobTitle,
-                JobType=model.JobType,
-                Salary=model.Salary,
-                ProgrammingLanguage=model.ProgrammingLanguage,
-                Description=model.Description,
-                JobOfferTechnology=technologies.Select(t=>new JobOfferTechnology
+                JobTitle = model.JobTitle,
+                JobType = model.JobType,
+                Salary = model.Salary,
+                ProgrammingLanguage = model.ProgrammingLanguage,
+                Description = model.Description,
+                JobOfferTechnologyRequired = technologiesRequired.Select(t => new JobOfferTechnologyRequired
                 {
-                    TechnologyId=t.Id
+                    TechnologyIdRequired = t.Id
+                }).ToList(),
+                JobOfferTechnologyNiceToHave = technologiesAdditional.Select(t=>new JobOfferTechnologyNiceToHave
+                {
+                    TechnologyIdNiceToHave =t.Id
                 }).ToList()
+                
             };
         }
     }

@@ -16,6 +16,7 @@ namespace api.Dtos.JobOfferDto
         public string ProgrammingLanguage { get; set; }
         public string? Description { get; set; }
 
-        public List<TechnologyDto> JobOfferTechnology { get; set; } = new List<TechnologyDto>();
+        public ICollection<TechnologyDto> JobOfferTechnologyRequired { get; set; } = new List<TechnologyDto>();
+        public ICollection<TechnologyDto>? JobOfferTechnologyNiceToHave { get; set; } = new List<TechnologyDto>();
     }
 }

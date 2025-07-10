@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250518210634_App")]
-    partial class App
+    [Migration("20250710155105_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -316,19 +316,34 @@ namespace api.Migrations
                     b.ToTable("JobOffers");
                 });
 
-            modelBuilder.Entity("api.Models.JobOfferTechnology", b =>
+            modelBuilder.Entity("api.Models.JobOfferTechnologyNiceToHave", b =>
                 {
                     b.Property<int>("JobOfferId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TechnologyId")
+                    b.Property<int>("TechnologyIdNiceToHave")
                         .HasColumnType("int");
 
-                    b.HasKey("JobOfferId", "TechnologyId");
+                    b.HasKey("JobOfferId", "TechnologyIdNiceToHave");
 
-                    b.HasIndex("TechnologyId");
+                    b.HasIndex("TechnologyIdNiceToHave");
 
-                    b.ToTable("JobOfferTechnologies");
+                    b.ToTable("JobOfferTechnologiesNiceToHave");
+                });
+
+            modelBuilder.Entity("api.Models.JobOfferTechnologyRequired", b =>
+                {
+                    b.Property<int>("JobOfferId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnologyIdRequired")
+                        .HasColumnType("int");
+
+                    b.HasKey("JobOfferId", "TechnologyIdRequired");
+
+                    b.HasIndex("TechnologyIdRequired");
+
+                    b.ToTable("JobOfferTechnologiesRequired");
                 });
 
             modelBuilder.Entity("api.Models.Technology", b =>
@@ -418,17 +433,36 @@ namespace api.Migrations
                     b.Navigation("JobOffer");
                 });
 
-            modelBuilder.Entity("api.Models.JobOfferTechnology", b =>
+            modelBuilder.Entity("api.Models.JobOfferTechnologyNiceToHave", b =>
                 {
                     b.HasOne("api.Models.JobOffer", "JobOffer")
-                        .WithMany("JobOfferTechnology")
+                        .WithMany("JobOfferTechnologyNiceToHave")
                         .HasForeignKey("JobOfferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("api.Models.Technology", "Technology")
                         .WithMany()
-                        .HasForeignKey("TechnologyId")
+                        .HasForeignKey("TechnologyIdNiceToHave")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobOffer");
+
+                    b.Navigation("Technology");
+                });
+
+            modelBuilder.Entity("api.Models.JobOfferTechnologyRequired", b =>
+                {
+                    b.HasOne("api.Models.JobOffer", "JobOffer")
+                        .WithMany("JobOfferTechnologyRequired")
+                        .HasForeignKey("JobOfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Technology", "Technology")
+                        .WithMany()
+                        .HasForeignKey("TechnologyIdRequired")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -439,7 +473,9 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.JobOffer", b =>
                 {
-                    b.Navigation("JobOfferTechnology");
+                    b.Navigation("JobOfferTechnologyNiceToHave");
+
+                    b.Navigation("JobOfferTechnologyRequired");
                 });
 #pragma warning restore 612, 618
         }

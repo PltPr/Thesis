@@ -12,6 +12,7 @@ namespace api.Dtos.JobOfferDto
         public int Salary { get; set; }
         public string ProgrammingLanguage { get; set; }
         public string? Description { get; set; }
-        public List<string> TechnologyNames{get;set;}=new();
+        public ICollection<string> TechnologyNamesRequired{get;set;}=new List<string>();
+        public ICollection<string> TechnologyNamesNiceToHave{get;set;}=new List<string>();
     }
 }

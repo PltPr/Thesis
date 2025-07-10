@@ -11,9 +11,10 @@ namespace api.Models
         public DateTime Date { get; set; }
         public string Status { get; set; }
         public string? CV { get; set; }
-        public AppUser AppUser { get; set; }
         public string AppUserId { get; set; }
-        public JobOffer JobOffer { get; set; }
+        public AppUser AppUser { get; set; }
         public int JobOfferId { get; set; }
+        public JobOffer JobOffer { get; set; }
+
     }
 }

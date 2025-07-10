@@ -23,23 +23,29 @@ namespace api.Repository
 
         public async Task<JobOffer> AddJobOfferAsync(AddJobOfferDto jobOfferDto)
         {
-            if(jobOfferDto.TechnologyNames==null)
+            if(jobOfferDto.TechnologyNamesRequired==null)
             {throw new ArgumentException("Offer must contains technologies");}
 
 
-            var existingTechnologies = await _context.Technologies.Where(t=>jobOfferDto.TechnologyNames.Contains(t.Name)).ToListAsync();
-            var jobOffer=JobOfferMappers.ToJobOffer(jobOfferDto, existingTechnologies);
+            var requiredTechnologies = await _context.Technologies.Where(t=>jobOfferDto.TechnologyNamesRequired.Contains(t.Name)).ToListAsync();
+            var additionalTechnologies = await _context.Technologies.Where(t=>jobOfferDto.TechnologyNamesNiceToHave.Contains(t.Name)).ToListAsync();
+            var jobOffer=JobOfferMappers.ToJobOffer(jobOfferDto, requiredTechnologies,additionalTechnologies);
 
             _context.JobOffers.Add(jobOffer);
             await _context.SaveChangesAsync();
             return jobOffer;
         }
 
+        
+
         public async Task<List<JobOffer>> GetAllAsync()
         {
             var offers= await _context.JobOffers
-                .Include(o => o.JobOfferTechnology)  
-                .ThenInclude(jot => jot.Technology).ToListAsync();
+                .Include(o => o.JobOfferTechnologyRequired)
+                .ThenInclude(t => t.Technology)
+                .Include(a=>a.JobOfferTechnologyNiceToHave)
+                .ThenInclude(t=>t.Technology)
+                .ToListAsync();
 
 
             return offers;
@@ -58,11 +64,11 @@ namespace api.Repository
             return offer;
         }
 
-        public async Task<List<Technology>> GetTechnologiesForOffer(int id)
+        public async Task<List<Technology>> GetRequiredTechnologiesForOffer(int id)
         {
             
             var offer = await _context.JobOffers
-                .Include(o => o.JobOfferTechnology)  
+                .Include(o => o.JobOfferTechnologyRequired)  
                 .ThenInclude(jot => jot.Technology)  
                 .FirstOrDefaultAsync(o => o.Id == id);
 
@@ -72,7 +78,7 @@ namespace api.Repository
                 return null;  
             }
 
-            return offer.JobOfferTechnology.Select(jot => jot.Technology).ToList();
+            return offer.JobOfferTechnologyRequired.Select(jot => jot.Technology).ToList();
         }
     }
 }

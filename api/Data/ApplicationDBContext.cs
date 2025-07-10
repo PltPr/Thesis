@@ -22,24 +22,38 @@ namespace api.Data
 
         public DbSet<JobOffer> JobOffers {get;set;}
         public DbSet<Technology> Technologies {get;set;}
-        public DbSet<JobOfferTechnology> JobOfferTechnologies {get;set;}
+        public DbSet<JobOfferTechnologyRequired> JobOfferTechnologiesRequired {get;set;}
+        public DbSet<JobOfferTechnologyNiceToHave> JobOfferTechnologiesNiceToHave {get;set;}
         public DbSet<Application> Applications {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<JobOfferTechnology>(x => x.HasKey(jot => new { jot.JobOfferId, jot.TechnologyId }));
+            modelBuilder.Entity<JobOfferTechnologyRequired>(x => x.HasKey(jot => new { jot.JobOfferId, jot.TechnologyIdRequired }));
 
-            modelBuilder.Entity<JobOfferTechnology>()
+            modelBuilder.Entity<JobOfferTechnologyRequired>()
                 .HasOne(jot => jot.JobOffer)
-                .WithMany(u => u.JobOfferTechnology)
+                .WithMany(u => u.JobOfferTechnologyRequired)
                 .HasForeignKey(jot => jot.JobOfferId);
 
-            modelBuilder.Entity<JobOfferTechnology>()
+            modelBuilder.Entity<JobOfferTechnologyRequired>()
                 .HasOne(jot => jot.Technology)
                 .WithMany()
-                .HasForeignKey(jot => jot.TechnologyId);
+                .HasForeignKey(jot => jot.TechnologyIdRequired);
+
+
+            modelBuilder.Entity<JobOfferTechnologyNiceToHave>(x => x.HasKey(jot => new { jot.JobOfferId, jot.TechnologyIdNiceToHave }));
+
+            modelBuilder.Entity<JobOfferTechnologyNiceToHave>()
+                .HasOne(jot => jot.JobOffer)
+                .WithMany(u => u.JobOfferTechnologyNiceToHave)
+                .HasForeignKey(jot => jot.JobOfferId);
+
+            modelBuilder.Entity<JobOfferTechnologyNiceToHave>()
+                .HasOne(jot => jot.Technology)
+                .WithMany()
+                .HasForeignKey(jot => jot.TechnologyIdNiceToHave);
 
 
 

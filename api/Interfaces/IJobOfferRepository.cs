@@ -10,7 +10,7 @@ namespace api.Interfaces
     public interface IJobOfferRepository
     {
         Task<List<JobOffer>> GetAllAsync();
-        Task<List<Technology>> GetTechnologiesForOffer(int id);
+        Task<List<Technology>> GetRequiredTechnologiesForOffer(int id);
         Task<List<Technology>> GetAllTechnologiesAsync();
         Task<JobOffer> AddJobOfferAsync(AddJobOfferDto jobOfferDto);
         Task<JobOffer> GetById(int id);
