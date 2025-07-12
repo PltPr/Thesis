@@ -6,6 +6,9 @@ export type UserProfileToken={
     token:string;
 }
 export type UserProfile={
+    name:string,
+    surname:string,
+    phoneNumber:string,
     email:string;
     role:string[];
 }

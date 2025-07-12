@@ -46,6 +46,9 @@ const registerUser = async(name:string,surname:string,phoneNumber:string,email:s
         if (res) {
             localStorage.setItem("token", res?.data.token);
             const userObj = {
+                name:res?.data.name,
+                surname:res?.data.surname,
+                phoneNumber:res?.data.phoneNumber,
                 email: res?.data.email,
                 role:["User"]
             };

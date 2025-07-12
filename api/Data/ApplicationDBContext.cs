@@ -25,6 +25,7 @@ namespace api.Data
         public DbSet<JobOfferTechnologyRequired> JobOfferTechnologiesRequired {get;set;}
         public DbSet<JobOfferTechnologyNiceToHave> JobOfferTechnologiesNiceToHave {get;set;}
         public DbSet<Application> Applications {get;set;}
+        public DbSet<CV> CVs {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

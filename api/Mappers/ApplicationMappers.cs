@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.AppalicationDto;
 using api.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace api.Mappers
@@ -16,9 +17,9 @@ namespace api.Mappers
             {
                 Date = DateTime.Now,
                 Status = "new",
-                CV = model.CV,
+                Description = model.Description,
                 AppUserId = userId,
-                JobOfferId = offerId
+                JobOfferId = offerId,
             };
         }
         public static GetApplicationDto ApplicationToDto(this Application model)
@@ -26,9 +27,11 @@ namespace api.Mappers
             return new GetApplicationDto
             {
                 JobOfferTitle = model.JobOffer?.JobTitle,
+                Description = model.Description,
                 Date = model.Date,
                 Status = model.Status,
-                CV=model.CV
+                CvFileName = model.CV.CvFileName,
+                CvId=model.CvId
             };
         }
     }

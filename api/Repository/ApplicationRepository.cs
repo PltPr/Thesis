@@ -26,7 +26,7 @@ namespace api.Repository
 
         public async Task<List<Application>> GetUserApplications(string userId)
         {
-            var result = await _context.Applications.Include(a=>a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
+            var result = await _context.Applications.Include(a=>a.CV).Include(a=>a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
             return result;
         }
     }

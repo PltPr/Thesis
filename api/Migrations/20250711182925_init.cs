@@ -55,6 +55,20 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CVs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CvFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CvData = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CVs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobOffers",
                 columns: table => new
                 {
@@ -198,7 +212,8 @@ namespace api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CV = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CvId = table.Column<int>(type: "int", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     JobOfferId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -209,6 +224,12 @@ namespace api.Migrations
                         name: "FK_Applications_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Applications_CVs_CvId",
+                        column: x => x.CvId,
+                        principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -281,6 +302,11 @@ namespace api.Migrations
                 name: "IX_Applications_AppUserId",
                 table: "Applications",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_CvId",
+                table: "Applications",
+                column: "CvId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_JobOfferId",
@@ -363,6 +389,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "JobOfferTechnologiesRequired");
+
+            migrationBuilder.DropTable(
+                name: "CVs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

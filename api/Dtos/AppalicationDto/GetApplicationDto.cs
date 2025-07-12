@@ -7,9 +7,12 @@ namespace api.Dtos.AppalicationDto
 {
     public class GetApplicationDto
     {
-        public DateTime Date { get; set; }
-        public string Status { get; set; }
-        public string? CV { get; set; }
         public string JobOfferTitle { get; set; }
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+        public int? CvId { get; set; }
+        public string? CvFileName { get; set; }
+        public string Status { get; set; }
+        
     }
 }

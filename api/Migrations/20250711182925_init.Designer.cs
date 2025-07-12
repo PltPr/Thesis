@@ -12,7 +12,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250710155105_init")]
+    [Migration("20250711182925_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -263,11 +263,15 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CV")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CvId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("JobOfferId")
                         .HasColumnType("int");
@@ -280,9 +284,32 @@ namespace api.Migrations
 
                     b.HasIndex("AppUserId");
 
+                    b.HasIndex("CvId");
+
                     b.HasIndex("JobOfferId");
 
                     b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("api.Models.CV", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("CvData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("CvFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CVs");
                 });
 
             modelBuilder.Entity("api.Models.JobOffer", b =>
@@ -422,6 +449,12 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("api.Models.CV", "CV")
+                        .WithMany()
+                        .HasForeignKey("CvId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("api.Models.JobOffer", "JobOffer")
                         .WithMany()
                         .HasForeignKey("JobOfferId")
@@ -429,6 +462,8 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("CV");
 
                     b.Navigation("JobOffer");
                 });
