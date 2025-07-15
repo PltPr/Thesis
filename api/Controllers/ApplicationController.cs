@@ -38,6 +38,7 @@ namespace api.Controllers
             if (offer == null) return NotFound();
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine($"HEREID:{userId}");
             if (userId == null) return Unauthorized();
 
             var application = new Application
@@ -67,11 +68,12 @@ namespace api.Controllers
 
 
 
+
             return Ok();
         }
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetUserReservations()
+        public async Task<IActionResult> GetUserApplications()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
@@ -79,6 +81,8 @@ namespace api.Controllers
             var result = reservations.Select(x => x.ApplicationToDto());
             return Ok(result);
         }
+
+
         [HttpGet("DownloadCV")]
         [Authorize]
         public async Task<IActionResult> DownloadCV(int id)
@@ -88,5 +92,15 @@ namespace api.Controllers
 
             return File(cv.CvData, "application/pdf", cv.CvFileName);
         }
+
+        [HttpGet("GroupedApps")]
+        public async Task<IActionResult> GetApplicationsGrouped()
+        {
+            var result = await _appRepo.GroupedApplications();
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
     }
+    
 }

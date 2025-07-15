@@ -11,5 +11,6 @@ namespace api.Interfaces
     {
         Task<Application> AddAplicationAsync(Application model);
         Task<List<Application>> GetUserApplications(string userId);
+        Task<List<GroupApplicationsDto>> GroupedApplications();
     }
 }

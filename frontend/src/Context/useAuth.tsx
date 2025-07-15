@@ -54,6 +54,7 @@ const registerUser = async(name:string,surname:string,phoneNumber:string,email:s
             };
             localStorage.setItem("user", JSON.stringify(userObj));
             setToken(res?.data.token!);
+            axios.defaults.headers.common["Authorization"] = "Bearer " + res.data.token;
             setUser(userObj!);
             toast.success("Register success");
             navigate("/");
@@ -89,6 +90,7 @@ const loginUser = async (email: string, password: string) => {
             };
             localStorage.setItem("user", JSON.stringify(userObj));
             setToken(res?.data.token!);
+            axios.defaults.headers.common["Authorization"] = "Bearer " + res.data.token;
             setUser(userObj!);
             toast.success("Login success");
             navigate("/");

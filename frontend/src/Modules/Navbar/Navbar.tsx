@@ -38,14 +38,22 @@ const Navbar = (props: Props) => {
           </Link>
         </li>
     {isLoggedIn()?(
-        <li onClick={logout} className="inline">
-          <Link
-            to="/about"
-            className="no-underline text-red-500 text-[18px] hover:text-[#6f00ff]"
-          >
+      <>
+        <li onClick={logout} className="inline no-underline text-red-500 text-[18px] hover:text-[#6f00ff] cursor-pointer">
+          
+          
             Logout
+        </li>
+
+        <li className="inline">
+          <Link
+            to="/my-application-page"
+            className="no-underline cursor-pointer"
+          >
+            my-application
           </Link>
         </li>
+        </>
     ):(
       <>
       <li className="inline">

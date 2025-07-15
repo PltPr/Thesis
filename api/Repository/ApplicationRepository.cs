@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.AppalicationDto;
@@ -28,6 +29,26 @@ namespace api.Repository
         {
             var result = await _context.Applications.Include(a=>a.CV).Include(a=>a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
             return result;
+        }
+
+        public async Task<List<GroupApplicationsDto>> GroupedApplications()
+        {
+            var applications = await _context.Applications
+            .GroupBy(app => app.JobOffer.JobTitle)
+            .Select(group => new GroupApplicationsDto
+            {
+                JobOfferTittle = group.Key,
+                applications = group.Select(app => new GroupedApps
+                {
+                    Description = app.Description,
+                    Date = app.Date,
+                    CvId = app.CvId,
+                    CvFileName = app.CV.CvFileName,
+                    Status = app.Status
+                }).ToList()
+            }).ToListAsync();
+
+            return applications;
         }
     }
 }

@@ -7,6 +7,7 @@ import LoginPage from "../Pages/LoginPage/LoginPage"
 import RegisterPage from "Pages/RegisterPage/RegisterPage"
 import ForgotPasswordPage from "Pages/ForgotPasswordPage/ForgotPasswordPage"
 import ResetPasswordPage from "Pages/ResetPasswordPage/ResetPasswordPage"
+import MyApplicationPage from "Pages/MyApplicationPage/MyApplicationPage"
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
             {path:"login-page",element:<LoginPage/>},
             {path:"forgot-password-page",element:<ForgotPasswordPage/>},
             {path:"reset-password-page/:email/:token",element:<ResetPasswordPage/>},
+            {path:"my-application-page",element:<MyApplicationPage/>},
 
             {path:"card-detail-page/:offerId",element:<CardDetailPage/>}
         ]
