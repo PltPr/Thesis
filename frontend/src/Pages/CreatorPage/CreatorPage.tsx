@@ -23,13 +23,15 @@ const CreatorPage = (props: Props) => {
     console.log(tests)
   return (
     <div className="flex justify-around mt-5 w-100">
-        <div>
-            <h1 className="font-bold">Tasks:</h1>
-            <TaskList data={tasks}/>
-        </div>
+
         <div>
             <h1 className="font-bold">Tests:</h1>
             <TestList data={tests}/>
+        </div>
+
+        <div>
+            <h1 className="font-bold">Tasks:</h1>
+            <TaskList data={tasks}/>
         </div>
     </div>
   )

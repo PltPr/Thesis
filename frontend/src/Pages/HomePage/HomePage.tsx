@@ -7,12 +7,12 @@ interface Props {}
 
 const HomePage = (props: Props) => {
   return (
-    <div className="flex gap-[20px] justify-around items-[space-evenly] bg-primary">
-      <div className="bg-primary shadow-[0_0_30px_-7px_#525d6b] mt-[20px] p-[25px] h-[700px] w-[22%]">
+    <div className="flex gap-[20px] justify-around items-[space-evenly] bg-blue-700">
+      <div className="bg-white shadow-[0_0_30px_-7px_#525d6b] mt-[20px] p-[25px] h-[700px] w-[22%]">
         Filters
       </div>
 
-      <div className="bg-primary shadow-[0_0_30px_-7px_#525d6b] mt-[20px] w-[78%]">
+      <div className="bg-white shadow-[0_0_30px_-7px_#525d6b] mt-[20px] w-[78%]">
         <CardList />
       </div>
     </div>

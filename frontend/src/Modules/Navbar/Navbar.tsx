@@ -37,10 +37,10 @@ const Navbar = (props: Props) => {
 
        <li className="inline">
           <Link
-            to="/creator-page"
+            to="/admin-page"
             className="no-underline cursor-pointer"
           >
-            admin-creator
+            admin
           </Link>
         </li>
 
