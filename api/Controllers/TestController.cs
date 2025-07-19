@@ -31,7 +31,10 @@ namespace api.Controllers
             if (result == null)
                 return Ok(new Exception("Cannot create test"));
 
-            return Ok(result);
+            var dto = result.toDto();
+
+            return CreatedAtAction(nameof(GetTestById), new { id = result.Id }, dto);
+
         }
 
         [HttpGet("{id}")]
