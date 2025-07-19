@@ -1,0 +1,22 @@
+import { Test } from 'Models/Test'
+import React from 'react'
+
+interface Props  {
+    data:Test[]
+}
+
+const TestList = ({data}: Props) => {
+  return (
+    <div className=''>
+        {data.map((test)=>(
+            <div className="p-3 m-3  border border-2 gap-5">
+                <div>Nr: {test.id}</div>
+                <div>Desc: {test.description}</div>
+                <div>TaskNumbers: {test.taskIds?.join(", ")}</div>
+            </div>
+        ))}
+    </div>
+  )
+}
+
+export default TestList

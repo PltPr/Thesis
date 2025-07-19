@@ -49,5 +49,13 @@ namespace api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var tests = await _testRepo.GetAllAsync();
+            var result = tests.Select(t => t.toDto());
+            return Ok(result);
+        }
+
     }
 }

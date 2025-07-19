@@ -8,6 +8,7 @@ import RegisterPage from "Pages/RegisterPage/RegisterPage"
 import ForgotPasswordPage from "Pages/ForgotPasswordPage/ForgotPasswordPage"
 import ResetPasswordPage from "Pages/ResetPasswordPage/ResetPasswordPage"
 import MyApplicationPage from "Pages/MyApplicationPage/MyApplicationPage"
+import CreatorPage from "Pages/CreatorPage/CreatorPage"
 
 export const router = createBrowserRouter([
     {
@@ -20,8 +21,10 @@ export const router = createBrowserRouter([
             {path:"forgot-password-page",element:<ForgotPasswordPage/>},
             {path:"reset-password-page/:email/:token",element:<ResetPasswordPage/>},
             {path:"my-application-page",element:<MyApplicationPage/>},
+            {path:"card-detail-page/:offerId",element:<CardDetailPage/>},
 
-            {path:"card-detail-page/:offerId",element:<CardDetailPage/>}
+
+            {path:"creator-page",element:<CreatorPage/>},
         ]
     }
 ])

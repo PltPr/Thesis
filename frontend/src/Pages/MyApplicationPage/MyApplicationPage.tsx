@@ -1,5 +1,6 @@
 import { getCv, getMyApplications } from 'Api/ApplicationService'
 import { applicationModel } from 'Models/Application'
+
 import React, { useEffect, useState } from 'react'
 
 type Props = {}
@@ -21,10 +22,10 @@ const MyApplicationPage = (props: Props) => {
         <div>
             {applications.map((app) => (
                 <div className="m-5 p-5 border border-black">
-                    <h1>{app.jobOfferTitle}</h1>
-                    <h1>{app.description}</h1>
-                    <h1>{app.status}</h1>
-                    <h1>
+                    <h1>Job Tittle: {app.jobOfferTitle}</h1>
+                    <h1>Description: {app.description}</h1>
+                    <h1>Status: {app.status}</h1>
+                    <h1>Application Date: 
                         {new Date(app.date).toLocaleString('pl-PL', {
                             day: '2-digit',
                             month: '2-digit',
@@ -32,10 +33,11 @@ const MyApplicationPage = (props: Props) => {
                             hour: '2-digit',
                             minute: '2-digit'
                         })}</h1>
-                    <button onClick={()=>getCv(app.cvId,app.cvFileName)} className ="bg-blue-600 rounded-sm">Download CV: {app.cvFileName} </button>
+                    <button onClick={()=>getCv(app.cvId,app.cvFileName)} className ="bg-blue-600 rounded-sm">Download CV</button>
 
                 </div>
             ))}
+
         </div>
     )
 }

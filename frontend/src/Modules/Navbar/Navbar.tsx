@@ -21,38 +21,37 @@ const Navbar = (props: Props) => {
 
       {/* Menu */}
       <ul className="list-none flex gap-[20px]">
-        <li className="inline">
-          <Link
-            to="/about"
-            className="no-underline text-black text-[18px] hover:text-[#6f00ff]"
-          >
-            About
-          </Link>
-        </li>
-        <li className="inline">
-          <Link
-            to="/contact"
-            className="no-underline text-black text-[18px] hover:text-[#6f00ff]"
-          >
-            Contact
-          </Link>
-        </li>
+        
+
     {isLoggedIn()?(
       <>
-        <li onClick={logout} className="inline no-underline text-red-500 text-[18px] hover:text-[#6f00ff] cursor-pointer">
-          
-          
-            Logout
-        </li>
 
-        <li className="inline">
+       <li className="inline">
           <Link
             to="/my-application-page"
             className="no-underline cursor-pointer"
           >
-            my-application
+            user-application
           </Link>
         </li>
+
+       <li className="inline">
+          <Link
+            to="/creator-page"
+            className="no-underline cursor-pointer"
+          >
+            admin-creator
+          </Link>
+        </li>
+
+
+
+
+        <li onClick={logout} className="inline no-underline text-red-500 text-[18px] hover:text-[#6f00ff] cursor-pointer">
+            Logout
+        </li>
+
+       
         </>
     ):(
       <>

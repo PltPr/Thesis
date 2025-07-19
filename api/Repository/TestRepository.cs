@@ -45,6 +45,12 @@ namespace api.Repository
             return test;
         }
 
+        public async Task<List<Test>> GetAllAsync()
+        {
+            var response = await _context.Tests.Include(t=>t.TestTasks).ToListAsync();
+            return response;
+        }
+
         public async Task<Test> GetByIdAsync(int id)
         {
             var test = await _context.Tests.Include(t=>t.TestTasks).ThenInclude(t=>t.Task).FirstOrDefaultAsync(t=>t.Id==id);
