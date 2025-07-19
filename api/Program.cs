@@ -99,6 +99,7 @@ builder.Services.AddScoped<IJobOfferRepository,JobOfferRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<ITestRepository, TestRepository>();
 
 
 

@@ -370,6 +370,27 @@ namespace api.Migrations
                     b.ToTable("JobOfferTechnologiesRequired");
                 });
 
+            modelBuilder.Entity("api.Models.TaskItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpectedOutput")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskItems");
+                });
+
             modelBuilder.Entity("api.Models.Technology", b =>
                 {
                     b.Property<int>("Id")
@@ -385,6 +406,41 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Technologies");
+                });
+
+            modelBuilder.Entity("api.Models.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("Assigned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("api.Models.TestTask", b =>
+                {
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TestId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TestTasks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -503,11 +559,35 @@ namespace api.Migrations
                     b.Navigation("Technology");
                 });
 
+            modelBuilder.Entity("api.Models.TestTask", b =>
+                {
+                    b.HasOne("api.Models.TaskItem", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Test", "Test")
+                        .WithMany("TestTasks")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+
+                    b.Navigation("Test");
+                });
+
             modelBuilder.Entity("api.Models.JobOffer", b =>
                 {
                     b.Navigation("JobOfferTechnologyNiceToHave");
 
                     b.Navigation("JobOfferTechnologyRequired");
+                });
+
+            modelBuilder.Entity("api.Models.Test", b =>
+                {
+                    b.Navigation("TestTasks");
                 });
 #pragma warning restore 612, 618
         }

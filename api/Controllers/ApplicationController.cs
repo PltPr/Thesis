@@ -38,7 +38,6 @@ namespace api.Controllers
             if (offer == null) return NotFound();
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine($"HEREID:{userId}");
             if (userId == null) return Unauthorized();
 
             var application = new Application

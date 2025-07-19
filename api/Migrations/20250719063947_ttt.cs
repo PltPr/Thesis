@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class ttt : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -86,6 +86,20 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TaskItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpectedOutput = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Technologies",
                 columns: table => new
                 {
@@ -96,6 +110,20 @@ namespace api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Technologies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Assigned = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,6 +316,30 @@ namespace api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TestTasks",
+                columns: table => new
+                {
+                    TestId = table.Column<int>(type: "int", nullable: false),
+                    TaskId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestTasks", x => new { x.TestId, x.TaskId });
+                    table.ForeignKey(
+                        name: "FK_TestTasks_TaskItems_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "TaskItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TestTasks_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -361,6 +413,11 @@ namespace api.Migrations
                 name: "IX_JobOfferTechnologiesRequired_TechnologyIdRequired",
                 table: "JobOfferTechnologiesRequired",
                 column: "TechnologyIdRequired");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestTasks_TaskId",
+                table: "TestTasks",
+                column: "TaskId");
         }
 
         /// <inheritdoc />
@@ -391,6 +448,9 @@ namespace api.Migrations
                 name: "JobOfferTechnologiesRequired");
 
             migrationBuilder.DropTable(
+                name: "TestTasks");
+
+            migrationBuilder.DropTable(
                 name: "CVs");
 
             migrationBuilder.DropTable(
@@ -404,6 +464,12 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Technologies");
+
+            migrationBuilder.DropTable(
+                name: "TaskItems");
+
+            migrationBuilder.DropTable(
+                name: "Tests");
         }
     }
 }

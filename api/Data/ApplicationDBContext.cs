@@ -26,6 +26,9 @@ namespace api.Data
         public DbSet<JobOfferTechnologyNiceToHave> JobOfferTechnologiesNiceToHave {get;set;}
         public DbSet<Application> Applications {get;set;}
         public DbSet<CV> CVs {get;set;}
+        public DbSet<TestTask> TestTasks {get;set;}
+        public DbSet<TaskItem> TaskItems {get;set;}
+        public DbSet<Test> Tests {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +58,19 @@ namespace api.Data
                 .HasOne(jot => jot.Technology)
                 .WithMany()
                 .HasForeignKey(jot => jot.TechnologyIdNiceToHave);
+
+
+            modelBuilder.Entity<TestTask>(x => x.HasKey(tt => new { tt.TestId, tt.TaskId }));
+
+            modelBuilder.Entity<TestTask>()
+                .HasOne(ts => ts.Test)
+                .WithMany(u => u.TestTasks)
+                .HasForeignKey(ts => ts.TestId);
+
+            modelBuilder.Entity<TestTask>()
+                .HasOne(ts => ts.Task)
+                .WithMany()
+                .HasForeignKey(ts=>ts.TaskId);
 
 
 
