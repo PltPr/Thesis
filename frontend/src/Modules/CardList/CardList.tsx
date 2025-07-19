@@ -21,7 +21,7 @@ const CardList : React.FC = () : JSX.Element => {
 
   return (
     
-    <div className='card-list'>
+    <div className='flex-1'>
       
     {jobOffer.map((offer)=>(
       <Card key={offer.id} jobOffer={offer}/>

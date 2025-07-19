@@ -11,7 +11,7 @@ const Card: React.FC<Props> = ({ jobOffer }) => {
     <Link
       to={`/card-detail-page/${jobOffer.id}`}
       state={{ jobOffer }}
-      className="block bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden max-w-xl mx-auto my-4"
+      className=" block bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden max-w-xl mx-auto my-4"
     >
       <div className="flex flex-col sm:flex-row">
         {/* Optional Image Placeholder */}

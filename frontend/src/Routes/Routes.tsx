@@ -8,8 +8,10 @@ import RegisterPage from "Pages/RegisterPage/RegisterPage"
 import ForgotPasswordPage from "Pages/ForgotPasswordPage/ForgotPasswordPage"
 import ResetPasswordPage from "Pages/ResetPasswordPage/ResetPasswordPage"
 import MyApplicationPage from "Pages/MyApplicationPage/MyApplicationPage"
-import CreatorPage from "Pages/CreatorPage/CreatorPage"
+import CreatorPage from "Pages/AdminPage/CreatorPage/CreatorPage"
 import AdminPage from "Pages/AdminPage/AdminPage"
+import ApplicationPage from "Pages/AdminPage/ApplicationsPage/ApplicationPage"
+import ClassificationPage from "Pages/AdminPage/ClassificationPage/ClassificationPage"
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +31,8 @@ export const router = createBrowserRouter([
                 children:
                     [
                         { path: "creator-page", element: <CreatorPage /> },
+                        { path: "application-page", element: <ApplicationPage /> },
+                        { path: "classification-page", element: <ClassificationPage /> },
 
                     ]
             }
