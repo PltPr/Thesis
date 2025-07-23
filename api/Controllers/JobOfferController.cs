@@ -16,14 +16,11 @@ namespace api.Controllers
     public class JobOfferController : ControllerBase
     {
         private readonly IJobOfferRepository _offerRepository;
-        private readonly ApplicationDBContext _context;
-        public JobOfferController(IJobOfferRepository offerRepository, ApplicationDBContext context)
+
+        public JobOfferController(IJobOfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
-            _context = context;
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -33,8 +30,6 @@ namespace api.Controllers
             var result = offers.Select(o => o.ToJobOfferDto()).ToList();
 
             return Ok(result);
-
-
         }
 
         [HttpGet("technologies")]

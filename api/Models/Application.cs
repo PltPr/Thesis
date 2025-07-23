@@ -12,11 +12,13 @@ namespace api.Models
         public string Status { get; set; }
         public string Description { get; set; }
         public int CvId { get; set; }
-        public CV? CV { get; set; }
+        public CV CV { get; set; }
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         public int JobOfferId { get; set; }
         public JobOffer JobOffer { get; set; }
+        public int? TestId { get; set; }
+        public Test? Test { get; set; }
 
     }
 

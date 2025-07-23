@@ -68,8 +68,26 @@ namespace api.Controllers
 
 
 
-            return Ok();
+            return CreatedAtAction(nameof(GetById),new{Id=application.Id},application.ToDto());
         }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            
+
+            var application = await _appRepo.GetByIdAsync(id);
+
+            var result = application.ToDto();
+
+            return Ok(result);
+        }
+
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUserApplications()
@@ -77,7 +95,7 @@ namespace api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
             var reservations = await _appRepo.GetUserApplications(userId);
-            var result = reservations.Select(x => x.ApplicationToDto());
+            var result = reservations.Select(x => x.ToDto());
             return Ok(result);
         }
 
@@ -98,6 +116,17 @@ namespace api.Controllers
             var result = await _appRepo.GroupedApplications();
             if (result == null)
                 return NotFound();
+            return Ok(result);
+        }
+
+        [HttpPut("AssignTestToApp")]
+        public async Task<IActionResult> AssignTestToApp(int appId, int testId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _appRepo.AssignTestToAppAsync(appId, testId);
+
             return Ok(result);
         }
     }

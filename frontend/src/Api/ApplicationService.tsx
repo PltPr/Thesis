@@ -1,5 +1,5 @@
 import axios from "axios"
-import { applicationModel } from "Models/Application";
+import { applicationModel,GroupedApplications } from "Models/Application";
 
 export const AddApplicationApi =async(description:string,cv:File,jobOfferId:number)=>{
     try{
@@ -55,3 +55,14 @@ export const getCv = async (id: number, fileNameFromApp: string) => {
         throw err;
     }
 };
+
+
+export const getGroupedApplications=async ()=>{
+    try{
+        const response = await axios.get<GroupedApplications[]>("http://localhost:5116/api/application/GroupedApps")
+        return response.data
+    }catch(err){
+        console.log("GetGroupedApplications error: ",err)
+        throw err;
+    }
+}

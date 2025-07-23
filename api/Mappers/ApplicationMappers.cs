@@ -22,7 +22,7 @@ namespace api.Mappers
                 JobOfferId = offerId,
             };
         }
-        public static GetApplicationDto ApplicationToDto(this Application model)
+        public static GetApplicationDto ToDto(this Application model)
         {
             return new GetApplicationDto
             {
@@ -31,7 +31,8 @@ namespace api.Mappers
                 Date = model.Date,
                 Status = model.Status,
                 CvFileName = model.CV.CvFileName,
-                CvId=model.CvId
+                CvId = model.CvId,
+                TestId=model.TestId
             };
         }
     }

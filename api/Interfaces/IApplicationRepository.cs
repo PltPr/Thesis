@@ -10,7 +10,9 @@ namespace api.Interfaces
     public interface IApplicationRepository
     {
         Task<Application> AddAplicationAsync(Application model);
+        Task<Application> GetByIdAsync(int id);
         Task<List<Application>> GetUserApplications(string userId);
         Task<List<GroupApplicationsDto>> GroupedApplications();
+        Task<Application> AssignTestToAppAsync(int appId,int testId);
     }
 }

@@ -10,9 +10,10 @@ namespace api.Dtos.AppalicationDto
         public string JobOfferTitle { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public int? CvId { get; set; }
-        public string? CvFileName { get; set; }
+        public int CvId { get; set; }
+        public string CvFileName { get; set; }
         public string Status { get; set; }
+        public int? TestId { get; set; }
         
     }
 }

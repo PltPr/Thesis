@@ -9,7 +9,7 @@ namespace api.Dtos.AppalicationDto
     public class AddApplicationDto
     {
         public string Description { get; set; }
-        public IFormFile? CV { get; set; }
+        public IFormFile CV { get; set; }
         public int JobOfferId { get; set; }
     }
 }

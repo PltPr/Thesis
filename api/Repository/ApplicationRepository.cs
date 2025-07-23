@@ -25,6 +25,34 @@ namespace api.Repository
             return model;
         }
 
+        public async Task<Application> AssignTestToAppAsync(int appId, int testId)
+        {
+            var application = await _context.Applications.FindAsync(appId);
+            if (application == null)
+                return null;
+
+            application.TestId = testId;
+            application.Status = "Test assigned";
+            
+            await _context.SaveChangesAsync();
+
+            return application;
+        }
+
+        public async Task<Application> GetByIdAsync(int id)
+        {
+            var app = await _context.Applications
+            .Include(t => t.Test)
+            .Include(a => a.CV)
+            .Include(a => a.JobOffer)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (app == null)
+                return null;
+
+            return (app);
+        }
+
         public async Task<List<Application>> GetUserApplications(string userId)
         {
             var result = await _context.Applications.Include(a=>a.CV).Include(a=>a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
@@ -37,7 +65,7 @@ namespace api.Repository
             .GroupBy(app => app.JobOffer.JobTitle)
             .Select(group => new GroupApplicationsDto
             {
-                JobOfferTittle = group.Key,
+                JobOfferTitle = group.Key,
                 applications = group.Select(app => new GroupedApps
                 {
                     Description = app.Description,

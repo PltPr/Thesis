@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250719063947_ttt")]
-    partial class ttt
+    [Migration("20250723094606_db")]
+    partial class db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -280,6 +280,9 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TestId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
@@ -287,6 +290,8 @@ namespace api.Migrations
                     b.HasIndex("CvId");
 
                     b.HasIndex("JobOfferId");
+
+                    b.HasIndex("TestId");
 
                     b.ToTable("Applications");
                 });
@@ -517,11 +522,17 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("api.Models.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId");
+
                     b.Navigation("AppUser");
 
                     b.Navigation("CV");
 
                     b.Navigation("JobOffer");
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("api.Models.JobOfferTechnologyNiceToHave", b =>
