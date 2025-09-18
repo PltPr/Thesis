@@ -68,7 +68,7 @@ namespace api.Controllers
 
 
 
-            return CreatedAtAction(nameof(GetById),new{Id=application.Id},application.ToDto());
+            return CreatedAtAction(nameof(GetById), new { id = application.Id }, application.ToDto());
         }
 
 

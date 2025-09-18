@@ -4,7 +4,8 @@ export type applicationModel = {
     date:string,
     cvId:number,
     cvFileName:string,
-    status:string
+    status:string,
+    testId:number
 }
 
 export type GroupedApplications= {
@@ -17,5 +18,6 @@ export type Applications={
     date:Date,
     cvId:number,
     cvFileName:string,
-    status:string
+    status:string,
+    testId:number
 }

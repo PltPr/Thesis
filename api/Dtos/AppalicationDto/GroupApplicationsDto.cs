@@ -18,5 +18,6 @@ namespace api.Dtos.AppalicationDto
         public int CvId { get; set; }
         public string CvFileName { get; set; }
         public string Status { get; set; }
+        public int? TestId { get; set; }
     }
 }

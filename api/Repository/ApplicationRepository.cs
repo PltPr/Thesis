@@ -72,7 +72,8 @@ namespace api.Repository
                     Date = app.Date,
                     CvId = app.CvId,
                     CvFileName = app.CV.CvFileName,
-                    Status = app.Status
+                    Status = app.Status,
+                    TestId=app.TestId
                 }).ToList()
             }).ToListAsync();
 
