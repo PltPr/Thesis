@@ -66,3 +66,18 @@ export const getGroupedApplications=async ()=>{
         throw err;
     }
 }
+
+export const createTestApi=async(description:string, taskList:number[])=>{
+    try{
+        const response = await axios.post("http://localhost:5116/api/Test/CreateTest",{
+            description:description,
+            taskIds:taskList
+        })
+        return response.data
+    }catch(err)
+    {
+        console.error("CreateTestError ",err)
+        throw err
+    }
+    
+}

@@ -37,7 +37,7 @@ namespace api.Controllers
             var offer = await _offerRepo.GetById(dto.JobOfferId);
             if (offer == null) return NotFound();
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Unauthorized();
 
             var application = new Application

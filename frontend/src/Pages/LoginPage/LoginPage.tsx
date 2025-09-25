@@ -41,7 +41,7 @@ const LoginPage = (props: Props) => {
         </label>
         <div className="mt-2">
           <input
-            type="email"
+            
             id="email"
             autoComplete="email"
             required

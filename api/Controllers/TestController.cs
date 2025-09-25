@@ -21,7 +21,7 @@ namespace api.Controllers
             _appRepo = appRepo;
             _testRepo = testRepo;
         }
-        [HttpPost]
+        [HttpPost("CreateTest")]
         public async Task<IActionResult> CreateTest(AddTestDto testDto)
         {
             if (!ModelState.IsValid)

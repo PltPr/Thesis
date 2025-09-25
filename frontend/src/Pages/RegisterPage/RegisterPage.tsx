@@ -76,10 +76,7 @@ const RegisterPage = (props: Props) => {
               className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
               {...register("phoneNumber", {
                 required: "Numer telefonu jest wymagany",
-                pattern: {
-                  value: /^[0-9]{9}$/,
-                  message: "Numer musi mieć 9 cyfr",
-                },
+                
               })}
             />
             {errors.phoneNumber && <p className="text-sm text-red-600 mt-1">{errors.phoneNumber.message}</p>}
@@ -91,16 +88,16 @@ const RegisterPage = (props: Props) => {
           <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email address</label>
           <div className="mt-2">
             <input
-              type="email"
+              //type="email"
               id="email"
               autoComplete="email"
               className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
               {...register("email", {
                 required: "Email jest wymagany",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Nieprawidłowy format email",
-                },
+                //pattern: {
+                 // value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                //  message: "Nieprawidłowy format email",
+               // },
               })}
             />
             {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
