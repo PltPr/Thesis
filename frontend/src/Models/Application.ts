@@ -14,6 +14,8 @@ export type GroupedApplications= {
 }
 
 export type Applications={
+    name:string,
+    surname:string,
     description:string,
     date:Date,
     cvId:number,

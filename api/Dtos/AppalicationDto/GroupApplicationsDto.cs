@@ -13,6 +13,8 @@ namespace api.Dtos.AppalicationDto
 
     public class GroupedApps
     {
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public int CvId { get; set; }

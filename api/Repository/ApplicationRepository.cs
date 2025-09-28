@@ -68,6 +68,8 @@ namespace api.Repository
                 JobOfferTitle = group.Key,
                 applications = group.Select(app => new GroupedApps
                 {
+                    Name=app.AppUser.Name,
+                    Surname=app.AppUser.Surname,
                     Description = app.Description,
                     Date = app.Date,
                     CvId = app.CvId,
