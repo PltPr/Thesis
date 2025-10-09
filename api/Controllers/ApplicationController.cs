@@ -78,7 +78,7 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            
+
 
             var application = await _appRepo.GetByIdAsync(id);
 
@@ -129,6 +129,19 @@ namespace api.Controllers
 
             return Ok(result);
         }
+        [HttpPut("RejectApp")]
+        public async Task<IActionResult> RejectApp([FromBody] RejectAppDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _appRepo.RejectAppAsync(dto.Id);
+            if (result == null)
+                return NotFound();
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.ToDto());
+        }
+        
     }
     
 }

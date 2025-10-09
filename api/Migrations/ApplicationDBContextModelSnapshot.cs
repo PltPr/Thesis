@@ -260,6 +260,9 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("AssignTestDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CvId")
                         .HasColumnType("int");
 
@@ -269,6 +272,9 @@ namespace api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Evaluation")
+                        .HasColumnType("int");
 
                     b.Property<int>("JobOfferId")
                         .HasColumnType("int");
@@ -375,6 +381,68 @@ namespace api.Migrations
                     b.ToTable("JobOfferTechnologiesRequired");
                 });
 
+            modelBuilder.Entity("api.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdderId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("api.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdderId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("Notes");
+                });
+
             modelBuilder.Entity("api.Models.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -422,6 +490,10 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tittle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -567,6 +639,44 @@ namespace api.Migrations
                     b.Navigation("Technology");
                 });
 
+            modelBuilder.Entity("api.Models.Message", b =>
+                {
+                    b.HasOne("api.Models.AppUser", "Adder")
+                        .WithMany()
+                        .HasForeignKey("AdderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Application", "Application")
+                        .WithMany("Messages")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adder");
+
+                    b.Navigation("Application");
+                });
+
+            modelBuilder.Entity("api.Models.Note", b =>
+                {
+                    b.HasOne("api.Models.AppUser", "Adder")
+                        .WithMany()
+                        .HasForeignKey("AdderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Application", "Application")
+                        .WithMany("Notes")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adder");
+
+                    b.Navigation("Application");
+                });
+
             modelBuilder.Entity("api.Models.TestTask", b =>
                 {
                     b.HasOne("api.Models.TaskItem", "Task")
@@ -584,6 +694,13 @@ namespace api.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("api.Models.Application", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("api.Models.JobOffer", b =>

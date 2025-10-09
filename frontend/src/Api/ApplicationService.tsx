@@ -67,9 +67,10 @@ export const getGroupedApplications=async ()=>{
     }
 }
 
-export const createTestApi=async(description:string, taskList:number[])=>{
+export const createTestApi=async(tittle:string,description:string, taskList:number[])=>{
     try{
         const response = await axios.post("http://localhost:5116/api/Test/CreateTest",{
+            tittle:tittle,
             description:description,
             taskIds:taskList
         })
@@ -80,4 +81,37 @@ export const createTestApi=async(description:string, taskList:number[])=>{
         throw err
     }
     
+}
+
+export const assignTestToAppApi = async(appId:number,testId:number)=>{
+    try{
+        const response = await axios.put("http://localhost:5116/api/application/AssignTestToApp",
+            null,
+            {
+            params:{
+                appId:appId,
+                testId:testId
+                }
+            }
+        );
+        return response.data;
+    }catch(err)
+    {
+        console.error("assignTestToApiError", err);
+        throw err;
+    }
+}
+
+
+export const rejectApp = async(appId:number)=>{
+    try{
+        const response = await axios.put("http://localhost:5116/api/application/RejectApp",{
+            Id:appId
+        })
+        return response.data
+
+    }catch(err){
+        console.error("rejectAppError", err)
+        throw err
+    }
 }

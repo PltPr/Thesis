@@ -13,6 +13,7 @@ namespace api.Dtos.AppalicationDto
 
     public class GroupedApps
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Description { get; set; }
@@ -21,5 +22,6 @@ namespace api.Dtos.AppalicationDto
         public string CvFileName { get; set; }
         public string Status { get; set; }
         public int? TestId { get; set; }
+        public DateTime? AssignTestDate { get; set; }
     }
 }

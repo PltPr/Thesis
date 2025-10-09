@@ -1,4 +1,5 @@
 export type applicationModel = {
+    id:number,
     jobOfferTitle:string,
     description:string,
     date:string,
@@ -6,6 +7,7 @@ export type applicationModel = {
     cvFileName:string,
     status:string,
     testId:number
+    assignTestDate:Date
 }
 
 export type GroupedApplications= {
@@ -14,6 +16,7 @@ export type GroupedApplications= {
 }
 
 export type Applications={
+    id:number,
     name:string,
     surname:string,
     description:string,
@@ -21,5 +24,6 @@ export type Applications={
     cvId:number,
     cvFileName:string,
     status:string,
-    testId:number
+    testId:number,
+    assignTestDate:Date
 }

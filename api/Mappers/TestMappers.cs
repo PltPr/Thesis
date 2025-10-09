@@ -13,6 +13,7 @@ namespace api.Mappers
         {
             return new Test
             {
+                Tittle=model.Tittle,
                 Description = model.Description
             };
         }
@@ -22,6 +23,7 @@ namespace api.Mappers
             return new TestDto
             {
                 Id = model.Id,
+                Tittle=model.Tittle,
                 Description = model.Description,
                 TaskIds = model.TestTasks.Select(t=>t.TaskId).ToList()
             };

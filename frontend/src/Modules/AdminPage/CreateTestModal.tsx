@@ -5,13 +5,14 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 
 type FormData={
+    tittle:string;
     description:string;
     selectedTasks:number[];
 }
 type Props = {
     tasks:taskItem[];
     onClose:()=>void;
-    onCreate:(newTest:Test)=>void;
+    onCreate:()=>void;
 }
 
 const CreateTaskModal:React.FC<Props> = ({tasks,onClose,onCreate}) => {
@@ -21,8 +22,8 @@ const CreateTaskModal:React.FC<Props> = ({tasks,onClose,onCreate}) => {
 
     const onSubmit = async(data:FormData)=>{
         try{
-            const newTest = await createTestApi(data.description,data.selectedTasks)
-            onCreate(newTest)
+            const newTest = await createTestApi(data.tittle,data.description,data.selectedTasks)
+            onCreate()
             onClose();
         }catch(err)
         {
@@ -31,12 +32,19 @@ const CreateTaskModal:React.FC<Props> = ({tasks,onClose,onCreate}) => {
     };
 
    return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-1/2 shadow-lg">
         <h2 className="text-xl font-bold mb-4">Create New Test</h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Opis testu */}
+          <input
+            {...register("tittle", { required: "Tittle is required" })}
+            placeholder="Test tittle"
+            className="border p-2 w-full mb-4"
+          />
+          {errors.tittle && (
+            <p className="text-red-500">{errors.tittle.message}</p>
+          )}
           <input
             {...register("description", { required: "Description is required" })}
             placeholder="Test description"
@@ -46,7 +54,6 @@ const CreateTaskModal:React.FC<Props> = ({tasks,onClose,onCreate}) => {
             <p className="text-red-500">{errors.description.message}</p>
           )}
 
-          {/* Lista tasków */}
           <h3 className="font-semibold mb-2">Select Tasks:</h3>
           <div className="max-h-64 overflow-y-auto border p-2 mb-4">
             {tasks.map((task) => (
@@ -66,7 +73,6 @@ const CreateTaskModal:React.FC<Props> = ({tasks,onClose,onCreate}) => {
             ))}
           </div>
 
-          {/* Przyciski */}
           <div className="flex justify-end gap-2">
             <button
               type="button"

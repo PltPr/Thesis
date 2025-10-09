@@ -26,13 +26,15 @@ namespace api.Mappers
         {
             return new GetApplicationDto
             {
+                Id = model.Id,
                 JobOfferTitle = model.JobOffer?.JobTitle,
                 Description = model.Description,
                 Date = model.Date,
                 Status = model.Status,
                 CvFileName = model.CV.CvFileName,
                 CvId = model.CvId,
-                TestId=model.TestId
+                TestId = model.TestId,
+                AssignTestDate=model.AssignTestDate
             };
         }
     }

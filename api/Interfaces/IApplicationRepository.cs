@@ -13,6 +13,8 @@ namespace api.Interfaces
         Task<Application> GetByIdAsync(int id);
         Task<List<Application>> GetUserApplications(string userId);
         Task<List<GroupApplicationsDto>> GroupedApplications();
-        Task<Application> AssignTestToAppAsync(int appId,int testId);
+        Task<Application?> AssignTestToAppAsync(int appId, int testId);
+        Task<Application?> RejectAppAsync(int appId);
+
     }
 }

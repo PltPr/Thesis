@@ -2,9 +2,9 @@ import { getAllTasks } from 'Api/TaskService'
 import { getAllTests } from 'Api/TestService';
 import { taskItem } from 'Models/Task';
 import { Test } from 'Models/Test';
-import CreateTaskModal from 'Modules/AdminPage/CreateTaskModal';
-import TaskList from 'Modules/TaskList/TaskList';
-import TestList from 'Modules/TestList/TestList';
+import CreateTaskModal from 'Modules/AdminPage/CreateTestModal';
+import TaskList from 'Modules/AdminPage/TaskList/TaskList';
+import TestList from 'Modules/AdminPage/TestList/TestList';
 import React, { useEffect, useState } from 'react'
 
 type Props = {}
@@ -46,7 +46,7 @@ const CreatorPage = (props: Props) => {
         {showModal&&(
             <CreateTaskModal tasks={tasks} onClose={()=>(setShowModal(false))}
             onCreate={handleCreateTest}/>
-        )}
+        )} 
     </div>
   )
 }

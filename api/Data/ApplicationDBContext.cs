@@ -12,23 +12,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDBContext :IdentityDbContext<AppUser>
+    public class ApplicationDBContext : IdentityDbContext<AppUser>
     {
         public ApplicationDBContext(DbContextOptions dbContextOptions)
         : base(dbContextOptions)
         {
-            
+
         }
 
-        public DbSet<JobOffer> JobOffers {get;set;}
-        public DbSet<Technology> Technologies {get;set;}
-        public DbSet<JobOfferTechnologyRequired> JobOfferTechnologiesRequired {get;set;}
-        public DbSet<JobOfferTechnologyNiceToHave> JobOfferTechnologiesNiceToHave {get;set;}
-        public DbSet<Application> Applications {get;set;}
-        public DbSet<CV> CVs {get;set;}
-        public DbSet<TestTask> TestTasks {get;set;}
-        public DbSet<TaskItem> TaskItems {get;set;}
-        public DbSet<Test> Tests {get;set;}
+        public DbSet<JobOffer> JobOffers { get; set; }
+        public DbSet<Technology> Technologies { get; set; }
+        public DbSet<JobOfferTechnologyRequired> JobOfferTechnologiesRequired { get; set; }
+        public DbSet<JobOfferTechnologyNiceToHave> JobOfferTechnologiesNiceToHave { get; set; }
+        public DbSet<Application> Applications { get; set; }
+        public DbSet<CV> CVs { get; set; }
+        public DbSet<TestTask> TestTasks { get; set; }
+        public DbSet<TaskItem> TaskItems { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Note> Notes { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,7 +73,32 @@ namespace api.Data
             modelBuilder.Entity<TestTask>()
                 .HasOne(ts => ts.Task)
                 .WithMany()
-                .HasForeignKey(ts=>ts.TaskId);
+                .HasForeignKey(ts => ts.TaskId);
+
+            modelBuilder.Entity<Note>()
+                .HasOne(n => n.Application)
+                .WithMany(a => a.Notes)
+                .HasForeignKey(n => n.ApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Note>()
+                .HasOne(n => n.Adder)
+                .WithMany()
+                .HasForeignKey(n => n.AdderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Application)
+                .WithMany(a => a.Messages)
+                .HasForeignKey(m => m.ApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Adder)
+                .WithMany()
+                .HasForeignKey(m => m.AdderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
 
 

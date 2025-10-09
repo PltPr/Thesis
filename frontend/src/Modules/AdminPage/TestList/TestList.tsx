@@ -10,6 +10,7 @@ const TestList = ({data}: Props) => {
     <div className=''>
         {data.map((test)=>(
             <div key={test.id} className="p-3 m-3  border border-2 gap-5">
+              <h1>{test.tittle}</h1>
                 <div>Desc: {test.description}</div>
                 <div>TaskNumbers: {test.taskIds?.join(", ")}</div>
             </div>

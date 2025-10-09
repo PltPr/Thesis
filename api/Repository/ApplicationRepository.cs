@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using api.Data;
@@ -25,7 +26,8 @@ namespace api.Repository
             return model;
         }
 
-        public async Task<Application> AssignTestToAppAsync(int appId, int testId)
+
+        public async Task<Application?> AssignTestToAppAsync(int appId, int testId)
         {
             var application = await _context.Applications.FindAsync(appId);
             if (application == null)
@@ -33,6 +35,7 @@ namespace api.Repository
 
             application.TestId = testId;
             application.Status = "Test assigned";
+            application.AssignTestDate = DateTime.Now;
             
             await _context.SaveChangesAsync();
 
@@ -68,18 +71,33 @@ namespace api.Repository
                 JobOfferTitle = group.Key,
                 applications = group.Select(app => new GroupedApps
                 {
-                    Name=app.AppUser.Name,
-                    Surname=app.AppUser.Surname,
+                    Id = app.Id,
+                    Name = app.AppUser.Name,
+                    Surname = app.AppUser.Surname,
                     Description = app.Description,
                     Date = app.Date,
                     CvId = app.CvId,
                     CvFileName = app.CV.CvFileName,
                     Status = app.Status,
-                    TestId=app.TestId
+                    TestId = app.TestId,
+                    AssignTestDate=app.AssignTestDate
                 }).ToList()
             }).ToListAsync();
 
             return applications;
+        }
+
+        public async Task<Application?> RejectAppAsync(int appId)
+        {
+            var app = await _context.Applications.Include(c=>c.CV).FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+
+            app.Status = "Rejected";
+
+            await _context.SaveChangesAsync();
+
+            return app;
         }
     }
 }
