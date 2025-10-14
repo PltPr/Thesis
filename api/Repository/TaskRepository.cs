@@ -34,6 +34,18 @@ namespace api.Repository
             return tasks;
         }
 
+        public async Task<List<TaskItem>?> GetAllTasksForTestAsync(int testId)
+        {
+            var test = await _context.Tests.FirstOrDefaultAsync(x => x.Id == testId);
+            if (test == null)
+                return null;
+
+            var taskListIds = await _context.TestTasks.Where(x => x.TestId == testId).Select(x => x.TaskId).ToListAsync();
+            var taskList = await _context.TaskItems.Where(x => taskListIds.Contains(x.Id)).ToListAsync();
+
+            return taskList;
+        }
+
         public async Task<TaskItem> GetByIdAsync(int id)
         {
             var task = await _context.TaskItems.FirstOrDefaultAsync(t => t.Id == id);

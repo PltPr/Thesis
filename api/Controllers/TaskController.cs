@@ -56,5 +56,19 @@ namespace api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+        [HttpGet("GetTasksForTest")]
+        public async Task<IActionResult>GetTasksForTest(int testId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var tasks = await _taskRepo.GetAllTasksForTestAsync(testId);
+            if (tasks == null)
+                return NotFound();
+
+            var result = tasks.Select(x => x.toDto());
+
+            return Ok(result);
+        }
     }
 }

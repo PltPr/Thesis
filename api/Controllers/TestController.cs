@@ -56,6 +56,19 @@ namespace api.Controllers
             var result = tests.Select(t => t.toDto());
             return Ok(result);
         }
+        [HttpGet("GetTestForApp")]
+        public async Task<IActionResult>GetTestForApp(int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var test = await _testRepo.GetTestForAppAsync(appId);
+            if (test == null)
+                return NotFound();
+
+            var result = test.toDto();
+            return Ok(result);
+        }
 
     }
 }

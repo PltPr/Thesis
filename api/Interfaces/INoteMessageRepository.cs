@@ -12,5 +12,7 @@ namespace api.Interfaces
         Task<Note?> GetNoteByIdAsync(int id);
         Task<Message> AddMessageAsync(Message model);
         Task<Message?> GetMessageByIdAsync(int id);
+        Task<List<Message>?> GetMessagesForAppAsync(int appId);
+        Task<List<Note>?> GetAllNotesForAppAsync(int appId);
     }
 }

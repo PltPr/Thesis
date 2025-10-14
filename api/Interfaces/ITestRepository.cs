@@ -10,7 +10,8 @@ namespace api.Interfaces
     public interface ITestRepository
     {
         Task<Test> AddTestAsync(AddTestDto dto);
-        Task<Test> GetByIdAsync(int id);
+        Task<Test?> GetByIdAsync(int id);
         Task<List<Test>> GetAllAsync();
+        Task<Test?> GetTestForAppAsync(int appId);
     }
 }

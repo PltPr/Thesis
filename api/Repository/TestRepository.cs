@@ -51,9 +51,23 @@ namespace api.Repository
             return response;
         }
 
-        public async Task<Test> GetByIdAsync(int id)
+        public async Task<Test?> GetByIdAsync(int id)
         {
             var test = await _context.Tests.Include(t=>t.TestTasks).ThenInclude(t=>t.Task).FirstOrDefaultAsync(t=>t.Id==id);
+            if (test == null)
+                return null;
+
+            return test;
+        }
+
+        public async Task<Test?> GetTestForAppAsync(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);
+            
+            if (app == null||app.TestId==null)
+                return null;
+
+            var test = await _context.Tests.Include(x=>x.TestTasks).ThenInclude(x=>x.Task).FirstOrDefaultAsync(x => x.Id == app.TestId);
             if (test == null)
                 return null;
 

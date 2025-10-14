@@ -37,6 +37,16 @@ namespace api.Repository
             return model;
         }
 
+        public async Task<List<Note>?> GetAllNotesForAppAsync(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+
+            var notes = await _context.Notes.Include(x => x.Adder).Where(x => x.ApplicationId == appId).ToListAsync();
+            return notes;
+        }
+
         public async Task<Message?> GetMessageByIdAsync(int id)
         {
             var result = await _context.Messages.Include(x => x.Adder).FirstOrDefaultAsync(x => x.Id == id);
@@ -44,6 +54,16 @@ namespace api.Repository
                 return null;
                 
             return result;
+        }
+
+        public async Task<List<Message>?> GetMessagesForAppAsync(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+
+            var message = await _context.Messages.Include(x => x.Adder).Where(x => x.ApplicationId == appId).OrderByDescending(x => x.Date).ToListAsync();
+            return message;
         }
 
         public async Task<Note?> GetNoteByIdAsync(int id)

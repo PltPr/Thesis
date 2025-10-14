@@ -20,7 +20,7 @@ type NoteMessage = {
 const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
     const [selectedTest, setSelectedTest] = useState<number | null>(null);
     const [status, setStatus] = useState(UserData.status);
-    const [decision, setDecision] = useState<"none" | "accepted" | "rejected" | "testAssigned">("none");
+    const [decision, setDecision] = useState<"none" | "accepting" | "rejecting" | "testAssigned"|"rejected">("none");
     const assignedTest = UserData ? TestsList.find(t => t.id == UserData.testId) : null;
 
     const { register, handleSubmit, formState: { errors } } = useForm<NoteMessage>({
@@ -46,6 +46,9 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
         if (UserData.testId && status === "Test assigned") {
             setDecision("testAssigned");
         }
+        else if(status=="Rejected")
+            setDecision("rejected")
+            
     }, [UserData.testId, status])
 
 
@@ -66,13 +69,14 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
     }
 
     const handleAccept = () => {
-        setDecision("accepted");
+        setDecision("accepting");
         toast.info("Application accepted. Assign a test to save decision!")
     }
 
     const handleReject = async () => {
-        setDecision("rejected");
+        setDecision("rejecting");
         await rejectApp(UserData.id)
+        setStatus("Rejected")
         toast.info("Application rejected.")
     }
 
@@ -142,7 +146,7 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
                         </div>
                     )}
 
-                    {decision == "accepted" && (
+                    {decision == "accepting" && (
                         <div className='border-b-2 border-gray-500  w-full h-full flex flex-col'>
                             <h1 className='text-lg font-bold'>Assign test</h1>
                             <div className='flex-1 overflow-y-auto pr-2'>
@@ -163,7 +167,7 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
 
                         </div>
                     )}
-                    {decision == "rejected" && (
+                    {(decision == "rejecting" || decision=="rejected") && (
                         <div className='border-b-2 border-gray-500  w-full h-full flex flex-col'>
                             Application rejected
                         </div>
@@ -179,7 +183,7 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
 
                     </div>
                     <div className=' w-full h-full'>
-                        {decision == "rejected" && (
+                        {decision == "rejecting" && (
                             <div>
                                 <form onSubmit={handleSubmit(sendNoteMessage)}>
                                     <div className='flex flex-col'>

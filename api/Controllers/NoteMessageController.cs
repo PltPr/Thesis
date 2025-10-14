@@ -90,5 +90,33 @@ namespace api.Controllers
 
             return Ok(result);
         }
+        [HttpGet("GetMessagesForApp")]
+        public async Task<IActionResult> GetMessagesForApp(int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var message = await _infoRepo.GetMessagesForAppAsync(appId);
+            if (message == null)
+                return NotFound();
+
+            var result = message.Select(x => x.ToMessageDto());
+
+            return Ok(result);
+        }
+        [HttpGet("GetAllNotesForApp")]
+        public async Task<IActionResult>GetAllNotesForApp(int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var notes = await _infoRepo.GetAllNotesForAppAsync(appId);
+            if (notes == null)
+                return NotFound();
+
+            var result = notes.Select(x => x.ToNoteDto()).ToList();
+
+            return Ok(result);
+        }
     }
 }
