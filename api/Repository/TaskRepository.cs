@@ -18,6 +18,13 @@ namespace api.Repository
             _context = context;
         }
 
+        public async Task<CodeSubmission> AddSolutionForTaskAsync(CodeSubmission model)
+        {
+            await _context.CodeSubmissions.AddAsync(model);
+            await _context.SaveChangesAsync();
+            return model;
+        }
+
         public async Task<TaskItem> AddTaskAsync(TaskItem taskModel)
         {
             await _context.TaskItems.AddAsync(taskModel);

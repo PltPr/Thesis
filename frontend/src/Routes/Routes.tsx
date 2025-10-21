@@ -12,6 +12,8 @@ import CreatorPage from "Pages/AdminPage/CreatorPage/CreatorPage"
 import AdminPage from "Pages/AdminPage/AdminPage"
 import ApplicationPage from "Pages/AdminPage/ApplicationsPage/ApplicationPage"
 import ClassificationPage from "Pages/AdminPage/ClassificationPage/ClassificationPage"
+import TestInfoPage from "Pages/TestInfoPage/TestInfoPage"
+import SolveTestPage from "Pages/SolveTestPage/SolveTestPage"
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +27,8 @@ export const router = createBrowserRouter([
             { path: "reset-password-page/:email/:token", element: <ResetPasswordPage /> },
             { path: "my-application-page", element: <MyApplicationPage /> },
             { path: "card-detail-page/:offerId", element: <CardDetailPage /> },
+            {path:"test-info-page/:appId/:testId",element:<TestInfoPage/>},
+            {path:"solve-test-page/:appId/:testId",element:<SolveTestPage/>},
             {
                 path: "admin-page",
                 element: <AdminPage />,

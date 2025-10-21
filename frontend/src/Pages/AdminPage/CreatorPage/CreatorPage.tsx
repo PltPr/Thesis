@@ -1,5 +1,5 @@
 import { getAllTasks } from 'Api/TaskService'
-import { getAllTests } from 'Api/TestService';
+import { getAllTestsApi } from 'Api/TestService';
 import { taskItem } from 'Models/Task';
 import { Test } from 'Models/Test';
 import CreateTaskModal from 'Modules/AdminPage/CreateTestModal';
@@ -16,7 +16,7 @@ const CreatorPage = (props: Props) => {
     useEffect(()=>{
         const getData = async()=>{
             const tasksData = await getAllTasks()
-            const testsData = await getAllTests()
+            const testsData = await getAllTestsApi()
             if(tasksData) setTasks(tasksData)
             if(testsData) setTests(testsData)
         }
@@ -24,7 +24,7 @@ const CreatorPage = (props: Props) => {
     },[])
     
     const handleCreateTest = async () => {
-  const testsData = await getAllTests();
+  const testsData = await getAllTestsApi();
   if (testsData) setTests(testsData);
 };
 

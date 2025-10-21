@@ -42,8 +42,7 @@ const CardDetailPage: React.FC = () => {
     }
   }
 
-  const token = localStorage.getItem("token");
-  console.log(token)
+
   
 
   return (

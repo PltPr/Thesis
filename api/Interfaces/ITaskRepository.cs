@@ -13,5 +13,6 @@ namespace api.Interfaces
         Task<List<TaskItem>> GetAllAsync();
         Task<TaskItem> AddTaskAsync(TaskItem taskModel);
         Task<List<TaskItem>?> GetAllTasksForTestAsync(int testId);
+        Task<CodeSubmission> AddSolutionForTaskAsync(CodeSubmission model);
     }
 }

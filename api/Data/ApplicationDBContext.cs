@@ -31,6 +31,7 @@ namespace api.Data
         public DbSet<Test> Tests { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<CodeSubmission>CodeSubmissions{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

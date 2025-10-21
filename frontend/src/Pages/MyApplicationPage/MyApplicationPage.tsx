@@ -2,6 +2,7 @@ import { getCv, getMyApplications } from 'Api/ApplicationService'
 import { applicationModel } from 'Models/Application'
 
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 type Props = {}
 
@@ -35,7 +36,9 @@ const MyApplicationPage = (props: Props) => {
                         })}</h1>
                     <button onClick={()=>getCv(app.cvId,app.cvFileName)} className ="bg-blue-600 rounded-sm w-1/12">Download CV</button>
                     {app.testId && app.status=="Test assigned"&&(
+                        <Link to={`/test-info-page/${app.id}/${app.testId}`}>
                         <button className="m-3 p-1 bg-green-600 hover:bg-green-700 w-1/12">Solve test!</button>
+                        </Link>
                     )}
 
                 </div>

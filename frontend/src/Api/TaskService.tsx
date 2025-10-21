@@ -19,6 +19,29 @@ export const getTaskById = async(id:string)=>{
         const response = await axios.get<taskItem>(`http://localhost:5116/api/Task/${id}`)
         return response.data
     }catch(err){
-        console.log("getTaskById error: ",err);
+        console.error("getTaskById error: ",err);
+    }
+}
+
+export const getTasksForTest=async (testId:number)=>{
+    try{
+        const response = await axios.get<taskItem[]>(`http://localhost:5116/api/Task/GetTasksForTest?testId=${testId}`)
+        return response.data;
+    }catch(err){
+        console.error("getTasksForTestApi error: ",err)
+    }
+}
+
+export const addSolutionForTask = async (appId:number,taskId:number,code:string)=>{
+    try{
+        const response = await axios.post("http://localhost:5116/api/Task/AddSolutionForTask",{
+            applicationId:appId,
+            taskId:taskId,
+            code:code
+        })
+        return response.data
+    }catch(err){
+        console.error("addCodeForTask error: ",err)
+        throw err;
     }
 }

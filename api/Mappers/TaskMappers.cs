@@ -8,7 +8,7 @@ namespace api.Mappers
 {
     public static class TaskMappers
     {
-        public static TaskDto toDto(this TaskItem model)
+        public static TaskDto toTaskDto(this TaskItem model)
         {
             return new TaskDto
             {
@@ -24,6 +24,16 @@ namespace api.Mappers
             {
                 Description = model.Description,
                 ExpectedOutput = model.ExpectedOutput
+            };
+        }
+        public static CodeSubmission toCodeSubmission(this AddSolutionDto dto)
+        {
+            return new CodeSubmission
+            {
+                ApplicationId = dto.ApplicationId,
+                TaskId = dto.TaskId,
+                Code = dto.Code,
+                SubmissionDate=DateTime.Now
             };
         }
     }

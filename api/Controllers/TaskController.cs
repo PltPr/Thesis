@@ -28,7 +28,7 @@ namespace api.Controllers
             if (task == null)
                 return NotFound();
 
-            var result = task.toDto();
+            var result = task.toTaskDto();
 
             return Ok(result);
         }
@@ -40,7 +40,7 @@ namespace api.Controllers
             if (tasks == null)
                 return NotFound();
 
-            var result = tasks.Select(t => t.toDto());
+            var result = tasks.Select(t => t.toTaskDto());
 
             return Ok(result);
         }
@@ -57,7 +57,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
         [HttpGet("GetTasksForTest")]
-        public async Task<IActionResult>GetTasksForTest(int testId)
+        public async Task<IActionResult> GetTasksForTest(int testId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -66,7 +66,19 @@ namespace api.Controllers
             if (tasks == null)
                 return NotFound();
 
-            var result = tasks.Select(x => x.toDto());
+            var result = tasks.Select(x => x.toTaskDto());
+
+            return Ok(result);
+        }
+        
+        [HttpPost("AddSolutionForTask")]
+        public async Task<IActionResult>AddSolutionForTask(AddSolutionDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var solution = dto.toCodeSubmission();
+            var result = await _taskRepo.AddSolutionForTaskAsync(solution);
 
             return Ok(result);
         }

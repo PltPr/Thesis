@@ -320,6 +320,42 @@ namespace api.Migrations
                     b.ToTable("CVs");
                 });
 
+            modelBuilder.Entity("api.Models.CodeSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompilationResult")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExecutionResult")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("CodeSubmissions");
+                });
+
             modelBuilder.Entity("api.Models.JobOffer", b =>
                 {
                     b.Property<int>("Id")
@@ -599,6 +635,25 @@ namespace api.Migrations
                     b.Navigation("JobOffer");
 
                     b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("api.Models.CodeSubmission", b =>
+                {
+                    b.HasOne("api.Models.Application", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.TaskItem", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("api.Models.JobOfferTechnologyNiceToHave", b =>

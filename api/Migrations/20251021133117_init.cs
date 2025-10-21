@@ -349,6 +349,36 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CodeSubmissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompilationResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExecutionResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicationId = table.Column<int>(type: "int", nullable: false),
+                    TaskId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CodeSubmissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CodeSubmissions_Applications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "Applications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CodeSubmissions_TaskItems_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "TaskItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -474,6 +504,16 @@ namespace api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CodeSubmissions_ApplicationId",
+                table: "CodeSubmissions",
+                column: "ApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CodeSubmissions_TaskId",
+                table: "CodeSubmissions",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_JobOfferTechnologiesNiceToHave_TechnologyIdNiceToHave",
                 table: "JobOfferTechnologiesNiceToHave",
                 column: "TechnologyIdNiceToHave");
@@ -526,6 +566,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CodeSubmissions");
 
             migrationBuilder.DropTable(
                 name: "JobOfferTechnologiesNiceToHave");

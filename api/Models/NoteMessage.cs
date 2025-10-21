@@ -14,7 +14,6 @@ namespace api.Models
         public string AdderId { get; set; }
         [ForeignKey("AdderId")]
         public AppUser Adder { get; set; }
-        
         public Application Application { get; set; }
         public int ApplicationId { get; set; }
     }

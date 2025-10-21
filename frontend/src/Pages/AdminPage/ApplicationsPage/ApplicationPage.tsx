@@ -1,5 +1,5 @@
 import { getCv, getGroupedApplications } from 'Api/ApplicationService'
-import { getAllTests } from 'Api/TestService'
+import { getAllTestsApi } from 'Api/TestService'
 import { applicationModel, Applications, GroupedApplications } from 'Models/Application'
 import { Test } from 'Models/Test'
 import ApplicationDetailModal from 'Modules/AdminPage/ApplicationDetailModal'
@@ -17,7 +17,7 @@ const ApplicationPage = (props: Props) => {
     const getData = async () => {
       const grapp = await getGroupedApplications()
       if (grapp) setGrApp(grapp);
-      const tests = await getAllTests()
+      const tests = await getAllTestsApi()
       if(tests) setTestList(tests);
     }
     useEffect(()=>{

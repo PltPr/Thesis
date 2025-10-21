@@ -44,6 +44,9 @@ namespace api.Controllers
                 return BadRequest();
 
             var test = await _testRepo.GetByIdAsync(id);
+            if (test == null)
+                return NotFound();
+                
             var result = test.toDto();
 
             return Ok(result);
