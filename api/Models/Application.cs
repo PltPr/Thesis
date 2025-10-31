@@ -21,10 +21,11 @@ namespace api.Models
         public int? Evaluation { get; set; }
         public int? TestId { get; set; }
         public Test? Test { get; set; }
+        public DateTime? TestStartTime { get; set; }
+        public DateTime? TestEndTime { get; set; }
         public DateTime? AssignTestDate { get; set; }
         public List<Note> Notes { get; set; }
         public List<Message> Messages { get; set; }
-
     }
 
     public class CV

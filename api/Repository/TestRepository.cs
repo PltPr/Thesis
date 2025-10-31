@@ -45,9 +45,26 @@ namespace api.Repository
             return test;
         }
 
+        public async Task<Test?> FinishTestAsync(int appId)
+        {
+            var app = await _context.Applications.Include(x=>x.Test).FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+            var test = app.Test;
+            if (test == null)
+                return null;
+
+            app.Status = "Test completed";
+            app.TestEndTime = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return test;
+        }
+
         public async Task<List<Test>> GetAllAsync()
         {
-            var response = await _context.Tests.Include(t=>t.TestTasks).ToListAsync();
+            var response = await _context.Tests.Include(t=>t.TestTasks).ThenInclude(x=>x.Task).ToListAsync();
             return response;
         }
 
@@ -70,6 +87,23 @@ namespace api.Repository
             var test = await _context.Tests.Include(x=>x.TestTasks).ThenInclude(x=>x.Task).FirstOrDefaultAsync(x => x.Id == app.TestId);
             if (test == null)
                 return null;
+
+            return test;
+        }
+
+        public async Task<Test?> StartTestAsync(int appId)
+        {
+            var app = await _context.Applications.Include(x=>x.Test).FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+            var test = app.Test;
+            if (test == null)
+                return null;
+
+            app.Status = "Test started";
+            app.TestStartTime = DateTime.Now;
+
+            await _context.SaveChangesAsync();
 
             return test;
         }

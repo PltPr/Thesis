@@ -1,4 +1,4 @@
-import { getTestByIdApi } from 'Api/TestService';
+import { getTestByIdApi, startTestApi } from 'Api/TestService';
 import { Test } from 'Models/Test'
 import { Link, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
@@ -26,6 +26,14 @@ const TestInfoPage = (props: Props) => {
     getTest()
   },[testId])
 
+  const startTest = async()=>{
+    try{
+      await startTestApi(Number(appId))
+    }catch(err){
+      console.error("StartTestError: ",err)
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
@@ -39,21 +47,29 @@ const TestInfoPage = (props: Props) => {
 
         <div className="border-t border-gray-300 my-4"></div>
 
-        <div className="flex justify-between items-center mt-6">
-          <div>
+        <div className="flex justify-between items-center mt-6 ">
+          <div className=''>
             <p className="text-gray-600">
               Number of tasks:{" "}
               <span className="font-semibold text-gray-800">
                 {test?.taskIds?.length || 0}
               </span>
             </p>
+          
+            <p className="text-gray-600">
+              Duration time: {" "}
+              <span className="font-semibold text-gray-800">
+                {test?.totalDurationMinutes} minutes
+              </span>
+            </p>
           </div>
 
           <Link to={`/solve-test-page/${appId}/${testId}`}>
-            <button className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition duration-200">
+            <button onClick={startTest} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition duration-200">
               Start Test
             </button>
           </Link>
+          
         </div>
       </div>
     </div>

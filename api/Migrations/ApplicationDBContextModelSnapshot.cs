@@ -283,8 +283,14 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("TestEndTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("TestId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("TestStartTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -332,11 +338,13 @@ namespace api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompilationResult")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Evaluation")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExecutionResult")
                         .HasColumnType("nvarchar(max)");
@@ -490,6 +498,9 @@ namespace api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("int");
 
                     b.Property<string>("ExpectedOutput")
                         .IsRequired()

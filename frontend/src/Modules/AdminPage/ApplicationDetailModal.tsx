@@ -1,10 +1,13 @@
 import { assignTestToAppApi, getCv, rejectApp } from 'Api/ApplicationService';
 import { AddMessage, AddNote } from 'Api/NoteMessageService';
+import { getSolutionForAllTasks } from 'Api/TaskService';
 import { Applications } from 'Models/Application';
+import { TaskWithSolution } from 'Models/Task';
 import { Test } from 'Models/Test';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import TaskNavigator from './TaskNavigator';
 
 type Props = {
     UserData: Applications
@@ -20,8 +23,9 @@ type NoteMessage = {
 const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
     const [selectedTest, setSelectedTest] = useState<number | null>(null);
     const [status, setStatus] = useState(UserData.status);
-    const [decision, setDecision] = useState<"none" | "accepting" | "rejecting" | "testAssigned"|"rejected">("none");
+    const [decision, setDecision] = useState<"none" | "accepting" | "rejecting" | "testAssigned" | "rejected" | "testEvaluating">("none");
     const assignedTest = UserData ? TestsList.find(t => t.id == UserData.testId) : null;
+    const [solutionForAllTasks, setSolutionForAllTasks] = useState<TaskWithSolution[] | null>(null);
 
     const { register, handleSubmit, formState: { errors } } = useForm<NoteMessage>({
         defaultValues: { noteContent: "", messageContent: "" }
@@ -30,10 +34,10 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
     const sendNoteMessage = async (form: NoteMessage) => {
         try {
             if (form.noteContent.trim()) {
-                await AddNote(UserData.id,form.noteContent)
+                await AddNote(UserData.id, form.noteContent)
             }
             if (form.messageContent.trim()) {
-                await AddMessage(UserData.id,form.messageContent)
+                await AddMessage(UserData.id, form.messageContent)
             }
             toast.success("Saved")
         } catch (err) {
@@ -41,14 +45,29 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
             toast.error("Something went wrong!")
         }
     }
+    const getTasksWithSolutions = async () => {
+        try {
+            const tasksData = await getSolutionForAllTasks(UserData.id);
+            if (tasksData)
+                setSolutionForAllTasks(tasksData);
+        } catch (err) {
+
+        }
+    }
 
     useEffect(() => {
         if (UserData.testId && status === "Test assigned") {
             setDecision("testAssigned");
         }
-        else if(status=="Rejected")
+        else if (status == "Rejected")
             setDecision("rejected")
-            
+        else if (status == "Test completed") {
+            setDecision("testEvaluating")
+            getTasksWithSolutions();
+        }
+
+
+
     }, [UserData.testId, status])
 
 
@@ -153,7 +172,7 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
 
                                 {TestsList.map((test) => (
                                     <div key={test.id} onClick={() => setSelectedTest(test.id)}
-                                        className={`p-3 m-3 cursor-pointer border border-2 rounded-md gap-5
+                                        className={`p-3 m-3 cursor-pointer  border-2 rounded-md gap-5
                                 ${selectedTest === test.id ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-gray-200 bg-gray-50'}`}>
                                         <h1>{test.tittle}</h1>
                                         <div>Desc: {test.description}</div>
@@ -167,11 +186,26 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
 
                         </div>
                     )}
-                    {(decision == "rejecting" || decision=="rejected") && (
+                    {(decision == "rejecting" || decision == "rejected") && (
                         <div className='border-b-2 border-gray-500  w-full h-full flex flex-col'>
                             Application rejected
                         </div>
                     )}
+                    {decision === "testEvaluating" && solutionForAllTasks && solutionForAllTasks.length > 0 && (
+                        <div className="border-b-2 border-gray-500 w-full h-full flex flex-col p-4">
+                            <h1 className="text-lg font-bold mb-2">Test evaluation ({solutionForAllTasks.length} tasks)</h1>
+
+                            
+                            <TaskNavigator solutions={solutionForAllTasks} />
+                        </div>
+                    )}
+
+                    {decision === "testEvaluating" && (!solutionForAllTasks || solutionForAllTasks.length === 0) && (
+                        <div className="border-b-2 border-gray-500 w-full h-full flex flex-col justify-center items-center text-gray-500">
+                            No task solutions found.
+                        </div>
+                    )}
+
 
 
                     <div className='border-r-2 border-gray-500 w-full h-full'>
@@ -187,24 +221,24 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
                             <div>
                                 <form onSubmit={handleSubmit(sendNoteMessage)}>
                                     <div className='flex flex-col'>
-                                    <h1 className=''>Add message</h1>
-                                    <input {...register("messageContent")}
-                                    placeholder='Message'
-                                    className='border border-2 border-black'>
-                                    {errors.messageContent&&(
-                                        <p className="text-red-500">{errors.messageContent.message}</p>
-                                    )}
-                                    </input>
-                                    <h1 className=''>Add note</h1>
-                                    <input {...register("noteContent")}
-                                    placeholder='Note'
-                                    className='border border-2 border-black'>
-                                        {errors.messageContent&&(
-                                            <p className="text-red-500">{errors.messageContent.message}</p>
-                                        )}
-                                    </input>
+                                        <h1 className=''>Add message</h1>
+                                        <input {...register("messageContent")}
+                                            placeholder='Message'
+                                            className='border-2 border-black'>
+                                            {errors.messageContent && (
+                                                <p className="text-red-500">{errors.messageContent.message}</p>
+                                            )}
+                                        </input>
+                                        <h1 className=''>Add note</h1>
+                                        <input {...register("noteContent")}
+                                            placeholder='Note'
+                                            className='border-2 border-black'>
+                                            {errors.messageContent && (
+                                                <p className="text-red-500">{errors.messageContent.message}</p>
+                                            )}
+                                        </input>
 
-                                    <button type="submit" className='bg-blue-500 mt-5 hover:bg-blue-600'>Send</button>
+                                        <button type="submit" className='bg-blue-500 mt-5 hover:bg-blue-600'>Send</button>
                                     </div>
                                 </form>
                             </div>

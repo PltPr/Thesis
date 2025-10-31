@@ -2,5 +2,7 @@ export interface Test {
     id:number,
     tittle:string,
     description:string,
-    taskIds:number[]
+    taskIds:number[],
+    totalDurationMinutes:number
+
 }

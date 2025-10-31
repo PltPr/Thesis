@@ -13,6 +13,7 @@ const TestList = ({data}: Props) => {
               <h1>{test.tittle}</h1>
                 <div>Desc: {test.description}</div>
                 <div>TaskNumbers: {test.taskIds?.join(", ")}</div>
+                <div>TotalDuration: {test.totalDurationMinutes} minutes</div>
             </div>
         ))}
     </div>

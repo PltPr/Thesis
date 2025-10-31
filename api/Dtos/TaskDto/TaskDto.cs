@@ -10,5 +10,6 @@ namespace api.Dtos.TaskDto
         public int Id { get; set; }
         public string Description { get; set; }
         public string ExpectedOutput { get; set; }
+        public int DurationMinutes { get; set; }
     }
 }

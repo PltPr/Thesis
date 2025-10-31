@@ -20,7 +20,7 @@ const MyApplicationPage = (props: Props) => {
     console.log(applications);
 
     return (
-        <div>
+        <div className='border'>
             {applications.map((app) => (
                 <div className="m-5 p-5 border border-black flex flex-col">
                     <h1>Job Tittle: {app.jobOfferTitle}</h1>
@@ -38,6 +38,11 @@ const MyApplicationPage = (props: Props) => {
                     {app.testId && app.status=="Test assigned"&&(
                         <Link to={`/test-info-page/${app.id}/${app.testId}`}>
                         <button className="m-3 p-1 bg-green-600 hover:bg-green-700 w-1/12">Solve test!</button>
+                        </Link>
+                    )}
+                    {app.testId && app.status=="Test started"&&(
+                        <Link to={`/solve-test-page/${app.id}/${app.testId}`}>
+                        <button className="m-3 p-1 bg-green-600 hover:bg-green-700 w-1/12">Continue test solving</button>
                         </Link>
                     )}
 

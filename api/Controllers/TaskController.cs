@@ -70,6 +70,16 @@ namespace api.Controllers
 
             return Ok(result);
         }
+        [HttpGet("GetAllTasksForSolving")]
+        public async Task<IActionResult>GetAllTasksForSolving(int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _taskRepo.GetAllTasksForSolvingAsync(appId);
+
+            return Ok(result);
+        }
         
         [HttpPost("AddSolutionForTask")]
         public async Task<IActionResult>AddSolutionForTask(AddSolutionDto dto)
@@ -82,5 +92,32 @@ namespace api.Controllers
 
             return Ok(result);
         }
-    }
+        [HttpGet("GetCodeSubmissionForTask")]
+        public async Task<IActionResult> GetCodeSubmissionForTask(int appId,int taskId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _taskRepo.GetCodeSubmissionForTask(appId, taskId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+
+        }
+        [HttpGet("GetCodeSubmissionForAllTasks")]
+        public async Task<IActionResult> GetCodeSubmissionForAllTasks(int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _taskRepo.GetCodeSubmissionForAllTask(appId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+
+        }
+
+	}
 }

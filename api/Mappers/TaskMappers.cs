@@ -14,7 +14,8 @@ namespace api.Mappers
             {
                 Id = model.Id,
                 Description = model.Description,
-                ExpectedOutput = model.ExpectedOutput
+                ExpectedOutput = model.ExpectedOutput,
+                DurationMinutes=model.DurationMinutes
             };
         }
 
@@ -23,7 +24,8 @@ namespace api.Mappers
             return new TaskItem
             {
                 Description = model.Description,
-                ExpectedOutput = model.ExpectedOutput
+                ExpectedOutput = model.ExpectedOutput,
+                DurationMinutes = model.DurationMinutes
             };
         }
         public static CodeSubmission toCodeSubmission(this AddSolutionDto dto)
@@ -33,7 +35,30 @@ namespace api.Mappers
                 ApplicationId = dto.ApplicationId,
                 TaskId = dto.TaskId,
                 Code = dto.Code,
-                SubmissionDate=DateTime.Now
+                SubmissionDate = DateTime.Now
+            };
+        }
+        public static TasksForSolvingDto toTaskForSolvingDto(this TaskItem model, bool isSolved)
+        {
+            return new TasksForSolvingDto
+            {
+                Id = model.Id,
+                Description = model.Description,
+                ExpectedOutput = model.ExpectedOutput,
+                isSolved = isSolved
+            };
+        }
+        public static TaskWithSolutionDto toTaskWithSolutionDto(this TaskItem task, CodeSubmission codeSubmission)
+        {
+            return new TaskWithSolutionDto
+            {
+                CodeSubmissionId = codeSubmission.Id,
+                TaskDescription = task.Description,
+                TaskExpectedOutput = task.ExpectedOutput,
+                Code = codeSubmission.Code,
+                SubmissionDate = codeSubmission.SubmissionDate,
+                CompilationResult = codeSubmission.CompilationResult,
+                ExecutionResult = codeSubmission.ExecutionResult
             };
         }
     }

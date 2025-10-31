@@ -16,9 +16,14 @@ module.exports = {
       spacing: {
         180: "32rem",
       },
+      colors: {
+        primary: "#1b9aaa", 
+      },
     },
   },
 
-  plugins: []
-    
-};
+ plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["light"], 
+  },
+}

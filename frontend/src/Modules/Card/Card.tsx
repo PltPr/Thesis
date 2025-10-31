@@ -11,51 +11,49 @@ const Card: React.FC<Props> = ({ jobOffer }) => {
     <Link
       to={`/card-detail-page/${jobOffer.id}`}
       state={{ jobOffer }}
-      className=" block bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden max-w-xl mx-auto my-4"
+      className="block border border-gray-200 hover:border-blue-400 transition-all duration-200 rounded-lg bg-white hover:bg-gray-50"
     >
-      <div className="flex flex-col sm:flex-row">
-        {/* Optional Image Placeholder */}
-        <div className="sm:w-1/4 bg-gray-100 flex items-center justify-center p-4">
-          {/* Replace with actual image if available */}
-          <span className="text-3xl text-gray-400">🏢</span>
+      <div className="flex items-center justify-between p-4 gap-4">
+        {/* Ikona lub logo firmy */}
+        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 flex items-center justify-center rounded-md">
+          <span className="text-2xl text-gray-400">ikona</span>
         </div>
 
-        <div className="flex-1 p-6 flex flex-col justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-blue-600 mb-1 uppercase">
-              {jobOffer.jobTitle}
-            </h2>
-            <p className="text-sm text-gray-500 uppercase mb-3">
-              {jobOffer.jobType}
-            </p>
-            <div className="flex items-center text-gray-700 mb-4">
-              <span className="font-bold text-lg mr-2">
-                ${jobOffer.salary}
-              </span>
-              <span className="text-sm bg-blue-100 text-blue-600 py-1 px-3 rounded-full">
-                {jobOffer.programmingLanguage}
-              </span>
-            </div>
-          </div>
+        {/* Główne informacje */}
+        <div className="flex-1 min-w-0">
+          <h2 className="text-lg font-semibold text-gray-800 truncate">
+            {jobOffer.jobTitle}
+          </h2>
+          <p className="text-sm text-gray-500 truncate">
+            {jobOffer.jobType} • {jobOffer.programmingLanguage}
+          </p>
 
-          {/* Tags / Technologies */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            {jobOffer.jobOfferTechnology?.map((tech) => (
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            {jobOffer.jobOfferTechnology?.slice(0, 4).map((tech) => (
               <span
                 key={tech.name}
-                className="text-sm bg-gray-100 text-gray-800 py-1 px-3 rounded-full"
+                className="text-xs bg-gray-100 text-gray-700 py-0.5 px-2 rounded-md"
               >
                 {tech.name}
               </span>
             ))}
+            {jobOffer.jobOfferTechnology?.length > 4 && (
+              <span className="text-xs text-gray-500">
+                +{jobOffer.jobOfferTechnology.length - 4}
+              </span>
+            )}
           </div>
+        </div>
 
-          {/* Details Button */}
-          <div className="text-right">
-            <span className="inline-block bg-blue-600 text-white py-2 px-4 rounded-lg uppercase text-sm hover:bg-blue-700 transition-colors duration-300">
-              Details →
-            </span>
-          </div>
+        {/* Prawa sekcja — wynagrodzenie i przycisk */}
+        <div className="flex flex-col items-end min-w-[100px]">
+          <span className="text-blue-600 font-semibold text-base">
+            ${jobOffer.salary}
+          </span>
+          <span className="text-xs text-gray-400">per month</span>
+          <button className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
+            Szczegóły →
+          </button>
         </div>
       </div>
     </Link>

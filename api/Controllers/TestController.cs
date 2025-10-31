@@ -60,7 +60,7 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpGet("GetTestForApp")]
-        public async Task<IActionResult>GetTestForApp(int appId)
+        public async Task<IActionResult> GetTestForApp(int appId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -71,6 +71,30 @@ namespace api.Controllers
 
             var result = test.toDto();
             return Ok(result);
+        }
+        [HttpPut("FinishTest/{appId}")]
+        public async Task<IActionResult> FinishTest([FromRoute] int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var test = await _testRepo.FinishTestAsync(appId);
+            if (test == null)
+                return NotFound();
+
+            return Ok();
+        }
+        [HttpPut("StartTest/{appId}")]
+        public async Task <IActionResult>StartTest([FromRoute] int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var test = await _testRepo.StartTestAsync(appId);
+            if (test == null)
+                return NotFound();
+
+            return Ok();
         }
 
     }

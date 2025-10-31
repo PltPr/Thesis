@@ -83,11 +83,11 @@ namespace api.Data
             {
                 var tasks = new[]
                 {
-                    new TaskItem { Description = "Napisz funkcję, która odwraca stringa", ExpectedOutput = "Wejście: 'abc' -> Wyjście: 'cba'" },
-                    new TaskItem { Description = "Policz sumę liczb w tablicy", ExpectedOutput = "Wejście: [1,2,3] -> Wyjście: 6" },
-                    new TaskItem { Description = "Zaimplementuj algorytm sortowania bąbelkowego", ExpectedOutput = "Posortowana tablica rosnąco" },
-                    new TaskItem { Description = "Stwórz prostą tabelę w SQL", ExpectedOutput = "Tabela Users z kolumnami Id, Name, Email" },
-                    new TaskItem { Description = "Napisz skrypt w Pythonie, który pobiera dane z API", ExpectedOutput = "Wyświetlone dane JSON" }
+                    new TaskItem { Description = "Napisz funkcję, która odwraca stringa", ExpectedOutput = "Wejście: 'abc' -> Wyjście: 'cba'", DurationMinutes = 5 },
+                    new TaskItem { Description = "Policz sumę liczb w tablicy", ExpectedOutput = "Wejście: [1,2,3] -> Wyjście: 6", DurationMinutes = 7 },
+                    new TaskItem { Description = "Zaimplementuj algorytm sortowania bąbelkowego", ExpectedOutput = "Posortowana tablica rosnąco", DurationMinutes = 10 },
+                    new TaskItem { Description = "Stwórz prostą tabelę w SQL", ExpectedOutput = "Tabela Users z kolumnami Id, Name, Email", DurationMinutes = 8 },
+                    new TaskItem { Description = "Napisz skrypt w Pythonie, który pobiera dane z API", ExpectedOutput = "Wyświetlone dane JSON", DurationMinutes = 12 }
                 };
 
                 context.TaskItems.AddRange(tasks);
@@ -106,19 +106,21 @@ namespace api.Data
 
                 context.Tests.AddRange(tests);
                 context.SaveChanges();
-            }
 
-            // --- TEST-TASK RELATIONS ---
-            if (!context.TestTasks.Any())
-            {
+                // Pobranie prawdziwych Id testów po SaveChanges
+                var testBackendId = tests[0].Id;
+                var testFrontendId = tests[1].Id;
+                var testDataScienceId = tests[2].Id;
+
+                // --- TEST-TASK RELATIONS ---
                 var testTasks = new[]
                 {
-                    new TestTask { TestId = 1, TaskId = 1 }, // Backend test -> reverse string
-                    new TestTask { TestId = 1, TaskId = 3 }, // Backend test -> bubble sort
-                    new TestTask { TestId = 2, TaskId = 2 }, // Frontend test -> sum array
-                    new TestTask { TestId = 2, TaskId = 5 }, // Frontend test -> API script
-                    new TestTask { TestId = 3, TaskId = 4 }, // Data Science test -> SQL table
-                    new TestTask { TestId = 3, TaskId = 5 }  // Data Science test -> Python API script
+                    new TestTask { TestId = testBackendId, TaskId = 1 },
+                    new TestTask { TestId = testBackendId, TaskId = 3 },
+                    new TestTask { TestId = testFrontendId, TaskId = 2 },
+                    new TestTask { TestId = testFrontendId, TaskId = 5 },
+                    new TestTask { TestId = testDataScienceId, TaskId = 4 },
+                    new TestTask { TestId = testDataScienceId, TaskId = 5 }
                 };
 
                 context.TestTasks.AddRange(testTasks);

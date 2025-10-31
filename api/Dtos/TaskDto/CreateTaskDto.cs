@@ -9,5 +9,6 @@ namespace api.Dtos.TaskDto
     {
         public string Description { get; set; }
         public string ExpectedOutput { get; set; }
+        public int DurationMinutes { get; set; }
     }
 }

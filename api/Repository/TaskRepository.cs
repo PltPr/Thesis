@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.TaskDto;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,22 @@ namespace api.Repository
             return tasks;
         }
 
+        public async Task<List<TasksForSolvingDto>?> GetAllTasksForSolvingAsync(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+            var testId = app.TestId;
+            if (testId == null)
+                return null;
+            var testTasks = await _context.TestTasks.Where(x => x.TestId == testId).Select(x => x.TaskId).ToListAsync();
+            var tasksList = await _context.TaskItems.Where(x => testTasks.Contains(x.Id)).ToListAsync();
+
+            var solvedTaskIds = await _context.CodeSubmissions.Where(x => x.ApplicationId == appId && !String.IsNullOrWhiteSpace(x.Code)).Select(x => x.TaskId).ToListAsync();
+            var tasksDto = tasksList.Select(x => x.toTaskForSolvingDto(solvedTaskIds.Contains(x.Id))).ToList();
+            return tasksDto;
+        }
+
         public async Task<List<TaskItem>?> GetAllTasksForTestAsync(int testId)
         {
             var test = await _context.Tests.FirstOrDefaultAsync(x => x.Id == testId);
@@ -59,6 +76,48 @@ namespace api.Repository
             if (task == null)
                 return null;
             return task;
+        }
+
+        public async Task<List<TaskWithSolutionDto>?> GetCodeSubmissionForAllTask(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+            var testId = app.TestId;
+            if (testId == null)
+                return null;
+
+            var tasks = await _context.TestTasks.Include(x=>x.Task).Where(x => x.TestId == testId).ToListAsync();
+
+            if (!tasks.Any())
+                return new List<TaskWithSolutionDto>();
+
+            var codeSubmission = await _context.CodeSubmissions.Where(x => x.ApplicationId == appId).ToListAsync();
+
+            var result = tasks.Select(t =>
+            {
+                var submission = codeSubmission.FirstOrDefault(x => x.TaskId == t.TaskId);
+                return t.Task.toTaskWithSolutionDto(submission);
+            }).ToList();
+
+            return result;
+        }
+
+        public async Task<TaskWithSolutionDto?> GetCodeSubmissionForTask(int appId, int taskId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+            var task = await _context.TaskItems.FirstOrDefaultAsync(x => x.Id == taskId);
+            if (task == null)
+                return null;
+
+            var codeSubmission = await _context.CodeSubmissions.Where(x => x.ApplicationId == appId && x.TaskId == taskId).FirstOrDefaultAsync();
+            if (codeSubmission == null)
+                return null;
+
+            var result = task.toTaskWithSolutionDto(codeSubmission);
+            return result;
         }
     }
 }

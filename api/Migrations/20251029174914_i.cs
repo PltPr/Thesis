@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class i : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,6 +91,7 @@ namespace api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    DurationMinutes = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExpectedOutput = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -294,6 +295,8 @@ namespace api.Migrations
                     JobOfferId = table.Column<int>(type: "int", nullable: false),
                     Evaluation = table.Column<int>(type: "int", nullable: true),
                     TestId = table.Column<int>(type: "int", nullable: true),
+                    TestStartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TestEndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AssignTestDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -354,10 +357,11 @@ namespace api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CompilationResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExecutionResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Evaluation = table.Column<int>(type: "int", nullable: false),
                     ApplicationId = table.Column<int>(type: "int", nullable: false),
                     TaskId = table.Column<int>(type: "int", nullable: false)
                 },

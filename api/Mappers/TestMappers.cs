@@ -23,9 +23,10 @@ namespace api.Mappers
             return new TestDto
             {
                 Id = model.Id,
-                Tittle=model.Tittle,
+                Tittle = model.Tittle,
                 Description = model.Description,
-                TaskIds = model.TestTasks.Select(t=>t.TaskId).ToList()
+                TaskIds = model.TestTasks.Select(t => t.TaskId).ToList(),
+                TotalDurationMinutes = model.TestTasks.Sum(t=>t.Task.DurationMinutes)
             };
         }
         

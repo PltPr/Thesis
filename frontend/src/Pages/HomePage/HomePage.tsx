@@ -8,11 +8,11 @@ interface Props {}
 const HomePage = (props: Props) => {
   return (
     <div className="flex min-h-screen  bg-blue-700">
-      <div className="w-64 bg-white shadow-xl h-screen flex flex-col px-6 py-4  mt-3 border border-black">
+      <div className="w-64 bg-white flex flex-col px-6 py-4  mt-2 sticky top-0">
         Filters
       </div>
 
-      <div className="flex-1 bg-white shadow-[0_0_30px_-7px_#525d6b] m-3 ">
+      <div className="flex-1 bg-white  m-2 ">
         <CardList />
       </div>
     </div>
