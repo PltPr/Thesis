@@ -24,7 +24,7 @@ const SolveTestPage = (props: Props) => {
     useEffect(()=>{
         const getTasks = async()=>{
             try{
-                const tasksData = await getTasksForTestSolution(Number(testId));
+                const tasksData = await getTasksForTestSolution(Number(appId));
                 if(tasksData)
                 {
                   const unsolvedTasks = tasksData.filter(task=>!task.isSolved)
@@ -39,7 +39,7 @@ const SolveTestPage = (props: Props) => {
         }
         getTasks();
     },[testId])
-
+    
     const addSolution = async()=>{
       if(submitting) return false
       setSubmitting(true)

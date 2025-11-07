@@ -43,7 +43,7 @@ const ApplicationPage = (props: Props) => {
                       <strong>Name:</strong> {app.name} {app.surname}
                     </span>
                     <span>
-                      <strong>Opis:</strong> {app.description}
+                      <strong>Opis:</strong> {app.aboutYourself}
                     </span>
                     <span>
                       <strong>Data:</strong>{" "}

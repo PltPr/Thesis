@@ -59,6 +59,7 @@ export const addSolutionForTask = async (appId:number,taskId:number,code:string)
 export const getSolutionForAllTasks = async(appId:number)=>{
     try{
         const response = await axios.get<TaskWithSolution[]>(`http://localhost:5116/api/Task/GetCodeSubmissionForAllTasks?appId=${appId}`)
+        console.log(response.data)
         return response.data
     }catch(err){
         console.error("getSolutionForAllTasksError: ",err)

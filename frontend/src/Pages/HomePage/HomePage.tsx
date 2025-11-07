@@ -1,11 +1,14 @@
 import React from 'react'
 import CardList from '../../Modules/CardList/CardList'
+import { useAuth } from 'Context/useAuth';
 
 
 
 interface Props {}
 
 const HomePage = (props: Props) => {
+  const {token}=useAuth();
+  console.log(token)
   return (
     <div className="flex min-h-screen  bg-blue-700">
       <div className="w-64 bg-white flex flex-col px-6 py-4  mt-2 sticky top-0">

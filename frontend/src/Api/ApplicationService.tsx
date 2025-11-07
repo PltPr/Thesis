@@ -1,10 +1,12 @@
 import axios from "axios"
 import { applicationModel,GroupedApplications } from "Models/Application";
 
-export const AddApplicationApi =async(description:string,cv:File,jobOfferId:number)=>{
+export const AddApplicationApi =async(aboutYourself:string,expectedMonthlySalary:string,similarExperience:string,cv:File,jobOfferId:number)=>{
     try{
         const formData = new FormData();
-        formData.append("Description",description);
+        formData.append("AboutYourself",aboutYourself);
+        formData.append("ExpectedMonthlySalary",expectedMonthlySalary);
+        formData.append("SimilarExperience",similarExperience)
         formData.append("CV",cv);
         formData.append("JobOfferId",jobOfferId.toString());
 

@@ -24,7 +24,7 @@ const MyApplicationPage = (props: Props) => {
             {applications.map((app) => (
                 <div className="m-5 p-5 border border-black flex flex-col">
                     <h1>Job Tittle: {app.jobOfferTitle}</h1>
-                    <h1>Description: {app.description}</h1>
+                    <h1>Description: {app.aboutYourself}</h1>
                     <h1>Status: {app.status}</h1>
                     <h1>Application Date: 
                         {new Date(app.date).toLocaleString('pl-PL', {
