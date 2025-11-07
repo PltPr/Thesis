@@ -256,9 +256,15 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AboutYourself")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ApplicationEvaluationId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("AssignTestDate")
                         .HasColumnType("datetime2");
@@ -269,15 +275,16 @@ namespace api.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("ExpectedMonthlySalary")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Evaluation")
-                        .HasColumnType("int");
-
                     b.Property<int>("JobOfferId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SimilarExperience")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -296,6 +303,8 @@ namespace api.Migrations
 
                     b.HasIndex("AppUserId");
 
+                    b.HasIndex("ApplicationEvaluationId");
+
                     b.HasIndex("CvId");
 
                     b.HasIndex("JobOfferId");
@@ -303,6 +312,34 @@ namespace api.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("api.Models.ApplicationEvaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CriteriaMatchScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EducationScore")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecruiterMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TechnicalSkillScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserExperienceScore")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationEvaluation");
                 });
 
             modelBuilder.Entity("api.Models.CV", b =>
@@ -623,6 +660,10 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("api.Models.ApplicationEvaluation", "ApplicationEvaluation")
+                        .WithMany()
+                        .HasForeignKey("ApplicationEvaluationId");
+
                     b.HasOne("api.Models.CV", "CV")
                         .WithMany()
                         .HasForeignKey("CvId")
@@ -640,6 +681,8 @@ namespace api.Migrations
                         .HasForeignKey("TestId");
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("ApplicationEvaluation");
 
                     b.Navigation("CV");
 

@@ -45,6 +45,7 @@ namespace api.Mappers
                 Id = model.Id,
                 Description = model.Description,
                 ExpectedOutput = model.ExpectedOutput,
+                DurationMinutes = model.DurationMinutes,
                 isSolved = isSolved
             };
         }

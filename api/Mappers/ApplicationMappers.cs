@@ -17,7 +17,9 @@ namespace api.Mappers
             {
                 Date = DateTime.Now,
                 Status = "new",
-                Description = model.Description,
+                AboutYourself = model.AboutYourself,
+                SimilarExperience = model.SimilarExperience,
+                ExpectedMonthlySalary = model.ExpectedMonthlySalary,
                 AppUserId = userId,
                 JobOfferId = offerId,
             };
@@ -28,13 +30,15 @@ namespace api.Mappers
             {
                 Id = model.Id,
                 JobOfferTitle = model.JobOffer?.JobTitle,
-                Description = model.Description,
+                AboutYourself = model.AboutYourself,
+                SimilarExperience = model.SimilarExperience,
+                ExpectedMonthlySalary = model.ExpectedMonthlySalary,
                 Date = model.Date,
                 Status = model.Status,
                 CvFileName = model.CV.CvFileName,
                 CvId = model.CvId,
                 TestId = model.TestId,
-                AssignTestDate=model.AssignTestDate
+                AssignTestDate = model.AssignTestDate
             };
         }
     }

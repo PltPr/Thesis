@@ -36,7 +36,7 @@ namespace api.Repository
             application.TestId = testId;
             application.Status = "Test assigned";
             application.AssignTestDate = DateTime.Now;
-            
+
             await _context.SaveChangesAsync();
 
             return application;
@@ -58,7 +58,7 @@ namespace api.Repository
 
         public async Task<List<Application>> GetUserApplications(string userId)
         {
-            var result = await _context.Applications.Include(a=>a.CV).Include(a=>a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
+            var result = await _context.Applications.Include(a => a.CV).Include(a => a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
             return result;
         }
 
@@ -74,13 +74,15 @@ namespace api.Repository
                     Id = app.Id,
                     Name = app.AppUser.Name,
                     Surname = app.AppUser.Surname,
-                    Description = app.Description,
+                    AboutYourself = app.AboutYourself,
+                    SimilarExperience = app.SimilarExperience,
+                    ExpectedMonthlySalary = app.ExpectedMonthlySalary,
                     Date = app.Date,
                     CvId = app.CvId,
                     CvFileName = app.CV.CvFileName,
                     Status = app.Status,
                     TestId = app.TestId,
-                    AssignTestDate=app.AssignTestDate
+                    AssignTestDate = app.AssignTestDate
                 }).ToList()
             }).ToListAsync();
 
@@ -89,7 +91,7 @@ namespace api.Repository
 
         public async Task<Application?> RejectAppAsync(int appId)
         {
-            var app = await _context.Applications.Include(c=>c.CV).FirstOrDefaultAsync(x => x.Id == appId);
+            var app = await _context.Applications.Include(c => c.CV).FirstOrDefaultAsync(x => x.Id == appId);
             if (app == null)
                 return null;
 

@@ -9,7 +9,9 @@ namespace api.Dtos.AppalicationDto
     {
         public int Id { get; set; }
         public string JobOfferTitle { get; set; }
-        public string Description { get; set; }
+        public string? AboutYourself { get; set; }
+        public string SimilarExperience { get; set; }
+        public string ExpectedMonthlySalary { get; set; }
         public DateTime Date { get; set; }
         public int CvId { get; set; }
         public string CvFileName { get; set; }

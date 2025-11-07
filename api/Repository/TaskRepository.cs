@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.TaskDto;
 using api.Interfaces;
 using api.Mappers;
+using api.Migrations;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -87,16 +88,17 @@ namespace api.Repository
             if (testId == null)
                 return null;
 
-            var tasks = await _context.TestTasks.Include(x=>x.Task).Where(x => x.TestId == testId).ToListAsync();
+            var tasks = await _context.TestTasks.Include(x => x.Task).Where(x => x.TestId == testId).ToListAsync();
 
             if (!tasks.Any())
                 return new List<TaskWithSolutionDto>();
 
             var codeSubmission = await _context.CodeSubmissions.Where(x => x.ApplicationId == appId).ToListAsync();
+            
 
             var result = tasks.Select(t =>
             {
-                var submission = codeSubmission.FirstOrDefault(x => x.TaskId == t.TaskId);
+                var submission = codeSubmission.FirstOrDefault(x => x.TaskId == t.TaskId) ?? new CodeSubmission();
                 return t.Task.toTaskWithSolutionDto(submission);
             }).ToList();
 

@@ -14,6 +14,23 @@ namespace api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ApplicationEvaluation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserExperienceScore = table.Column<int>(type: "int", nullable: false),
+                    CriteriaMatchScore = table.Column<int>(type: "int", nullable: false),
+                    TechnicalSkillScore = table.Column<int>(type: "int", nullable: false),
+                    EducationScore = table.Column<int>(type: "int", nullable: false),
+                    RecruiterMessage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationEvaluation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -289,11 +306,13 @@ namespace api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AboutYourself = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SimilarExperience = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpectedMonthlySalary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CvId = table.Column<int>(type: "int", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     JobOfferId = table.Column<int>(type: "int", nullable: false),
-                    Evaluation = table.Column<int>(type: "int", nullable: true),
+                    ApplicationEvaluationId = table.Column<int>(type: "int", nullable: true),
                     TestId = table.Column<int>(type: "int", nullable: true),
                     TestStartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TestEndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -302,6 +321,11 @@ namespace api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Applications_ApplicationEvaluation_ApplicationEvaluationId",
+                        column: x => x.ApplicationEvaluationId,
+                        principalTable: "ApplicationEvaluation",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Applications_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
@@ -447,6 +471,11 @@ namespace api.Migrations
                     { "Examiner", null, "Examiner", "EXAMINER" },
                     { "User", null, "User", "USER" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_ApplicationEvaluationId",
+                table: "Applications",
+                column: "ApplicationEvaluationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_AppUserId",
@@ -600,6 +629,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "TaskItems");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationEvaluation");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -8,7 +8,10 @@ namespace api.Dtos.AppalicationDto
 {
     public class AddApplicationDto
     {
-        public string Description { get; set; }
+        public string? AboutYourself { get; set; }
+        public string SimilarExperience { get; set; }
+        public string ExpectedMonthlySalary { get; set; }
+
         public IFormFile CV { get; set; }
         public int JobOfferId { get; set; }
     }

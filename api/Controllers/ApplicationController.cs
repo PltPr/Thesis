@@ -42,7 +42,9 @@ namespace api.Controllers
 
             var application = new Application
             {
-                Description = dto.Description,
+                AboutYourself = dto.AboutYourself,
+                SimilarExperience = dto.SimilarExperience,
+ExpectedMonthlySalary=dto.ExpectedMonthlySalary,
                 Date = DateTime.Now,
                 Status = "new",
                 AppUserId = userId,
