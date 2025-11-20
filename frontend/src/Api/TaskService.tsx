@@ -65,3 +65,17 @@ export const getSolutionForAllTasks = async(appId:number)=>{
         console.error("getSolutionForAllTasksError: ",err)
     }
 }
+
+export const addEvaluationForSolutionApi = async (codeSubmissionId:number,evaluation:number)=>{
+    try{
+        const response = await axios.put("http://localhost:5116/api/Task/AddEvaluationForSolution",{
+            codeSubmissionId:codeSubmissionId,
+            evaluation:evaluation
+        });
+    }catch(err)
+    {
+        console.error("addEvaluationForSolutionApiError: ",err)
+        throw err;
+    }
+}
+

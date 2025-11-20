@@ -303,7 +303,9 @@ namespace api.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("ApplicationEvaluationId");
+                    b.HasIndex("ApplicationEvaluationId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationEvaluationId] IS NOT NULL");
 
                     b.HasIndex("CvId");
 
@@ -328,7 +330,7 @@ namespace api.Migrations
                     b.Property<int>("EducationScore")
                         .HasColumnType("int");
 
-                    b.Property<string>("RecruiterMessage")
+                    b.Property<string>("RecruiterNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TechnicalSkillScore")
@@ -339,7 +341,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationEvaluation");
+                    b.ToTable("ApplicationEvaluations");
                 });
 
             modelBuilder.Entity("api.Models.CV", b =>
@@ -380,7 +382,7 @@ namespace api.Migrations
                     b.Property<string>("CompilationResult")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Evaluation")
+                    b.Property<int?>("Evaluation")
                         .HasColumnType("int");
 
                     b.Property<string>("ExecutionResult")
@@ -661,8 +663,8 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.HasOne("api.Models.ApplicationEvaluation", "ApplicationEvaluation")
-                        .WithMany()
-                        .HasForeignKey("ApplicationEvaluationId");
+                        .WithOne("Application")
+                        .HasForeignKey("api.Models.Application", "ApplicationEvaluationId");
 
                     b.HasOne("api.Models.CV", "CV")
                         .WithMany()
@@ -810,6 +812,11 @@ namespace api.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("api.Models.ApplicationEvaluation", b =>
+                {
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("api.Models.JobOffer", b =>

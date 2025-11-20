@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.AppalicationDto;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -26,6 +28,21 @@ namespace api.Repository
             return model;
         }
 
+        public async Task<ApplicationEvaluation?> AddEvaluationForAppAsync(AddAppEvaluationDto dto)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == dto.AppId);
+            if (app == null)
+                return null;
+
+            var evaluation = dto.ToAppEvaluationModel();
+
+            app.ApplicationEvaluation = evaluation;
+
+            await _context.SaveChangesAsync();
+
+            return evaluation;
+
+        }
 
         public async Task<Application?> AssignTestToAppAsync(int appId, int testId)
         {
@@ -54,6 +71,31 @@ namespace api.Repository
                 return null;
 
             return (app);
+        }
+
+        public async Task<List<GetClassificationGroupDto>> GetClassificationAsync()
+        {
+            var apps = await _context.Applications.Include(x=>x.AppUser).Include(x=>x.JobOffer).Include(x=>x.ApplicationEvaluation).Where(a=>a.Status=="Test Evaluated").ToListAsync();
+
+            var result = apps.GroupBy(app=>app.JobOffer.JobTitle)
+            .Select(g=> new GetClassificationGroupDto
+            {
+                JobTitle=g.Key,
+                Applications=g.Select(app=>app.toGetClassificationDto()).ToList()
+            }).ToList();
+
+            return result;
+        }
+
+        public async Task<ApplicationEvaluation?> GetEvaluationForAppAsync(int appId)
+        {
+            var app = await _context.Applications.Include(x=>x.ApplicationEvaluation).FirstOrDefaultAsync(x => x.Id == appId);
+            if (app == null)
+                return null;
+
+            var evaluation = app.ApplicationEvaluation;
+
+            return evaluation;
         }
 
         public async Task<List<Application>> GetUserApplications(string userId)

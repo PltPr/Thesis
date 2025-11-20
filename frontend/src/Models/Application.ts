@@ -31,3 +31,24 @@ export type Applications={
     testId:number,
     assignTestDate:Date
 }
+
+export type ApplicationEvaluation={
+    appId:number,
+    userExperienceScore:number,
+    criteriaMatchScore:number,
+    technicalSkillScore:number,
+    educationScore:number,
+    recruiterNote:string
+}
+
+export type GroupedClassification={
+    jobTitle:string,
+    applications:Classifications[]
+}
+
+export type Classifications={
+    applicationId:number,
+    firstName:string,
+    lastName:string,
+    evaluationScore:number
+}

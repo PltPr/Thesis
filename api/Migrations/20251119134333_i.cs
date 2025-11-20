@@ -14,7 +14,7 @@ namespace api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ApplicationEvaluation",
+                name: "ApplicationEvaluations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -23,11 +23,11 @@ namespace api.Migrations
                     CriteriaMatchScore = table.Column<int>(type: "int", nullable: false),
                     TechnicalSkillScore = table.Column<int>(type: "int", nullable: false),
                     EducationScore = table.Column<int>(type: "int", nullable: false),
-                    RecruiterMessage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RecruiterNote = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationEvaluation", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationEvaluations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -322,9 +322,9 @@ namespace api.Migrations
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Applications_ApplicationEvaluation_ApplicationEvaluationId",
+                        name: "FK_Applications_ApplicationEvaluations_ApplicationEvaluationId",
                         column: x => x.ApplicationEvaluationId,
-                        principalTable: "ApplicationEvaluation",
+                        principalTable: "ApplicationEvaluations",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Applications_AspNetUsers_AppUserId",
@@ -385,7 +385,7 @@ namespace api.Migrations
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CompilationResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExecutionResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Evaluation = table.Column<int>(type: "int", nullable: false),
+                    Evaluation = table.Column<int>(type: "int", nullable: true),
                     ApplicationId = table.Column<int>(type: "int", nullable: false),
                     TaskId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -475,7 +475,9 @@ namespace api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_ApplicationEvaluationId",
                 table: "Applications",
-                column: "ApplicationEvaluationId");
+                column: "ApplicationEvaluationId",
+                unique: true,
+                filter: "[ApplicationEvaluationId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_AppUserId",
@@ -631,7 +633,7 @@ namespace api.Migrations
                 name: "TaskItems");
 
             migrationBuilder.DropTable(
-                name: "ApplicationEvaluation");
+                name: "ApplicationEvaluations");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -1,12 +1,23 @@
 import { TaskWithSolution } from "Models/Task";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const TaskNavigator = ({ solutions }: { solutions: TaskWithSolution[] }) => {
+const TaskNavigator = ({
+    solutions,
+    onTaskChange
+}: {
+    solutions: TaskWithSolution[];
+    onTaskChange: (taskId: number, index: number) => void;
+}) => {
+
     const [index, setIndex] = useState(0);
     const task = solutions[index];
 
     const prev = () => setIndex((i) => (i > 0 ? i - 1 : i));
     const next = () => setIndex((i) => (i < solutions.length - 1 ? i + 1 : i));
+
+    useEffect(() => {
+        onTaskChange(task.codeSubmissionId, index);
+    }, [index]);
 
     return (
         <div className="flex flex-col flex-1 border rounded-lg shadow-sm bg-gray-50 p-4">
@@ -47,4 +58,5 @@ const TaskNavigator = ({ solutions }: { solutions: TaskWithSolution[] }) => {
         </div>
     );
 };
-export default TaskNavigator
+
+export default TaskNavigator;

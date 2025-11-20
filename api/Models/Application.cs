@@ -44,7 +44,8 @@ namespace api.Models
         public int CriteriaMatchScore { get; set; }
         public int TechnicalSkillScore { get; set; }
         public int EducationScore { get; set; }
-        public string? RecruiterMessage { get; set; }
+        public string? RecruiterNote { get; set; }
+        public Application? Application{ get; set; }
     }
 
     

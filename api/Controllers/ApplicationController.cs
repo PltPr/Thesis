@@ -44,7 +44,7 @@ namespace api.Controllers
             {
                 AboutYourself = dto.AboutYourself,
                 SimilarExperience = dto.SimilarExperience,
-ExpectedMonthlySalary=dto.ExpectedMonthlySalary,
+                ExpectedMonthlySalary = dto.ExpectedMonthlySalary,
                 Date = DateTime.Now,
                 Status = "new",
                 AppUserId = userId,
@@ -142,6 +142,39 @@ ExpectedMonthlySalary=dto.ExpectedMonthlySalary,
                 return NotFound();
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.ToDto());
+        }
+        [HttpPost("AddAppEvaluation")]
+        public async Task<IActionResult> AddEvaluationForApp([FromBody] AddAppEvaluationDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _appRepo.AddEvaluationForAppAsync(dto);
+            if (result == null)
+                return NotFound();
+
+            return Ok();
+        }
+        [HttpGet("GetAppEvaluation")]
+        public async Task <IActionResult>GetEvaluationForApp(int appId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var evaluation = await _appRepo.GetEvaluationForAppAsync(appId);
+
+            if (evaluation == null)
+                return NotFound();
+
+            var result = evaluation.toAppEvaluationDto();
+
+            return Ok(result);
+        }
+        [HttpGet("GetClassification")]
+        public async Task<IActionResult>GetClassification()
+        {
+            var result = await _appRepo.GetClassificationAsync();
+            return Ok(result);
         }
         
     }

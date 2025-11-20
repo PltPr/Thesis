@@ -1,5 +1,5 @@
 import axios from "axios"
-import { applicationModel,GroupedApplications } from "Models/Application";
+import { ApplicationEvaluation, applicationModel,GroupedApplications, GroupedClassification } from "Models/Application";
 
 export const AddApplicationApi =async(aboutYourself:string,expectedMonthlySalary:string,similarExperience:string,cv:File,jobOfferId:number)=>{
     try{
@@ -115,5 +115,33 @@ export const rejectApp = async(appId:number)=>{
     }catch(err){
         console.error("rejectAppError", err)
         throw err
+    }
+}
+
+export const getAppEvaluationApi = async (appId:number)=>{
+    try{
+        const response = await axios.get<ApplicationEvaluation>(`http://localhost:5116/api/application/GetAppEvaluation?appId=${appId}`)
+        return response.data
+    }catch(err){
+        console.error("getAppEvaluationError",err)
+    }
+}
+
+export const addAppEvaluationApi = async (data:ApplicationEvaluation)=>{
+    try{
+        const response = await axios.post("http://localhost:5116/api/application/AddAppEvaluation",data)
+        return response.data
+    }catch(err){
+        console.error("addAppEvaluationApiError: ",err)
+        throw err;
+    }
+}
+
+export const getClassificationApi = async()=>{
+    try{
+        const response = await axios.get<GroupedClassification[]>("http://localhost:5116/api/application/GetClassification")
+        return response.data
+    }catch(err){
+        console.error("getClassificationApiError: ",err)
     }
 }

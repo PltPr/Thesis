@@ -36,7 +36,7 @@ const Navbar = (props: Props) => {
             {/* --- Środkowe przyciski --- */}
             <li>
               <Link
-                to="/job-offers"
+                to="/job-offer-page"
                 className="no-underline cursor-pointer flex gap-2 items-center"
               >
                 <SquarePen />

@@ -17,5 +17,7 @@ namespace api.Interfaces
         Task<CodeSubmission> AddSolutionForTaskAsync(CodeSubmission model);
         Task<TaskWithSolutionDto?> GetCodeSubmissionForTask(int appId, int taskId);
         Task<List<TaskWithSolutionDto>?> GetCodeSubmissionForAllTask(int appId);
+        Task<CodeSubmission?> AddEvaluationForSolutionAsync(AddEvaluationForSolutionDto dto);
+        Task<bool>isTestEvaluated(int codeSubmissionId);
     }
 }

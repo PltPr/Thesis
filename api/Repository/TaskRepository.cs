@@ -6,7 +6,6 @@ using api.Data;
 using api.Dtos.TaskDto;
 using api.Interfaces;
 using api.Mappers;
-using api.Migrations;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +17,29 @@ namespace api.Repository
         public TaskRepository(ApplicationDBContext context)
         {
             _context = context;
+        }
+
+        public async Task<CodeSubmission?> AddEvaluationForSolutionAsync(AddEvaluationForSolutionDto dto)
+        {
+            var codeSubmission = await _context.CodeSubmissions.FirstOrDefaultAsync(x=>x.Id==dto.codeSubmissionId);
+            if(codeSubmission==null)
+                return null;
+            
+            codeSubmission.Evaluation=dto.evaluation;
+            await _context.SaveChangesAsync();
+
+            if(await isTestEvaluated(dto.codeSubmissionId)==true)
+            {
+                var appId = codeSubmission.ApplicationId;
+                var app = await _context.Applications.FindAsync(appId);
+                if(app!=null)
+                    app.Status = "Test evaluated";
+
+                await _context.SaveChangesAsync();
+            }
+
+            
+            return codeSubmission;
         }
 
         public async Task<CodeSubmission> AddSolutionForTaskAsync(CodeSubmission model)
@@ -120,6 +142,23 @@ namespace api.Repository
 
             var result = task.toTaskWithSolutionDto(codeSubmission);
             return result;
+        }
+
+        public async Task<bool> isTestEvaluated(int codeSubmissionId)
+        {
+            int appId = await _context.CodeSubmissions.Where(x=>x.Id==codeSubmissionId).Select(x=>x.ApplicationId).FirstOrDefaultAsync();
+            if(appId==0) return false;
+            var testId= await _context.Applications.Where(x=>x.Id==appId).Select(x=>x.TestId).FirstOrDefaultAsync();
+            if(testId==null) return false;
+
+            var tasksIds=await _context.TestTasks.Where(x=>x.TestId==testId).Select(x=>x.TaskId).ToListAsync();
+
+            bool isAllEvaluated = tasksIds.All(taskId=> _context.CodeSubmissions.Any(cs=>
+            cs.ApplicationId==appId&&
+            cs.TaskId==taskId&&
+            cs.Evaluation!=null));
+
+            return isAllEvaluated;
         }
     }
 }

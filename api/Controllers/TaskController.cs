@@ -118,6 +118,18 @@ namespace api.Controllers
             return Ok(result);
 
         }
+        [HttpPut("AddEvaluationForSolution")]
+        public async Task<IActionResult>AddEvaluationForSolution([FromBody] AddEvaluationForSolutionDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _taskRepo.AddEvaluationForSolutionAsync(dto);
+            if(result==null)
+                return NotFound();
+
+            return Ok(result);
+        }
 
 	}
 }

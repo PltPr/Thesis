@@ -57,6 +57,7 @@ namespace api.Mappers
                 TaskDescription = task.Description,
                 TaskExpectedOutput = task.ExpectedOutput,
                 Code = codeSubmission.Code,
+                Evaluation=codeSubmission.Evaluation,
                 SubmissionDate = codeSubmission.SubmissionDate,
                 CompilationResult = codeSubmission.CompilationResult,
                 ExecutionResult = codeSubmission.ExecutionResult

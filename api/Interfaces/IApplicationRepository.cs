@@ -15,6 +15,9 @@ namespace api.Interfaces
         Task<List<GroupApplicationsDto>> GroupedApplications();
         Task<Application?> AssignTestToAppAsync(int appId, int testId);
         Task<Application?> RejectAppAsync(int appId);
+        Task<ApplicationEvaluation?> AddEvaluationForAppAsync(AddAppEvaluationDto dto);
+        Task<ApplicationEvaluation?> GetEvaluationForAppAsync(int appId);
+        Task<List<GetClassificationGroupDto>>GetClassificationAsync();
 
     }
 }

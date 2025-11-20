@@ -13,10 +13,11 @@ namespace api.Models
         public DateTime SubmissionDate { get; set; }
         public string? CompilationResult { get; set; }
         public string? ExecutionResult { get; set; }
-        public int Evaluation { get; set; }
+        public int? Evaluation { get; set; }
         public int ApplicationId { get; set; }
         public Application Application { get; set; }
         public int TaskId { get; set; }
         public TaskItem Task { get; set; }
+        
     }
 }

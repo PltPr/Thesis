@@ -16,6 +16,7 @@ export interface TaskWithSolution{
     taskDescription:string,
     taskExpectedOutput:string,
     code:string,
+    evaluation:number,
     submissionDate:Date,
     compilationResult:string,
     executionResult:string
