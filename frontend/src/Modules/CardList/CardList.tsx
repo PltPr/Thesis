@@ -1,37 +1,34 @@
-import React, { JSX, useEffect, useState } from 'react'
-import Card from '../Card/Card'
-import './CardList.css'
-import { JobOfferGet } from '../../Models/JobOffers'
-import { getJobOffersApi } from '../../Api/JobOfferServices'
+import React, { useEffect, useState } from "react";
+import Card from "../Card/Card";
+import { JobOfferGet } from "../../Models/JobOffers";
+import { getJobOffersApi } from "../../Api/JobOfferServices";
+import { motion } from "framer-motion";
 
+const CardList: React.FC = () => {
+  const [jobOffer, setJobOffer] = useState<JobOfferGet[]>([]);
 
-const CardList : React.FC = () : JSX.Element => {
-  const[jobOffer,setJobOffer]=useState<JobOfferGet[]>([]);
-
-  useEffect(()=>{
-    const getData=async()=>{
-      const value = await getJobOffersApi()
-      if(value){
-        setJobOffer(value);
-      }
+  useEffect(() => {
+    const getData = async () => {
+      const value = await getJobOffersApi();
+      if (value) setJobOffer(value);
     };
     getData();
-  },[]);
-  console.log(jobOffer);
+  }, []);
 
   return (
-    
-    <div className='flex-1'>
-      
-    {jobOffer.map((offer)=>(
-      <Card key={offer.id} jobOffer={offer}/>
-   ))}
-
-   
-   
-    
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
+      {jobOffer.map((offer) => (
+        <motion.div
+          key={offer.id}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Card jobOffer={offer} />
+        </motion.div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default CardList
+export default CardList;

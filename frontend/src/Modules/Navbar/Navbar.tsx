@@ -9,7 +9,7 @@ const Navbar = (props: Props) => {
   const { isLoggedIn, logout } = useAuth();
 
   return (
-    <div className="navbar flex justify-between items-center bg-white px-[50px] h-[30px] text-black">
+    <div className="navbar flex justify-between items-center bg-white px-[50px] h-[30px] text-black border-b-2">
       {/* --- Logo po lewej --- */}
       <div className="flex items-center flex-shrink-0">
         <Link to="/" className="inline-block">
@@ -26,12 +26,7 @@ const Navbar = (props: Props) => {
       <ul className="list-none flex gap-[20px] items-center justify-center flex-1">
         {isLoggedIn() ? (
           <>
-            {/* --- Paski przed przyciskami --- */}
-            <li className="flex flex-col gap-1 rotate-12 mr-10">
-              <span className="block w-2 h-6 bg-blue-700"></span>
-              <span className="block w-2 h-6 bg-blue-700"></span>
-              <span className="block w-2 h-6 bg-blue-700"></span>
-            </li>
+            
 
             {/* --- Środkowe przyciski --- */}
             <li>
@@ -62,12 +57,7 @@ const Navbar = (props: Props) => {
               </Link>
             </li>
 
-            {/* --- Paski po przyciskach --- */}
-            <li className="flex flex-col gap-1 -rotate-12 ml-10">
-              <span className="block w-2 h-6 bg-blue-700"></span>
-              <span className="block w-2 h-6 bg-blue-700"></span>
-              <span className="block w-2 h-6 bg-blue-700"></span>
-            </li>
+            
           </>
         ) : (
           <>
