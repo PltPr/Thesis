@@ -7,6 +7,7 @@ using api.Dtos.AccountDto;
 using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,16 @@ namespace api.Controllers
                     if (roleResult.Succeeded)
                     {
                         var roles = new List<string> { "User" };
+
+                        var token = _tokenService.CreateToken(appUser, roles);
+                        Response.Cookies.Append("jwt",token, new CookieOptions
+                        {
+                            HttpOnly=true,
+                            Secure=false,
+                            SameSite=SameSiteMode.Lax,
+                            Expires=DateTime.UtcNow.AddDays(7)
+                        });
+
                         return Ok(
                             new NewUserDto
                             {
@@ -64,7 +75,7 @@ namespace api.Controllers
                                 Surname=appUser.Surname,
                                 PhoneNumber=appUser.PhoneNumber,
                                 Email = appUser.Email,
-                                Token = _tokenService.CreateToken(appUser, roles)
+                                Roles=roles.ToArray()
                             }
                         );
                     }
@@ -100,6 +111,13 @@ namespace api.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = _tokenService.CreateToken(user, roles);
+            Response.Cookies.Append("jwt",token, new CookieOptions
+                {
+                    HttpOnly=true,
+                    Secure=false,
+                    SameSite=SameSiteMode.Lax,
+                    Expires=DateTime.UtcNow.AddDays(7)
+                });
 
             return Ok(
                 new NewUserDto
@@ -108,7 +126,7 @@ namespace api.Controllers
                     Surname=user.Surname,
                     PhoneNumber=user.PhoneNumber,
                     Email = user.Email,
-                    Token = token
+                    Roles=roles.ToArray()
                 }
             );
         }
@@ -142,6 +160,12 @@ namespace api.Controllers
             var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
             if (result.Succeeded) return Ok();
             else return BadRequest();
+        }
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(new{message="Logged out successfully"});
         }
     }
     

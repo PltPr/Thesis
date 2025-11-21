@@ -26,7 +26,7 @@ const Navbar = (props: Props) => {
       <ul className="list-none flex gap-[20px] items-center justify-center flex-1">
         {isLoggedIn() ? (
           <>
-            
+
 
             {/* --- Środkowe przyciski --- */}
             <li>
@@ -57,19 +57,19 @@ const Navbar = (props: Props) => {
               </Link>
             </li>
 
-            
+
           </>
         ) : (
           <>
             <li>
-              <Link to="/login-page" className="no-underline text-black">
+              <Link to="/login-page" className="no-underline cursor-pointer flex gap-2 items-center">
                 Login
               </Link>
             </li>
             <li>
               <Link
                 to="/register-page"
-                className="no-underline text-black text-[18px]"
+                className="no-underline cursor-pointer flex gap-2 items-center"
               >
                 Register
               </Link>
@@ -90,26 +90,22 @@ const Navbar = (props: Props) => {
             className="dropdown-content menu p-2 shadow bg-white border  border-gray-500 w-auto  text-center "
           >
             {isLoggedIn() ? (
-              <div className="">
-              <li>
-                <button
-                  className="text-black flex border-b"
-                  onClick={() => logout()}
-                >
-                  <User />
-                  <h1>Profile</h1>
-                </button>
-              </li>
-              <li>
-                <button
-                  className="text-red-500 flex"
-                  onClick={() => logout()}
-                >
-                  <LogOut />
-                  <h1>Logout</h1>
-                </button>
-              </li>
-              </div>
+              <>
+                <li>
+                  <Link to="/user-page">
+                  <button className="text-black flex border-b">
+                    <User />
+                    <h1>Profile</h1>
+                  </button>
+                  </Link>
+                </li>
+                <li>
+                  <button className="text-red-500 flex" onClick={() => logout()}>
+                    <LogOut />
+                    Logout
+                  </button>
+                </li>
+              </>
             ) : (
               <>
                 <li>

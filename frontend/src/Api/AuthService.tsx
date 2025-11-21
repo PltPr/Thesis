@@ -54,3 +54,13 @@ export const resetPasswordApi = async (token:string,email:string,newPassword:str
         throw error;
     }
 }
+
+export const logoutApi =async ()=>{
+    try{
+        const response = await axios.post("http://localhost:5116/api/account/logout")
+        return response.data
+    }catch(err){
+        console.error("Logout error: ",err)
+        throw err;
+    }
+}

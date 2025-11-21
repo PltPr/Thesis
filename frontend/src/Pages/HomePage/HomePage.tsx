@@ -4,7 +4,6 @@ import { FileText, CheckCircle, Code, Trophy, Paperclip, TrendingUp } from 'luci
 import { motion } from 'framer-motion';  // Import Framer Motion
 
 const HomePage = () => {
-  const { token } = useAuth();
 
   // Framer Motion variants for fade-in and slide-up effects
   const fadeInUp = {

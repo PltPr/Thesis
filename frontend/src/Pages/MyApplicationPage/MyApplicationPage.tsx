@@ -25,6 +25,7 @@ const MyApplicationPage = (props: Props) => {
       <div className="space-y-6">
         {applications.map(app => (
           <div
+          
             key={app.id}
             className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-all"
           >

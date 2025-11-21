@@ -9,7 +9,6 @@ const fadeInUp = {
 };
 
 const JobOfferPage = () => {
-  const { token } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white">

@@ -15,6 +15,7 @@ import ClassificationPage from "Pages/AdminPage/ClassificationPage/Classificatio
 import TestInfoPage from "Pages/TestInfoPage/TestInfoPage"
 import SolveTestPage from "Pages/SolveTestPage/SolveTestPage"
 import JobOfferPage from "Pages/JobOfferPage/JobOfferPage"
+import UserPage from "Pages/UserPage/UserPage"
 
 export const router = createBrowserRouter([
     {
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
             { path: "", element: <HomePage /> },
             { path: "register-page", element: <RegisterPage /> },
             { path: "login-page", element: <LoginPage /> },
+            { path: "user-page", element: <UserPage /> },
             { path: "forgot-password-page", element: <ForgotPasswordPage /> },
             { path: "reset-password-page/:email/:token", element: <ResetPasswordPage /> },
             { path: "my-application-page", element: <MyApplicationPage /> },
