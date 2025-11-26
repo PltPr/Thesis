@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.JobOfferDto;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +24,9 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]JobOfferQueryObject query)
         {
-            var offers = await _offerRepository.GetAllAsync();
+            var offers = await _offerRepository.GetAllAsync(query);
 
             var result = offers.Select(o => o.ToJobOfferDto()).ToList();
 

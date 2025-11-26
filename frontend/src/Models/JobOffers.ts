@@ -11,3 +11,9 @@ export type JobOfferGet ={
     description:string,
     jobOfferTechnology: Technology[]
 }
+
+
+export type JobOfferQuery={
+    jobTitle?:string,
+    language?:string
+}

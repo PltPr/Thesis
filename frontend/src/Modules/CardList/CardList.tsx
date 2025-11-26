@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Card/Card";
-import { JobOfferGet } from "../../Models/JobOffers";
+import { JobOfferGet, JobOfferQuery } from "../../Models/JobOffers";
 import { getJobOffersApi } from "../../Api/JobOfferServices";
 import { motion } from "framer-motion";
 
-const CardList: React.FC = () => {
+interface Props{
+  JobTitleQuery:string;
+  ProgrammingLanguage:string
+}
+
+const CardList: React.FC<Props> = ({JobTitleQuery,ProgrammingLanguage}) => {
   const [jobOffer, setJobOffer] = useState<JobOfferGet[]>([]);
 
   useEffect(() => {
     const getData = async () => {
-      const value = await getJobOffersApi();
-      if (value) setJobOffer(value);
+
+    const query:JobOfferQuery={
+      jobTitle:JobTitleQuery || undefined,
+      language:ProgrammingLanguage ||undefined
+    }
+    const value = await getJobOffersApi(query);
+    if (value) setJobOffer(value);
     };
     getData();
-  }, []);
+  }, [JobTitleQuery,ProgrammingLanguage]);
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">

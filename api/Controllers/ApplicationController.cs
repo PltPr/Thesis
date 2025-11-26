@@ -46,7 +46,7 @@ namespace api.Controllers
                 SimilarExperience = dto.SimilarExperience,
                 ExpectedMonthlySalary = dto.ExpectedMonthlySalary,
                 Date = DateTime.Now,
-                Status = "new",
+                Status = "New",
                 AppUserId = userId,
                 JobOfferId = dto.JobOfferId
             };

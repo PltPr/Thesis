@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 
 using api.Dtos.JobOfferDto;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -38,17 +39,24 @@ namespace api.Repository
 
         
 
-        public async Task<List<JobOffer>> GetAllAsync()
+        public async Task<List<JobOffer>> GetAllAsync(JobOfferQueryObject query)
         {
-            var offers= await _context.JobOffers
+            var offers=_context.JobOffers
                 .Include(o => o.JobOfferTechnologyRequired)
                 .ThenInclude(t => t.Technology)
                 .Include(a=>a.JobOfferTechnologyNiceToHave)
                 .ThenInclude(t=>t.Technology)
-                .ToListAsync();
+                .AsQueryable();
 
-
-            return offers;
+            if(!string.IsNullOrWhiteSpace(query.JobTitle))
+            {
+                offers = offers.Where(o=>o.JobTitle.Contains(query.JobTitle));
+            }
+            if(!string.IsNullOrWhiteSpace(query.Language))
+            {
+                offers = offers.Where(o=>o.ProgrammingLanguage==query.Language);
+            }
+            return await offers.ToListAsync();
         }
 
         public async Task<List<Technology>> GetAllTechnologiesAsync()

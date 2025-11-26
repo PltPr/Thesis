@@ -10,5 +10,6 @@ namespace api.Interfaces
     {
         Task<CompileResult> CompileAsync(CompileRequest request);
         bool KillProcess(string procesId);
+        string ExtractErrorSummary(string language,string errorOutput);
     }
 }

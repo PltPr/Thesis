@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using api.Dtos.CompilerDto;
 using api.Interfaces;
@@ -19,55 +20,56 @@ namespace api.Repository
 
             var processId = Guid.NewGuid().ToString();
 
-            
-                var tempFolder = Path.Combine("Temp", Guid.NewGuid().ToString());
-                Directory.CreateDirectory(tempFolder);
 
-                var fileName = GetDefaultFileName(request.Language);
-                var filePath = Path.Combine(tempFolder, fileName);
+            var tempFolder = Path.Combine("Temp", Guid.NewGuid().ToString());
+            Directory.CreateDirectory(tempFolder);
 
-                await File.WriteAllTextAsync(filePath, request.Code);
+            var fileName = GetDefaultFileName(request.Language);
+            var filePath = Path.Combine(tempFolder, fileName);
 
-                string dockerFileContent;
-                try
-                {
-                    dockerFileContent = GetDockerfileForLanguage(request.Language, fileName);
-                }
-                catch (Exception ex)
-                {
-                    Cleanup(tempFolder);
-                    return new CompileResult { Success = false, Error = ex.Message };
-                }
+            await File.WriteAllTextAsync(filePath, request.Code);
 
-                var dockerFilePath = Path.Combine(tempFolder, "Dockerfile");
-                await File.WriteAllTextAsync(dockerFilePath, dockerFileContent);
-
-                var imageTag = $"temp.{Guid.NewGuid():N}";
-
-                var buildResult = await RunProcessAsync("docker", $"build -t {imageTag} \"{tempFolder}\"",processId);
-                if (buildResult.ExitCode != 0)
-                {
+            string dockerFileContent;
+            try
+            {
+                dockerFileContent = GetDockerfileForLanguage(request.Language, fileName);
+            }
+            catch (Exception ex)
+            {
                 Cleanup(tempFolder);
-                    
+                return new CompileResult { Success = false, Error = ex.Message };
+            }
+
+            var dockerFilePath = Path.Combine(tempFolder, "Dockerfile");
+            await File.WriteAllTextAsync(dockerFilePath, dockerFileContent);
+
+            var imageTag = $"temp.{Guid.NewGuid():N}";
+
+            var buildResult = await RunProcessAsync("docker", $"build -t {imageTag} \"{tempFolder}\"", processId);
+            if (buildResult.ExitCode != 0)
+            {
+                Cleanup(tempFolder);
+                var buildErrorSummary = ExtractErrorSummary(request.Language, buildResult.Error);
+
                 return new CompileResult
                 {
                     Success = false,
                     ProcessId = processId,
                     Output = buildResult.Output,
-                    Error = buildResult.Error
+                    Error = buildErrorSummary
                 };
             }
             var runResult = await RunProcessAsync("docker", $"run --rm {imageTag}", processId);
             Cleanup(tempFolder);
 
-
+            var errorSummary = ExtractErrorSummary(request.Language, runResult.Error);
 
             return new CompileResult
             {
                 Success = runResult.ExitCode == 0,
                 ProcessId = processId,
                 Output = runResult.Output,
-                Error = runResult.ExitCode != 0 ? runResult.Error : null
+                Error = runResult.ExitCode != 0 ? errorSummary : null
             };
         }
         private string GetDefaultFileName(string language)
@@ -88,7 +90,7 @@ namespace api.Repository
             return language switch
             {
                 "java" => @$"
-                    FROM openjdk:17-slim
+                    FROM eclipse-temurin:17-jdk
                     WORKDIR /app
                     COPY . /app
                     RUN javac {fileName}
@@ -153,7 +155,7 @@ namespace api.Repository
             }
             catch
             {
-                
+
             }
         }
 
@@ -174,5 +176,106 @@ namespace api.Repository
             }
             return false;
         }
+
+        public string ExtractErrorSummary(string language, string errorOutput)
+        {
+            if (string.IsNullOrWhiteSpace(errorOutput))
+                return null;
+
+            language = language.ToLower();
+            var lines = errorOutput.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<string> errorLines = new();
+
+            switch (language)
+            {
+                case "java":
+                    {
+                        // Wzorzec na błędy kompilatora javac (typowy format)
+                        var javaRegex = new Regex(@"[A-Za-z0-9_\-/\.]+\.java:\d+: error:.*");
+
+                        errorLines = javaRegex
+                            .Matches(errorOutput)
+                            .Select(m => m.Value.Trim())
+                            .Distinct()
+                            .Take(5)
+                            .ToList();
+
+                        // fallback: jeśli brak wyników, szukaj linii zawierających 'error' i 'java'
+                        if (!errorLines.Any())
+                        {
+                            errorLines = lines
+                                .Where(l => l.ToLower().Contains("error") && l.ToLower().Contains(".java"))
+                                .Take(5)
+                                .ToList();
+                        }
+                        break;
+                    }
+                case "cpp":
+                    {
+                        // Wzorzec na typowe błędy g++
+                        var cppRegex = new Regex(@"[A-Za-z0-9_\-/\.]+\.cpp:\d+:\d+: error:.*");
+
+
+                        errorLines = cppRegex
+                            .Matches(errorOutput)
+                            .Select(m => m.Value.Trim())
+                            .Distinct()
+                            .Take(5)
+                            .ToList();
+
+                        break;
+                    }
+
+
+                case "python":
+                    var startIndex = Array.FindIndex(lines, l => l.Contains("Traceback"));
+                    if (startIndex >= 0)
+                    {
+                        errorLines = lines.Skip(startIndex).Take(10).ToList();
+                    }
+                    else
+                    {
+                        errorLines = lines.Where(l => l.Contains("SyntaxError") || l.Contains("Error"))
+                                          .Take(5)
+                                          .ToList();
+                    }
+                    break;
+
+                case "csharp":
+                    {
+                        // Regex pasujący do błędów C# bez prefiksów Dockera
+                        var csRegex = new Regex(@"\b[^ ]*\.cs\(\d+,\d+\): error CS\d+:.*?(?=( \[|$))");
+
+                        // Dopasuj wszystkie błędy
+                        var matches = csRegex.Matches(errorOutput)
+                                             .Select(m => m.Value.Trim())
+                                             .Distinct() // usuń duplikaty
+                                             .Take(5)    // max 5
+                                             .ToList();
+
+                        errorLines = matches;
+                        break;
+                    }
+
+
+                default:
+                    errorLines = lines.Take(5).ToList();
+                    break;
+            }
+
+
+            if (!errorLines.Any())
+                return errorOutput.Length > 500 ? errorOutput.Substring(0, 500) + "..." : errorOutput;
+
+            int maxErrors = 5;
+            var limitedErrors = errorLines.Take(maxErrors).ToList();
+
+            if (errorLines.Count > maxErrors)
+                limitedErrors.Add($"... and {errorLines.Count - maxErrors} more errors");
+
+            return string.Join(Environment.NewLine, limitedErrors);
+        }
+
     }
 }

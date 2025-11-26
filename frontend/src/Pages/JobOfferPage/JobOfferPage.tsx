@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CardList from "../../Modules/CardList/CardList";
 import { useAuth } from "Context/useAuth";
 import { motion } from "framer-motion";
@@ -9,6 +9,8 @@ const fadeInUp = {
 };
 
 const JobOfferPage = () => {
+  const [jobTitle, setJobTitle] = useState("");
+  const [language, setLanguage] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white">
@@ -23,7 +25,60 @@ const JobOfferPage = () => {
         >
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Filters</h2>
 
-          <p className="text-gray-500 text-sm">Coming soon...</p>
+           <input
+            type="text"
+            placeholder="Search job title..."
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+            className="
+              mb-5
+              w-full
+              rounded-xl
+              border
+              border-gray-300
+              px-4
+              py-3
+              text-gray-700
+              placeholder-gray-400
+              focus:border-blue-500
+              focus:ring-2
+              focus:ring-blue-300
+              focus:outline-none
+              transition
+              duration-200
+              ease-in-out
+            "
+          />
+
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="
+              w-full
+              rounded-xl
+              border
+              border-gray-300
+              px-4
+              py-3
+              text-gray-700
+              focus:border-blue-500
+              focus:ring-2
+              focus:ring-blue-300
+              focus:outline-none
+              transition
+              duration-200
+              ease-in-out
+            "
+          >
+            <option value="" disabled>
+              Language
+            </option>
+            <option value="">All</option>
+            <option value="Cpp">C++</option>
+            <option value="C#">C#</option>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+          </select>
         </motion.div>
 
         {/* MAIN CONTENT */}
@@ -36,7 +91,7 @@ const JobOfferPage = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Available Job Offers
           </h2>
-          <CardList />
+          <CardList JobTitleQuery={jobTitle} ProgrammingLanguage={language}/>
         </motion.div>
       </div>
     </div>
