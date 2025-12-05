@@ -53,6 +53,14 @@ namespace api.Controllers
 
             return Ok(jobOfferDto);
         }
+
+        [HttpGet("GetJobOfferTitles")]
+        public async Task<IActionResult> GetJobOfferTitles()
+        {
+            var result = await _offerRepository.GetJobOffersTitlesAsync();
+
+            return Ok(result);
+        }
         
     }
 }

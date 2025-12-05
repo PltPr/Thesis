@@ -64,3 +64,25 @@ export const logoutApi =async ()=>{
         throw err;
     }
 }
+
+
+export const getUserAboutMe = async()=>{
+    try{
+        const response = await axios.get("http://localhost:5116/api/account/GetUserAboutMe")
+        return response.data
+    }catch(err){
+        console.error("getUserAboutMeError: ",err)
+    }
+}
+
+export const EditUserAboutMe = async(aboutMe:string)=>{
+    try{
+        const response = await axios.put("http://localhost:5116/api/account/AccountEdit",{aboutMe})
+        return response.data;
+    }
+    catch(err){
+        console.error("EditUserAboutMeError: ",err)
+        throw err;
+    }
+}
+

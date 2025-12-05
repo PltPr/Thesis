@@ -1,102 +1,104 @@
-import React from 'react'
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../Context/useAuth';
 import { Link } from 'react-router-dom';
-
-
-
-
-
-type Props = {}
+import { motion } from 'framer-motion';
 
 type LoginFormInput = {
   email: string;
   password: string;
 };
 
+const LoginPage = () => {
+  const { loginUser } = useAuth();
+  const { register, handleSubmit } = useForm<LoginFormInput>();
 
+  const handleLogin = (form: LoginFormInput) => {
+    loginUser(form.email, form.password);
+  };
 
-const LoginPage = (props: Props) => {
-  const {loginUser}=useAuth();
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInput>();
+  // efekt fade-in + slide-up
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
 
-  const handleLogin=(form:LoginFormInput)=>{
-    loginUser(form.email,form.password)
-  }
-  
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-  <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-    
-    <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
-      Sign in to your account
-    </h2>
-  </div>
-
-  <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-900">
-          Email address
-        </label>
-        <div className="mt-2">
-          <input
-            
-            id="email"
-            autoComplete="email"
-            required
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
-            {...register("email")}
-          />
-        </div>
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-900">
-            Password
-          </label>
-          <div className="text-sm">
-            <Link to="/forgot-password-page">
-            <a className="font-semibold text-indigo-600 hover:text-indigo-500">
-              Forgot password?
-            </a>
-            </Link>
-          </div>
-        </div>
-        <div className="mt-2">
-          <input
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            required
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
-            {...register("password")}
-          />
-        </div>
-      </div>
-
-      <div>
-        <button
-          type="submit"
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Sign in
-        </button>
-      </div>
-    </form>
-
-    <p className="mt-10 text-center text-sm text-gray-500">
-      Not a member? 
-      <Link to="/register-page" className="font-semibold text-indigo-600 hover:text-indigo-500">
-        {" Create an account"}
-      </Link>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white flex justify-center items-start px-4">
       
-    </p>
-  </div>
-</div>
+      <motion.div
+        className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 my-14"
+        initial="hidden"
+        animate="visible"
+        variants={fadeInUp}
+      >
+        <h2 className="text-center text-3xl font-bold text-gray-900">
+          Zaloguj się
+        </h2>
 
-  )
-}
+        <p className="text-center text-gray-600 mt-2">
+          Witaj ponownie w <span className="text-blue-600 font-semibold">iTrack</span>
+        </p>
 
-export default LoginPage
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(handleLogin)}>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-900">
+              Email
+            </label>
+            <input
+              id="email"
+              autoComplete="email"
+              required
+              {...register("email")}
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-medium text-gray-900">
+                Hasło
+              </label>
+
+              <Link
+                to="/forgot-password-page"
+                className="text-sm text-blue-600 hover:text-blue-500 font-semibold"
+              >
+                Zapomniałeś hasła?
+              </Link>
+            </div>
+
+            <input
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              required
+              {...register("password")}
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-blue-600 py-2 text-white font-semibold shadow-md hover:bg-blue-500 transition"
+          >
+            Zaloguj się
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Nie masz konta?
+          <Link
+            to="/register-page"
+            className="text-blue-600 font-semibold hover:text-blue-500 ml-1"
+          >
+            Zarejestruj się
+          </Link>
+        </p>
+      </motion.div>
+    </div>
+  );
+};
+
+export default LoginPage;

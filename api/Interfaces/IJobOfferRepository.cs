@@ -15,5 +15,6 @@ namespace api.Interfaces
         Task<List<Technology>> GetAllTechnologiesAsync();
         Task<JobOffer> AddJobOfferAsync(AddJobOfferDto jobOfferDto);
         Task<JobOffer> GetById(int id);
+        Task<List<string>>GetJobOffersTitlesAsync();
     }
 }

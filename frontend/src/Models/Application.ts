@@ -27,6 +27,7 @@ export type Applications={
     date:Date,
     cvId:number,
     cvFileName:string,
+    jobOfferTitle:string,
     status:string,
     testId:number,
     assignTestDate:Date
@@ -51,4 +52,9 @@ export type Classifications={
     firstName:string,
     lastName:string,
     evaluationScore:number
+}
+
+export type ApplicationQuery={
+    jobTitle?:string,
+    status?:string
 }

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.AppalicationDto;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -21,13 +22,11 @@ namespace api.Controllers
     {
         private readonly IApplicationRepository _appRepo;
         private readonly IJobOfferRepository _offerRepo;
-        private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationDBContext _context;
         public ApplicationController(IApplicationRepository appRepo, IJobOfferRepository offerRepo, UserManager<AppUser> userManager, ApplicationDBContext context)
         {
             _appRepo = appRepo;
             _offerRepo = offerRepo;
-            _userManager = userManager;
             _context = context;
         }
         [Authorize]
@@ -39,6 +38,9 @@ namespace api.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Unauthorized();
+
+            if(await _appRepo.CheckIfUserApplied(userId,dto.JobOfferId))
+                return BadRequest(new{message="You have already applied for this job offer"});
 
             var application = new Application
             {
@@ -113,9 +115,9 @@ namespace api.Controllers
         }
 
         [HttpGet("GroupedApps")]
-        public async Task<IActionResult> GetApplicationsGrouped()
+        public async Task<IActionResult> GetApplicationsGrouped([FromQuery] ApplicationsQueryObject query)
         {
-            var result = await _appRepo.GroupedApplications();
+            var result = await _appRepo.GroupedApplications(query);
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -153,7 +155,7 @@ namespace api.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok();
+            return Ok(dto);
         }
         [HttpGet("GetAppEvaluation")]
         public async Task <IActionResult>GetEvaluationForApp(int appId)
@@ -175,8 +177,6 @@ namespace api.Controllers
         {
             var result = await _appRepo.GetClassificationAsync();
             return Ok(result);
-        }
-        
+        }   
     }
-    
 }

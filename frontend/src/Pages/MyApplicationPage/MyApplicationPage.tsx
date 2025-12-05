@@ -1,5 +1,5 @@
 import { getCv, getMyApplications } from 'Api/ApplicationService'
-import { FilePlus, ClipboardCheck, Award, XCircle, Mic, BadgePlus, CirclePlus } from "lucide-react";
+import { FilePlus, ClipboardCheck, Award, XCircle, Mic, BadgePlus, CirclePlus, PenLine } from "lucide-react";
 import { applicationModel } from 'Models/Application'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -18,21 +18,23 @@ const MyApplicationPage = (props: Props) => {
   }, [])
 
   const StatusIcon = ({ status }: { status: string }) => {
-  switch (status) {
-    case "new":
-      return <CirclePlus  className="inline-block w-5 h-5 text-green-600" />;
-    case "Test assigned":
-      return <ClipboardCheck className="inline-block w-5 h-5 text-blue-600" />;
-    case "Test evaluated":
-      return <Award className="inline-block w-5 h-5 text-green-600" />;
-    case "Rejected":
-      return <XCircle className="inline-block w-5 h-5 text-red-600" />;
-    case "Interview scheduled":
-      return <Mic className="inline-block w-5 h-5 text-purple-600" />;
-    default:
-      return <FilePlus className="inline-block w-5 h-5 text-gray-500" />;
-  }
-};
+    switch (status) {
+      case "New":
+        return <CirclePlus className="inline-block w-5 h-5 text-green-600" />;
+      case "Test assigned":
+        return <ClipboardCheck className="inline-block w-5 h-5 text-blue-600" />;
+      case "Test completed":
+        return <PenLine className="inline-block w-5 h-5 text-blue-600" />;
+      case "Test evaluated":
+        return <Award className="inline-block w-5 h-5 text-green-600" />;
+      case "Rejected":
+        return <XCircle className="inline-block w-5 h-5 text-red-600" />;
+      case "Interview scheduled":
+        return <Mic className="inline-block w-5 h-5 text-purple-600" />;
+      default:
+        return <FilePlus className="inline-block w-5 h-5 text-gray-500" />;
+    }
+  };
 
 
   return (
@@ -44,7 +46,7 @@ const MyApplicationPage = (props: Props) => {
       <div className="space-y-6">
         {applications.map(app => (
           <div
-          
+
             key={app.id}
             className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-all"
           >
@@ -60,10 +62,10 @@ const MyApplicationPage = (props: Props) => {
                 {app.aboutYourself}
               </p>
               <p className="flex items-center gap-2">
-  <span className="font-medium">Status:</span>
-  {app.status}
-  <StatusIcon status={app.status} />
-</p>
+                <span className="font-medium">Status:</span>
+                {app.status}
+                <StatusIcon status={app.status} />
+              </p>
 
               <p>
                 <span className="font-medium">Application Date:</span>{' '}

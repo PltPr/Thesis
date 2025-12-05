@@ -24,3 +24,13 @@ export const getJobOffersApi = async (query?:JobOfferQuery) => {
         return null;
     }
 };
+
+
+export const getJobOffersTitles = async()=>{
+    try{
+        const response = await axios.get<string[]>("http://localhost:5116/api/jobOffer/GetJobOfferTitles")
+        return response.data
+    }catch(err){
+        console.error("getJobOfferTitlesError: ",err)
+    }
+}

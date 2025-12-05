@@ -72,6 +72,13 @@ namespace api.Repository
             return offer;
         }
 
+        public async Task<List<string>> GetJobOffersTitlesAsync()
+        {
+            List<string> titles = await _context.JobOffers.Select(x=>x.JobTitle).ToListAsync();
+
+            return titles;
+        }
+
         public async Task<List<Technology>> GetRequiredTechnologiesForOffer(int id)
         {
             

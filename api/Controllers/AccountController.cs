@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using api.Dtos.AccountDto;
@@ -24,12 +25,15 @@ namespace api.Controllers
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IEmailSender emailSender)
+        private readonly IAccountRepository _accRepo;
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IEmailSender emailSender,IAccountRepository accRepo)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _accRepo=accRepo;
+            
         }
 
         [HttpPost("register")]
@@ -38,6 +42,9 @@ namespace api.Controllers
             try
             {
                 if (!ModelState.IsValid) return BadRequest();
+
+                var existingUser = await _userManager.FindByEmailAsync(registerDto.Email);
+                if(existingUser!=null) return BadRequest(new {message = "Email is already taken"});
 
                 var appUser = new AppUser
                 {
@@ -103,10 +110,10 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email.ToLower());
-            if (user == null) return Unauthorized("Username not found and/or password is incorrect");
+            if (user == null) return Unauthorized(new{message = "Email not found and/or password is incorrect"});
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-            if (!result.Succeeded) return Unauthorized("Username not found and/or password is incorrect!");
+            if (!result.Succeeded) return Unauthorized(new{message = "Email not found and/or password is incorrect"});
 
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -166,6 +173,36 @@ namespace api.Controllers
         {
             Response.Cookies.Delete("jwt");
             return Ok(new{message="Logged out successfully"});
+        }
+
+        [HttpPut("AccountEdit")]
+        public async Task<IActionResult> AccountEdit([FromBody] EditAccountDetailsDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(userId==null)
+                return Unauthorized();
+
+            var result = await _accRepo.EditAccountAsync(userId,dto);
+            if(result==null)
+                return Unauthorized();
+
+            return Ok(result);
+        }
+        [HttpGet("GetUserAboutMe")]
+        public async Task<IActionResult>GetUserAboutMe()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(userId==null)
+                return Unauthorized();
+
+            var result = await _accRepo.GetUserAboutMeAsync(userId);
+            if(result==null)
+                return NotFound();
+
+            return Ok(result);
         }
     }
     

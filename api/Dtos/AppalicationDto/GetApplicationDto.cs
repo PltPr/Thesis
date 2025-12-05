@@ -8,6 +8,8 @@ namespace api.Dtos.AppalicationDto
     public class GetApplicationDto
     {
         public int Id { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string JobOfferTitle { get; set; }
         public string? AboutYourself { get; set; }
         public string SimilarExperience { get; set; }

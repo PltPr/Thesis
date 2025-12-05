@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.AppalicationDto;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
@@ -25,6 +26,10 @@ namespace api.Repository
         {
             await _context.Applications.AddAsync(model);
             await _context.SaveChangesAsync();
+                await _context.Entry(model).Reference(a => a.AppUser).LoadAsync();
+    await _context.Entry(model).Reference(a => a.CV).LoadAsync();
+    await _context.Entry(model).Reference(a => a.JobOffer).LoadAsync();
+    await _context.Entry(model).Reference(a => a.Test).LoadAsync();
             return model;
         }
 
@@ -59,12 +64,18 @@ namespace api.Repository
             return application;
         }
 
+        public async Task<bool> CheckIfUserApplied(string userId, int offerId)
+        {
+            return await _context.Applications.Where(x=>x.AppUserId==userId && x.JobOfferId==offerId).AnyAsync();
+        }
+
         public async Task<Application> GetByIdAsync(int id)
         {
             var app = await _context.Applications
             .Include(t => t.Test)
             .Include(a => a.CV)
             .Include(a => a.JobOffer)
+            .Include(a=>a.AppUser)
             .FirstOrDefaultAsync(t => t.Id == id);
 
             if (app == null)
@@ -75,7 +86,7 @@ namespace api.Repository
 
         public async Task<List<GetClassificationGroupDto>> GetClassificationAsync()
         {
-            var apps = await _context.Applications.Include(x=>x.AppUser).Include(x=>x.JobOffer).Include(x=>x.ApplicationEvaluation).Where(a=>a.Status=="Test Evaluated").ToListAsync();
+            var apps = await _context.Applications.Include(x=>x.AppUser).Include(x=>x.JobOffer).Include(x=>x.ApplicationEvaluation).Where(a=>a.Status=="Test evaluated").ToListAsync();
 
             var result = apps.GroupBy(app=>app.JobOffer.JobTitle)
             .Select(g=> new GetClassificationGroupDto
@@ -100,13 +111,25 @@ namespace api.Repository
 
         public async Task<List<Application>> GetUserApplications(string userId)
         {
-            var result = await _context.Applications.Include(a => a.CV).Include(a => a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
+            var result = await _context.Applications.Include(a=>a.AppUser).Include(a => a.CV).Include(a => a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
             return result;
         }
 
-        public async Task<List<GroupApplicationsDto>> GroupedApplications()
+        public async Task<List<GroupApplicationsDto>> GroupedApplications(ApplicationsQueryObject query)
         {
-            var applications = await _context.Applications
+            var applications = _context.Applications.AsQueryable();
+
+            if(!string.IsNullOrWhiteSpace(query.JobTitle))
+            {
+                applications = applications.Where(a=>a.JobOffer.JobTitle==query.JobTitle);
+            }
+            if(!string.IsNullOrWhiteSpace(query.Status))
+            {
+                applications=applications.Where(a=>a.Status==query.Status);
+            }
+
+
+            var result= await applications
             .GroupBy(app => app.JobOffer.JobTitle)
             .Select(group => new GroupApplicationsDto
             {
@@ -128,12 +151,13 @@ namespace api.Repository
                 }).ToList()
             }).ToListAsync();
 
-            return applications;
+
+            return result;
         }
 
         public async Task<Application?> RejectAppAsync(int appId)
         {
-            var app = await _context.Applications.Include(c => c.CV).FirstOrDefaultAsync(x => x.Id == appId);
+            var app = await _context.Applications.Include(x=>x.AppUser).Include(c => c.CV).FirstOrDefaultAsync(x => x.Id == appId);
             if (app == null)
                 return null;
 

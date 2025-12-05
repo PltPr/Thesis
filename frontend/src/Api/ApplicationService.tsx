@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ApplicationEvaluation, applicationModel,GroupedApplications, GroupedClassification } from "Models/Application";
+import { ApplicationEvaluation, applicationModel,ApplicationQuery,Applications,GroupedApplications, GroupedClassification } from "Models/Application";
 
 export const AddApplicationApi =async(aboutYourself:string,expectedMonthlySalary:string,similarExperience:string,cv:File,jobOfferId:number)=>{
     try{
@@ -58,10 +58,19 @@ export const getCv = async (id: number, fileNameFromApp: string) => {
     }
 };
 
+const grappapi = "http://localhost:5116/api/application/GroupedApps"
+export const getGroupedApplications=async (query?:ApplicationQuery)=>{
+    let url = grappapi
+    const params = new URLSearchParams();
+    if(query?.jobTitle) params.append("jobTitle",query.jobTitle);
+    if(query?.status) params.append("status",query.status);
 
-export const getGroupedApplications=async ()=>{
+    const queryString=params.toString();
+    if(queryString)
+        url+=`?${queryString}`;
+
     try{
-        const response = await axios.get<GroupedApplications[]>("http://localhost:5116/api/application/GroupedApps")
+        const response = await axios.get<GroupedApplications[]>(url)
         return response.data
     }catch(err){
         console.log("GetGroupedApplications error: ",err)
@@ -143,5 +152,15 @@ export const getClassificationApi = async()=>{
         return response.data
     }catch(err){
         console.error("getClassificationApiError: ",err)
+    }
+}
+
+export const getApplicationById = async (appId:number)=>{
+    try{
+        const response = await axios.get<Applications>(`http://localhost:5116/api/application/${appId}`)
+        return response.data
+    }catch(err)
+    {
+        console.error("getApplicationByIdError: ",err)
     }
 }

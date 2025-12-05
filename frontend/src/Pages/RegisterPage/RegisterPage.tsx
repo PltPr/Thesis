@@ -1,164 +1,143 @@
 import { useAuth } from 'Context/useAuth';
-import React from 'react'
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-type Props = {}
+type RegisterFormInput = {
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+};
 
+const RegisterPage = () => {
+  const { registerUser } = useAuth();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormInput>();
 
-type RegisterFormInput={
-    name:string;
-    surname:string;
-    phoneNumber:string;
-    email:string;
-    password:string;
-    repeatPassword:string;
-}
+  const password = watch("password");
 
-const RegisterPage = (props: Props) => {
-    const {registerUser}=useAuth();
-    const{register, handleSubmit,watch,formState:{errors}}=useForm<RegisterFormInput>();
+  const handleRegister = (form: RegisterFormInput) => {
+    registerUser(form.name, form.surname, form.phoneNumber, form.email, form.password, form.repeatPassword);
+  };
 
-    const password = watch("password");
-
-    const handleRegister =(form:RegisterFormInput)=>{
-        registerUser(form.name,form.surname,form.phoneNumber,form.email,form.password,form.repeatPassword)
-    }
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
 
   return (
-  <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-    <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-      <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
-        Register
-      </h2>
-    </div>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white flex items-center justify-center px-4">
 
-    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form className="space-y-6" onSubmit={handleSubmit(handleRegister)}>
+      {/* CARD */}
+      <motion.div
+        className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8"
+        initial="hidden"
+        animate="visible"
+        variants={fadeInUp}
+      >
+        <h2 className="text-center text-3xl font-bold text-gray-900">
+          Stwórz konto
+        </h2>
 
-        {/* Name */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-900">Name</label>
-          <div className="mt-2">
+        <p className="text-center text-gray-600 mt-2">
+          Dołącz do <span className="text-blue-600 font-semibold">iTrack</span>
+        </p>
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(handleRegister)}>
+
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Imię</label>
             <input
               type="text"
-              id="name"
-              autoComplete="name"
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
               {...register("name", { required: "Imię jest wymagane" })}
             />
             {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
           </div>
-        </div>
 
-        {/* Surname */}
-        <div>
-          <label htmlFor="surname" className="block text-sm font-medium text-gray-900">Surname</label>
-          <div className="mt-2">
+          {/* Surname */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Nazwisko</label>
             <input
               type="text"
-              id="surname"
-              autoComplete="surname"
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
               {...register("surname", { required: "Nazwisko jest wymagane" })}
             />
             {errors.surname && <p className="text-sm text-red-600 mt-1">{errors.surname.message}</p>}
           </div>
-        </div>
 
-        {/* Phone Number */}
-        <div>
-          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-900">Phone Number</label>
-          <div className="mt-2">
+          {/* Phone Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Numer telefonu</label>
             <input
               type="tel"
-              id="phoneNumber"
-              autoComplete="tel"
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
-              {...register("phoneNumber", {
-                required: "Numer telefonu jest wymagany",
-                
-              })}
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
+              {...register("phoneNumber", { required: "Numer telefonu jest wymagany" })}
             />
             {errors.phoneNumber && <p className="text-sm text-red-600 mt-1">{errors.phoneNumber.message}</p>}
           </div>
-        </div>
 
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-900">Email address</label>
-          <div className="mt-2">
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Email</label>
             <input
-              //type="email"
-              id="email"
-              autoComplete="email"
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
-              {...register("email", {
-                required: "Email jest wymagany",
-                //pattern: {
-                 // value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                //  message: "Nieprawidłowy format email",
-               // },
-              })}
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
+              {...register("email", { required: "Email jest wymagany" })}
             />
             {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
           </div>
-        </div>
 
-        {/* Password */}
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-900">Password</label>
-          <div className="mt-2">
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Hasło</label>
             <input
               type="password"
-              id="password"
-              autoComplete="new-password"
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
               {...register("password", {
                 required: "Hasło jest wymagane",
-                minLength: { value: 6, message: "Hasło musi mieć co najmniej 6 znaków" },
+                minLength: { value: 6, message: "Minimum 6 znaków" }
               })}
             />
             {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
           </div>
-        </div>
 
-        {/* Repeat Password */}
-        <div>
-          <label htmlFor="repeatPassword" className="block text-sm font-medium text-gray-900">Repeat Password</label>
-          <div className="mt-2">
+          {/* Repeat Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Powtórz hasło</label>
             <input
               type="password"
-              id="repeatPassword"
-              autoComplete="new-password"
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 focus:outline-indigo-600 sm:text-sm"
+              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
               {...register("repeatPassword", {
                 required: "Powtórz hasło",
-                validate: (value) =>
-                  value === password || "Hasła muszą być identyczne",
+                validate: value => value === password || "Hasła muszą się zgadzać"
               })}
             />
             {errors.repeatPassword && <p className="text-sm text-red-600 mt-1">{errors.repeatPassword.message}</p>}
           </div>
-        </div>
 
-        {/* Submit button */}
-        <div>
+          {/* SUBMIT */}
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600"
+            className="w-full rounded-lg bg-blue-600 py-2 text-white font-semibold shadow-md hover:bg-blue-500 transition"
           >
-            Register
+            Zarejestruj się
           </button>
-        </div>
-      </form>
+        </form>
 
-      <p className="mt-10 text-center text-sm text-gray-500">
-        Already have an account?
-        <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">{" Sign in"}</a>
-      </p>
+        {/* LOGIN LINK */}
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Masz już konto?
+          <Link to="/login-page" className="text-blue-600 font-semibold hover:text-blue-500 ml-1">
+            Zaloguj się
+          </Link>
+        </p>
+      </motion.div>
     </div>
-  </div>
-)
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

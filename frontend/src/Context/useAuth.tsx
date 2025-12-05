@@ -53,9 +53,8 @@ const registerUser = async(name:string,surname:string,phoneNumber:string,email:s
         }
     } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
-            if (error) {
-                toast.warning("Server error occurred");
-            } 
+            const message = error.response.data.message;
+            toast.warning(message)
          }else {
             toast.warning("Network error. Please try again later.");
         }
@@ -83,11 +82,8 @@ const loginUser = async (email: string, password: string) => {
         }
     } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response) {
-            if (error.response.status === 401) {
-                toast.warning("Email or password is incorrect");
-            } else {
-                toast.warning("Server error occurred");
-            }
+            const message = error.response.data.message;
+            toast.warning(message);
         } else {
             toast.warning("Network error. Please try again later.");
         }

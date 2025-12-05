@@ -29,6 +29,8 @@ namespace api.Mappers
             return new GetApplicationDto
             {
                 Id = model.Id,
+                Name=model.AppUser.Name,
+                Surname = model.AppUser.Surname,
                 JobOfferTitle = model.JobOffer?.JobTitle,
                 AboutYourself = model.AboutYourself,
                 SimilarExperience = model.SimilarExperience,

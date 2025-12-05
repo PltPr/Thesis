@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20251119134333_i")]
-    partial class i
+    [Migration("20251127095935_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,6 +182,9 @@ namespace api.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AboutMe")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
