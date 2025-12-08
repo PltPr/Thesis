@@ -20,5 +20,6 @@ namespace api.Interfaces
         Task<ApplicationEvaluation?> GetEvaluationForAppAsync(int appId);
         Task<List<GetClassificationGroupDto>>GetClassificationAsync();
         Task<bool>CheckIfUserApplied(string userId,int offerId);
+        Task<Application?>InviteToInterview(int appId);
     }
 }

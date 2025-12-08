@@ -155,6 +155,19 @@ namespace api.Repository
             return result;
         }
 
+        public async Task<Application?> InviteToInterview(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x=>x.Id==appId);
+            if(app==null)
+                return null;
+
+            app.Status="Interview";
+            await _context.SaveChangesAsync();
+
+            return app;
+
+        }
+
         public async Task<Application?> RejectAppAsync(int appId)
         {
             var app = await _context.Applications.Include(x=>x.AppUser).Include(c => c.CV).FirstOrDefaultAsync(x => x.Id == appId);

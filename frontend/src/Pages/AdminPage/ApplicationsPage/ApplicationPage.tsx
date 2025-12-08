@@ -98,6 +98,7 @@ const ApplicationPage = (props: Props) => {
             <option value="Test assigned">Test assigned</option>
             <option value="Test completed">Test completed</option>
             <option value="Test evaluated">Test evaluated</option>
+            <option value="Interview">Interview</option>
             <option value="Rejected">Rejected</option>
             
           </select>

@@ -178,5 +178,18 @@ namespace api.Controllers
             var result = await _appRepo.GetClassificationAsync();
             return Ok(result);
         }   
+
+        [HttpPut("InviteToInterview")]
+        public async Task<IActionResult>InviteToInterview(int appId)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _appRepo.InviteToInterview(appId);
+            if(result == null)
+                return NotFound();
+
+            return Ok(new{ Status=result.Status});
+        }
     }
 }

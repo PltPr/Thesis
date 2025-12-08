@@ -261,11 +261,13 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
     }
   }, [activeTab]);
 
-  return (
+return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl w-11/12 max-w-6xl h-[86vh] shadow-xl overflow-hidden">
+      {/* ZMIANA 1: Ustawiona wysokość, dodany flex i flex-col */}
+      <div className="bg-white rounded-xl w-11/12 max-w-6xl h-[90vh] shadow-xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b">
+        {/* ZMIANA 2: Nagłówek nie będzie się kurczył */}
+        <div className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0">
           <div className="flex items-center gap-4">
             <h2 className="text-lg font-semibold">Application detail</h2>
 
@@ -308,7 +310,7 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
         </div>
 
         {/* Body */}
-        <div className="grid grid-cols-2 gap-5 p-6 h-[calc(86vh-72px)]">
+        <div className="grid grid-cols-2 gap-5 p-6 flex-grow overflow-y-auto">
           {/* Left column */}
           <div className="space-y-4">
             <div className="bg-gray-50 p-4 rounded-md border border-gray-200">

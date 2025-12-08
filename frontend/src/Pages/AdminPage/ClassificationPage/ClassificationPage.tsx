@@ -9,13 +9,23 @@ const ClassificationPage = (props: Props) => {
   const [classifications, setClassifications] = useState<GroupedClassification[]>();
   const [showModal,setShowModal]=useState<boolean>(false);
   const[selectedAppId,setSelectedAppId]=useState<number|null>(null)     
-  useEffect(() => {
-    const getData = async () => {
-      const classificationData = await getClassificationApi();
+
+  const getData = async ()=>{
+    const classificationData = await getClassificationApi();
       if (classificationData) setClassifications(classificationData);
-    };
+  }
+  useEffect(() => {
     getData();
   }, []); 
+
+  const handleClose = async()=>{
+    try{
+      setShowModal(false);
+      await getData();
+    }catch(err){
+
+    }
+  }
 
   return (
     <>
@@ -66,7 +76,7 @@ const ClassificationPage = (props: Props) => {
         </div>
       ))}
     </div>
-    {showModal &&selectedAppId &&(<ClassificationDetailModal onClose={()=>setShowModal(false)} AppId={selectedAppId}/>)}
+    {showModal &&selectedAppId &&(<ClassificationDetailModal onClose={ handleClose} AppId={selectedAppId}/>)}
     </>
   );
 };

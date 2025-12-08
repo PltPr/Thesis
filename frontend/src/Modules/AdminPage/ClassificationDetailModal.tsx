@@ -1,6 +1,7 @@
-import { getAppEvaluationApi, getApplicationById, getCv } from 'Api/ApplicationService';
+import { getAppEvaluationApi, getApplicationById, getCv, rejectApp } from 'Api/ApplicationService';
 import { ApplicationEvaluation, Applications } from 'Models/Application';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 type Props = {
   onClose: () => void;
@@ -43,6 +44,17 @@ const ClassificationDetailModal = ({ onClose, AppId }: Props) => {
       ))}
     </div>
   );
+
+  const handleReject = async()=>{
+    try{
+      await rejectApp(AppId);
+      setApplicationData(prev=>prev ? {...prev, 
+        status:'Rejected'} :prev);
+      toast.info("Application rejected")
+    }catch(err){
+      toast.error("Something went wrong!")
+    }
+  }
 
   if (isLoading || !applicationData || !applicationEvaluationData) {
     return (
@@ -129,7 +141,30 @@ const ClassificationDetailModal = ({ onClose, AppId }: Props) => {
           </div>
 
           {/* ➡️ RIGHT COLUMN — EMPTY */}
-          <div></div>
+          <div>
+            <div className="bg-white p-4 rounded-md border border-gray-200">
+                <h4 className="font-semibold mb-2">Decision</h4>
+                <div className="text-sm text-gray-600 mb-2">
+                  Invite to Interview or reject app
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    
+                    className="btn btn-primary p-2"
+                    disabled={false}
+                  >
+                    Interview
+                  </button>
+                  <button
+                    onClick={handleReject}
+                    className="btn btn-error bg-red-700 text-white p-2"
+                    disabled={false}
+                  >
+                    Reject
+                  </button>
+                </div>
+                </div>
+          </div>
         </div>
       </div>
     </div>
