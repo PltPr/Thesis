@@ -77,6 +77,31 @@ namespace api.Repository
             return test;
         }
 
+        public async Task<double> GetOverallTestRatingAsync(int appId)
+        {
+            var app = await _context.Applications.FirstOrDefaultAsync(x=>x.Id==appId);
+            if(app==null)
+                throw new Exception ("Cannot find an application");
+            
+            var testId=app.TestId;
+            if(testId==null)
+                throw new Exception("No test assigned to this application");
+            
+            var tasksIds = await _context.TestTasks.Where(x=>x.TestId==testId).Select(x=>x.TaskId).ToListAsync();
+            if(tasksIds.Count==0)
+                throw new Exception("Test has no tasks");
+            
+            var evaluations = await _context.CodeSubmissions.Where(x=>x.ApplicationId==appId && tasksIds.Contains(x.TaskId)).Select(x=>x.Evaluation).ToListAsync();
+            if(evaluations.Count==0)
+                return 0;
+            
+            var validEvaluations = evaluations.Where(x=>x.HasValue).Select(x=>x.Value).ToList();
+            
+            double sum = validEvaluations.Sum(x=>x);
+
+            return Math.Round(sum/tasksIds.Count,1);
+        }
+
         public async Task<Test?> GetTestForAppAsync(int appId)
         {
             var app = await _context.Applications.FirstOrDefaultAsync(x => x.Id == appId);

@@ -164,3 +164,13 @@ export const getApplicationById = async (appId:number)=>{
         console.error("getApplicationByIdError: ",err)
     }
 }
+
+export const inviteToInterview = async(appId:number)=>{
+    try{
+        const response = await axios.put(`http://localhost:5116/api/application/InviteToInterview?appId=${appId}`)
+        return response.data
+    }catch(err){
+        console.error("inviteToInterviewError: ",err)
+        throw err
+    }
+}

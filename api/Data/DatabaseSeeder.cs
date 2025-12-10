@@ -41,9 +41,7 @@ namespace api.Data
                 context.SaveChanges();
             }
 
-            // =====================================================================
-            //  JOB OFFERS (ROZSZERZONE + EU SALARY)
-            // =====================================================================
+            
             if (!context.JobOffers.Any())
             {
                 var jobOffers = new[]

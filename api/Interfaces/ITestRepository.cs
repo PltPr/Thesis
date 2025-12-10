@@ -15,5 +15,6 @@ namespace api.Interfaces
         Task<Test?> GetTestForAppAsync(int appId);
         Task<Test?> FinishTestAsync(int appId);
         Task<Test?> StartTestAsync(int appId);
+        Task<double>GetOverallTestRatingAsync(int appId);
     }
 }

@@ -96,6 +96,18 @@ namespace api.Controllers
 
             return Ok();
         }
+        [HttpGet("GetOverallTestRating")]
+        public async Task<IActionResult>GetOverallTestRating(int appId)
+        {
+            try
+            {
+                var result = await _testRepo.GetOverallTestRatingAsync(appId);
+                return Ok(result);
+            }catch(Exception ex)
+            {
+                return BadRequest(new {message=ex.Message});
+            }
+        }
 
     }
 }

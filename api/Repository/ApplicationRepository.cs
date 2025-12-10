@@ -18,9 +18,11 @@ namespace api.Repository
     public class ApplicationRepository : IApplicationRepository
     {
         private readonly ApplicationDBContext _context;
-        public ApplicationRepository(ApplicationDBContext context)
+        private readonly ITestRepository _testRepo;
+        public ApplicationRepository(ApplicationDBContext context,ITestRepository testRepo)
         {
             _context = context;
+            _testRepo=testRepo;
         }
         public async Task<Application> AddAplicationAsync(Application model)
         {
@@ -86,16 +88,32 @@ namespace api.Repository
 
         public async Task<List<GetClassificationGroupDto>> GetClassificationAsync()
         {
-            var apps = await _context.Applications.Include(x=>x.AppUser).Include(x=>x.JobOffer).Include(x=>x.ApplicationEvaluation).Where(a=>a.Status=="Test evaluated").ToListAsync();
+            var apps = await _context.Applications.Include(x=>x.AppUser).Include(x=>x.JobOffer).Include(x=>x.ApplicationEvaluation).Where(a=>a.Status=="Test evaluated"||a.Status=="Interview"||(a.Status=="Rejected"&&a.TestId!=null)).ToListAsync();
 
-            var result = apps.GroupBy(app=>app.JobOffer.JobTitle)
-            .Select(g=> new GetClassificationGroupDto
+            var grouped = apps.GroupBy(app=>app.JobOffer.JobTitle);
+            
+            var result = new List<GetClassificationGroupDto>();
+
+            foreach(var group in grouped)
             {
-                JobTitle=g.Key,
-                Applications=g.Select(app=>app.toGetClassificationDto()).ToList()
-            }).ToList();
+                var app = group.Select(async app =>
+                {
+                    var dto = app.toGetClassificationDto();
+                    var testRating = await _testRepo.GetOverallTestRatingAsync(app.Id);
+                    dto.EvaluationScore=Math.Round(dto.EvaluationScore+(testRating*0.2),2);
+                    return dto;
+                });
 
+                var applicationsWithUpdatedScore = await Task.WhenAll(app);
+
+                result.Add(new GetClassificationGroupDto
+                {
+                    JobTitle=group.Key,
+                    Applications=applicationsWithUpdatedScore.ToList()
+                });
+            }
             return result;
+            
         }
 
         public async Task<ApplicationEvaluation?> GetEvaluationForAppAsync(int appId)

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { UserProfileToken } from "../Models/User";
+import { UserManagementDto, UserProfileToken } from "../Models/User";
 
 export const loginAPI = async(email:string,password:string)=>{
     try{
@@ -86,3 +86,11 @@ export const EditUserAboutMe = async(aboutMe:string)=>{
     }
 }
 
+export const GetAllUsers=async()=>{
+    try{
+        const response = await axios.get<UserManagementDto[]>("http://localhost:5116/api/account/GetAllUsers")
+        return response.data;
+    }catch(err){
+        console.error("getAllUsersError: ",err)
+    }
+}

@@ -76,7 +76,8 @@ namespace api.Mappers
                 Math.Round((model.ApplicationEvaluation.UserExperienceScore *0.2)+
                 (model.ApplicationEvaluation.CriteriaMatchScore *0.2)+
                 (model.ApplicationEvaluation.TechnicalSkillScore *0.2)+
-                (model.ApplicationEvaluation.EducationScore*0.2),2)
+                (model.ApplicationEvaluation.EducationScore*0.2),2),
+                Status=model.Status
             };
         }
     }

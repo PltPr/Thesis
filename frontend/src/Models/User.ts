@@ -12,3 +12,12 @@ export type UserProfile={
     email:string;
     roles:string[];
 }
+
+export type UserManagementDto={
+    id:string,
+    name:string,
+    surname:string,
+    phoneNumber:string,
+    email:string;
+    roles:string[];
+}

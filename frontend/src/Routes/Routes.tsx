@@ -16,6 +16,8 @@ import TestInfoPage from "Pages/TestInfoPage/TestInfoPage"
 import SolveTestPage from "Pages/SolveTestPage/SolveTestPage"
 import JobOfferPage from "Pages/JobOfferPage/JobOfferPage"
 import UserPage from "Pages/UserPage/UserPage"
+import UsersManagementPage from "Pages/AdminPage/UsersManagementPage/UsersManagementPage"
+import JobOfferManagement from "Pages/AdminPage/JobOfferManagementPage/JobOfferManagement"
 
 export const router = createBrowserRouter([
     {
@@ -41,6 +43,8 @@ export const router = createBrowserRouter([
                         { path: "creator-page", element: <CreatorPage /> },
                         { path: "application-page", element: <ApplicationPage /> },
                         { path: "classification-page", element: <ClassificationPage /> },
+                        { path: "users-management-page", element: <UsersManagementPage /> },
+                        { path: "job-offer-management-page", element: <JobOfferManagement /> },
 
                     ]
             }

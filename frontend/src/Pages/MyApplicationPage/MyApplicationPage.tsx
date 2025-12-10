@@ -1,10 +1,16 @@
 import { getCv, getMyApplications } from 'Api/ApplicationService'
-import { FilePlus, ClipboardCheck, Award, XCircle, Mic, BadgePlus, CirclePlus, PenLine } from "lucide-react";
+import { motion } from 'framer-motion';
+import { FilePlus, ClipboardCheck, Award, XCircle, Mic, BadgePlus, CirclePlus, PenLine, CalendarCheck2 } from "lucide-react";
 import { applicationModel } from 'Models/Application'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 type Props = {}
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
 
 const MyApplicationPage = (props: Props) => {
   const [applications, setApplications] = useState<applicationModel[]>([])
@@ -29,8 +35,8 @@ const MyApplicationPage = (props: Props) => {
         return <Award className="inline-block w-5 h-5 text-green-600" />;
       case "Rejected":
         return <XCircle className="inline-block w-5 h-5 text-red-600" />;
-      case "Interview scheduled":
-        return <Mic className="inline-block w-5 h-5 text-purple-600" />;
+      case "Interview":
+        return <CalendarCheck2 className="inline-block w-5 h-5 text-purple-600" />;
       default:
         return <FilePlus className="inline-block w-5 h-5 text-gray-500" />;
     }
@@ -39,11 +45,20 @@ const MyApplicationPage = (props: Props) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+      
+      <motion.h1 
+      initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+      className="text-3xl font-bold text-gray-800 mb-6">
         My Applications
-      </h1>
+      </motion.h1>
 
-      <div className="space-y-6">
+      <motion.div 
+      initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+      className="space-y-6">
         {applications.map(app => (
           <div
 
@@ -106,7 +121,9 @@ const MyApplicationPage = (props: Props) => {
             </div>
           </div>
         ))}
-      </div>
+      </motion.div>
+
+      
     </div>
   )
 }

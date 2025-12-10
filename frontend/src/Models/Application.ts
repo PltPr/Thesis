@@ -51,7 +51,8 @@ export type Classifications={
     applicationId:number,
     firstName:string,
     lastName:string,
-    evaluationScore:number
+    evaluationScore:number,
+    status:string
 }
 
 export type ApplicationQuery={

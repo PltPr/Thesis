@@ -30,6 +30,19 @@ const Sidebar = () => {
         >
           Tests
         </Link>
+
+        <Link
+          to="users-management-page"
+          className="text-red-500 font-semibold uppercase"
+        >
+          Users
+        </Link>
+        <Link
+          to="job-offer-management-page"
+          className="text-red-500 font-semibold uppercase"
+        >
+          JobOffers
+        </Link>
       </div>
     </nav>
   )

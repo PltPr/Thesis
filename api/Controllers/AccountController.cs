@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using api.Dtos.AccountDto;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -201,6 +202,17 @@ namespace api.Controllers
             var result = await _accRepo.GetUserAboutMeAsync(userId);
             if(result==null)
                 return NotFound();
+
+            return Ok(result);
+        }
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult>GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            
+            var tasks = users.Select(u => u.toAllUserWithRolesDto(_userManager));
+            
+            var result = await Task.WhenAll(tasks);
 
             return Ok(result);
         }

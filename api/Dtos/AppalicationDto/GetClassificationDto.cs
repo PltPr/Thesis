@@ -11,5 +11,6 @@ namespace api.Dtos.AppalicationDto
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public double EvaluationScore { get; set; }
+        public string Status { get; set; }
     }
 }

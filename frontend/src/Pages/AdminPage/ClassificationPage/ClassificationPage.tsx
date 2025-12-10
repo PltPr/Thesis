@@ -1,4 +1,5 @@
 import { getClassificationApi } from 'Api/ApplicationService';
+import { CalendarCheck2, Info, XCircle } from 'lucide-react';
 import { Applications, GroupedClassification } from 'Models/Application';
 import ClassificationDetailModal from 'Modules/AdminPage/ClassificationDetailModal';
 import React, { useEffect, useState } from 'react';
@@ -27,6 +28,7 @@ const ClassificationPage = (props: Props) => {
     }
   }
 
+
   return (
     <>
     <div className="p-6 max-w-5xl mx-auto">
@@ -46,6 +48,7 @@ const ClassificationPage = (props: Props) => {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200">
+                <th className="border px-3 py-2 text-left"></th>
                 <th className="border px-3 py-2 text-left">First Name</th>
                 <th className="border px-3 py-2 text-left">Last Name</th>
                 <th className="border px-3 py-2 text-left">Score</th>
@@ -55,10 +58,18 @@ const ClassificationPage = (props: Props) => {
             <tbody>
               {group.applications.map((a, i) => (
                 <tr key={i} className="">
+                  <td className="border px-3 py-2 w-3 text-center align-middle">
+                    {a.status=="Test evaluated" &&
+                    (<Info className='text-blue-700 inline-block'/>)}
+                    {a.status=="Interview" &&
+                    (<CalendarCheck2 className='text-green-600 inline-block'/>)}
+                    {a.status=="Rejected" &&
+                    (<XCircle className=" text-red-600 inline-block" />)}
+                  </td>
                   <td className="border px-3 py-2">{a.firstName}</td>
                   <td className="border px-3 py-2">{a.lastName}</td>
                   <td className="border px-3 py-2">{a.evaluationScore.toFixed(2)}</td>
-                  
+
                     <div className='flex items-center '>
                       <button className='bg-blue-500' 
                       onClick={()=>{

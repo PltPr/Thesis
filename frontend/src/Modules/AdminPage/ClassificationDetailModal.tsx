@@ -1,4 +1,4 @@
-import { getAppEvaluationApi, getApplicationById, getCv, rejectApp } from 'Api/ApplicationService';
+import { getAppEvaluationApi, getApplicationById, getCv, inviteToInterview, rejectApp } from 'Api/ApplicationService';
 import { ApplicationEvaluation, Applications } from 'Models/Application';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -45,13 +45,27 @@ const ClassificationDetailModal = ({ onClose, AppId }: Props) => {
     </div>
   );
 
-  const handleReject = async()=>{
-    try{
+  const handleReject = async () => {
+    try {
       await rejectApp(AppId);
-      setApplicationData(prev=>prev ? {...prev, 
-        status:'Rejected'} :prev);
+      setApplicationData(prev => prev ? {
+        ...prev,
+        status: 'Rejected'
+      } : prev);
       toast.info("Application rejected")
-    }catch(err){
+    } catch (err) {
+      toast.error("Something went wrong!")
+    }
+  }
+  const handleAccept = async () => {
+    try {
+      await inviteToInterview(AppId);
+      setApplicationData(prev => prev ? {
+        ...prev,
+        status: "Interview"
+      } : prev);
+      toast.info("Invited to interview")
+    } catch (err) {
       toast.error("Something went wrong!")
     }
   }
@@ -67,7 +81,7 @@ const ClassificationDetailModal = ({ onClose, AppId }: Props) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl w-11/12 max-w-6xl h-[86vh] shadow-xl overflow-hidden">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <h2 className="text-lg font-semibold">Classification detail</h2>
@@ -143,31 +157,42 @@ const ClassificationDetailModal = ({ onClose, AppId }: Props) => {
           {/* ➡️ RIGHT COLUMN — EMPTY */}
           <div>
             <div className="bg-white p-4 rounded-md border border-gray-200">
-                <h4 className="font-semibold mb-2">Decision</h4>
-                <div className="text-sm text-gray-600 mb-2">
-                  Invite to Interview or reject app
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    
-                    className="btn btn-primary p-2"
-                    disabled={false}
-                  >
-                    Interview
-                  </button>
-                  <button
-                    onClick={handleReject}
-                    className="btn btn-error bg-red-700 text-white p-2"
-                    disabled={false}
-                  >
-                    Reject
-                  </button>
-                </div>
-                </div>
+              <h4 className="font-semibold mb-2">Decision</h4>
+              {applicationData.status === "Test evaluated" ? (
+                <>
+                  <div className="text-sm text-gray-600 mb-2">
+                    Invite to Interview or reject app
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handleAccept}
+                      className="btn btn-primary p-2"
+                      disabled={false}
+                    >
+                      Interview
+                    </button>
+                    <button
+                      onClick={handleReject}
+                      className="btn btn-error bg-red-700 text-white p-2"
+                      disabled={false}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm font-medium">
+                  {applicationData.status === "Interview" && "Aplikacja została zaakceptowana - zaproszona na rozmowę."}
+                  {applicationData.status === "Rejected" && "Aplikacja została odrzucona."}
+                  {applicationData.status !== "Interview" && applicationData.status !== "Rejected" && "Decyzja została już podjęta."}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   );
 };
 
