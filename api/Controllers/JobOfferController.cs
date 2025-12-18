@@ -7,6 +7,7 @@ using api.Dtos.JobOfferDto;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,6 +62,35 @@ namespace api.Controllers
 
             return Ok(result);
         }
-        
+        [HttpDelete("DeleteTechnologyFromOffer")]
+        public async Task<IActionResult>DeleteTechnologyFromOffer([FromBody]DeleteTechnologyDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            try
+            {
+                var result = await _offerRepository.DeleteTechnologyFromOfferAsync(dto);
+                return Ok();
+            }catch(Exception ex)
+            {
+                return BadRequest(new {message=ex.Message});
+            }
+        }
+        [HttpPost("AddTechnologyToOffer")]
+        public async Task<IActionResult>AddTechnologyToOffer([FromBody]AddTechnologyDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+            try
+            {
+                var result = await _offerRepository.AddTechnologyToOfferAsync(dto);
+                return Ok();
+            }catch(Exception ex)
+            {
+                return BadRequest(new {message=ex.Message});
+            }
+            
+        }
     }
 }

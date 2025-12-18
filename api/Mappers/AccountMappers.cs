@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.AccountDto;
+using api.Dtos.AppalicationDto;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -30,6 +31,15 @@ namespace api.Mappers
             dto.Roles = roles.ToList();
 
             return dto;
+        }
+
+        public static ApplicationSummary toApplicationSummaricDto (this Application app)
+        {
+            return new ApplicationSummary
+            {
+                JobTitle=  app.JobOffer.JobTitle,
+                Status=app.Status
+            };
         }
     }
 }

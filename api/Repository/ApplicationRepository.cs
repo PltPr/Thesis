@@ -11,6 +11,7 @@ using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -19,10 +20,12 @@ namespace api.Repository
     {
         private readonly ApplicationDBContext _context;
         private readonly ITestRepository _testRepo;
-        public ApplicationRepository(ApplicationDBContext context,ITestRepository testRepo)
+        private readonly UserManager<AppUser>_userManager;
+        public ApplicationRepository(ApplicationDBContext context,ITestRepository testRepo, UserManager<AppUser>userManager)
         {
             _context = context;
             _testRepo=testRepo;
+            _userManager=userManager;
         }
         public async Task<Application> AddAplicationAsync(Application model)
         {
@@ -71,7 +74,7 @@ namespace api.Repository
             return await _context.Applications.Where(x=>x.AppUserId==userId && x.JobOfferId==offerId).AnyAsync();
         }
 
-        public async Task<Application> GetByIdAsync(int id)
+        public async Task<Application?> GetByIdAsync(int id)
         {
             var app = await _context.Applications
             .Include(t => t.Test)
@@ -131,6 +134,30 @@ namespace api.Repository
         {
             var result = await _context.Applications.Include(a=>a.AppUser).Include(a => a.CV).Include(a => a.JobOffer).Where(x => x.AppUserId == userId).ToListAsync();
             return result;
+        }
+
+        public async Task<GetSummaryDto?> GetUserSummaryAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user==null)
+                throw new Exception("User not found");
+            
+            var apps = await _context.Applications.Include(x=>x.JobOffer).Where(x=>x.AppUserId==userId).ToListAsync();
+            if(apps.Count==0)
+                return new GetSummaryDto
+                {
+                    UserId=userId,
+                    Applications=new List<ApplicationSummary>()
+                };
+            
+            var appsSumaries = apps.Select(x=>x.toApplicationSummaricDto()).ToList();
+
+            return new GetSummaryDto
+            {
+                UserId=userId,
+                Applications=appsSumaries
+            };
+            
         }
 
         public async Task<List<GroupApplicationsDto>> GroupedApplications(ApplicationsQueryObject query)

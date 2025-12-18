@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.JobOfferDto;
+using api.Dtos.Technology;
 using api.Helpers;
 using api.Models;
 
@@ -16,5 +17,7 @@ namespace api.Interfaces
         Task<JobOffer> AddJobOfferAsync(AddJobOfferDto jobOfferDto);
         Task<JobOffer> GetById(int id);
         Task<List<string>>GetJobOffersTitlesAsync();
+        Task<bool>DeleteTechnologyFromOfferAsync(DeleteTechnologyDto dto);
+        Task<bool>AddTechnologyToOfferAsync(AddTechnologyDto dto);
     }
 }

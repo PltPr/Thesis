@@ -94,3 +94,30 @@ export const GetAllUsers=async()=>{
         console.error("getAllUsersError: ",err)
     }
 }
+
+
+export const AddRoleToUser=async(userId:string,role:string)=>{
+    try{
+        const response = await axios.post(`http://localhost:5116/api/account/AddRole`,{
+            userId:userId,
+            role:role
+        })
+        return response.data;
+    }catch(err){
+        console.error("addRoleToUserError: ",err)
+        throw err;
+    }
+}
+
+export const DeleteRoleFromUser=async(userId:string,role:string)=>{
+    try{
+        const response = await axios.post("http://localhost:5116/api/account/DeleteRole",{
+            userId:userId,
+            role:role
+        })
+        return response.data;
+    }catch(err){
+        console.error("deleteRoleFromUserError: ",err)
+        throw err;
+    }
+}

@@ -12,6 +12,7 @@ const JobOfferPage = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [language, setLanguage] = useState("");
 
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white">
       <div className="flex max-w-7xl mx-auto pt-10 pb-20 px-6 gap-6">

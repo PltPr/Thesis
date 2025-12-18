@@ -8,11 +8,11 @@ import { UserProvider } from 'Context/useAuth';
 function App() {
   return (
     <>
-    <UserProvider>
-    <Navbar/>
-    <Outlet/>
-    <ToastContainer/>
-    </UserProvider>
+      <UserProvider>
+        <Navbar />
+        <Outlet />
+        <ToastContainer />
+      </UserProvider>
     </>
   );
 }

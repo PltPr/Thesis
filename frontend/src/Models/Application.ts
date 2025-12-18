@@ -59,3 +59,13 @@ export type ApplicationQuery={
     jobTitle?:string,
     status?:string
 }
+
+export type SummaryDto={
+    userId:string,
+    applications:ApplicationSummary[]
+}
+
+export type ApplicationSummary={
+    jobTitle:string,
+    status:string
+}

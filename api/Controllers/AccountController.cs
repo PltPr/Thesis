@@ -216,6 +216,47 @@ namespace api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("AddRole")]
+        public async Task<IActionResult>AddRole([FromBody]AddRoleDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if(user==null)
+                return NotFound();
+            
+            if(dto.Role!="Admin" && dto.Role!="Examiner")
+                return BadRequest($"Role {dto.Role} not exist");
+
+            if (await _userManager.IsInRoleAsync(user, dto.Role))
+                return BadRequest(new { message = $"User already has role '{dto.Role}'" });
+
+            var result = await _userManager.AddToRoleAsync(user,dto.Role);
+
+            return Ok(new {message = "Role added"});
+        }
+        [HttpPost("DeleteRole")]
+        public async Task<IActionResult>DeleteRole([FromBody]RemoveRoleDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if(user==null)
+                return NotFound();
+            
+            if(dto.Role!="Admin" && dto.Role!="Examiner")
+                return BadRequest($"Role {dto.Role} not exist");
+
+            if (!await _userManager.IsInRoleAsync(user, dto.Role))
+                return BadRequest(new { message = $"User already has not role '{dto.Role}'" });
+
+            var result = await _userManager.RemoveFromRoleAsync(user,dto.Role);
+
+            return Ok(new {message = "Role deleted"});
+        }
+        
     }
     
 }

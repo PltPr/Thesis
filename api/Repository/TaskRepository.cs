@@ -56,7 +56,7 @@ namespace api.Repository
             return taskModel;
         }
 
-        public async Task<List<TaskItem>> GetAllAsync()
+        public async Task<List<TaskItem>?> GetAllAsync()
         {
             var tasks = await _context.TaskItems.ToListAsync();
             if (tasks == null)
@@ -93,7 +93,7 @@ namespace api.Repository
             return taskList;
         }
 
-        public async Task<TaskItem> GetByIdAsync(int id)
+        public async Task<TaskItem?> GetByIdAsync(int id)
         {
             var task = await _context.TaskItems.FirstOrDefaultAsync(t => t.Id == id);
             if (task == null)

@@ -174,3 +174,12 @@ export const inviteToInterview = async(appId:number)=>{
         throw err
     }
 }
+
+export const GetSummaryForUser=async(userId:string)=>{
+    try{
+        const response = await axios.get(`http://localhost:5116/api/application/UserSummary/${userId}`)
+        return response.data
+    }catch(err){
+        console.error("getSummaryForUserError: ",err)
+    }
+}

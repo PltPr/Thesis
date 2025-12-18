@@ -5,19 +5,38 @@ interface Props  {
     data:Test[]
 }
 
-const TestList = ({data}: Props) => {
+const TestList = ({ data }: Props) => {
   return (
-    <div className=''>
-        {data.map((test)=>(
-            <div key={test.id} className="p-3 m-3  border border-2 gap-5">
-              <h1>{test.tittle}</h1>
-                <div>Desc: {test.description}</div>
-                <div>TaskNumbers: {test.taskIds?.join(", ")}</div>
-                <div>TotalDuration: {test.totalDurationMinutes} minutes</div>
-            </div>
-        ))}
+    <div className="space-y-4">
+      {data.map((test) => (
+        <div
+          key={test.id}
+          className="
+            p-4 
+            rounded-lg 
+            border 
+            border-gray-300 
+            bg-gray-50 
+            shadow-sm
+            hover:shadow-md
+            hover:border-blue-400
+            transition
+          "
+        >
+          <h1 className="text-lg font-semibold text-gray-800">
+            {test.tittle}
+          </h1>
+
+          <div className="mt-2 text-gray-700">
+            <p><strong>Description:</strong> {test.description}</p>
+            <p><strong>Tasks:</strong> {test.taskIds?.join(", ")}</p>
+            <p><strong>Duration:</strong> {test.totalDurationMinutes} min</p>
+          </div>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
+
 
 export default TestList

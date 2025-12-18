@@ -9,6 +9,7 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +38,78 @@ namespace api.Repository
             return jobOffer;
         }
 
-        
+        public async Task<bool> AddTechnologyToOfferAsync(AddTechnologyDto dto)
+        {
+            var offer = await _context.JobOffers.FirstOrDefaultAsync(x=>x.Id==dto.JobOfferId);
+            if(offer==null)
+                throw new Exception("Job offer not found");
+
+            var technology = await _context.Technologies.FirstOrDefaultAsync(x=>x.Name.ToLower()==dto.TechnologyName.ToLower());
+            if(technology==null)
+            {
+                var newTechnology = new Technology
+                {
+                    Name=dto.TechnologyName
+                };
+                await _context.Technologies.AddAsync(newTechnology);
+                await _context.SaveChangesAsync();
+                technology=newTechnology;
+            }
+            if(dto.Type=="Required")
+            {
+                var jobOfferTechnology = new JobOfferTechnologyRequired
+                {
+                    JobOfferId=offer.Id,
+                    TechnologyIdRequired=technology.Id
+                };
+                await _context.JobOfferTechnologiesRequired.AddAsync(jobOfferTechnology);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            if(dto.Type=="NiceToHave")
+            {
+                var jobOfferTechnology = new JobOfferTechnologyNiceToHave
+                {
+                    JobOfferId=offer.Id,
+                    TechnologyIdNiceToHave=technology.Id
+                };
+                await _context.JobOfferTechnologiesNiceToHave.AddAsync(jobOfferTechnology);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            throw new Exception("Type error");
+        }
+
+        public async Task<bool> DeleteTechnologyFromOfferAsync(DeleteTechnologyDto dto)
+        {
+            var offer = await _context.JobOffers.FirstOrDefaultAsync(x=>x.Id==dto.JobOfferId);
+            if(offer==null)
+                throw new Exception("Job offer not found");
+            var technology = await _context.Technologies.Where(x=>x.Name==dto.TechnologyName).Select(x=>x.Id).FirstOrDefaultAsync();
+            if(technology==0)
+                throw new Exception("Technology not found");
+            
+            if(dto.Type=="NiceToHave")
+            {
+                var offertechnology = await _context.JobOfferTechnologiesNiceToHave.Where(x=>x.JobOfferId==dto.JobOfferId && x.TechnologyIdNiceToHave==technology).FirstOrDefaultAsync();
+                if(offertechnology==null)
+                    throw new Exception("Technology is not assigned to this job offer");
+                _context.JobOfferTechnologiesNiceToHave.Remove(offertechnology);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            if(dto.Type=="Required")
+            {
+                var offertechnology = await _context.JobOfferTechnologiesRequired.Where(x=>x.JobOfferId==dto.JobOfferId && x.TechnologyIdRequired==technology).FirstOrDefaultAsync();
+                if(offertechnology==null)
+                    throw new Exception("Technology is not assigned to this job offer");
+                _context.JobOfferTechnologiesRequired.Remove(offertechnology);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            throw new Exception("Wrong type");
+        }
 
         public async Task<List<JobOffer>> GetAllAsync(JobOfferQueryObject query)
         {

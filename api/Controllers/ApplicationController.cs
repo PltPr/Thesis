@@ -191,5 +191,16 @@ namespace api.Controllers
 
             return Ok(new{ Status=result.Status});
         }
+        [HttpGet("UserSummary/{userId}")]
+        public async Task<IActionResult>GetUserSummary([FromRoute]string userId)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var result = await _appRepo.GetUserSummaryAsync(userId);
+
+            return Ok(result);
+        }
+
     }
 }

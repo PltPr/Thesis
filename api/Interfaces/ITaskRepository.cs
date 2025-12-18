@@ -9,8 +9,8 @@ namespace api.Interfaces
 {
     public interface ITaskRepository
     {
-        Task<TaskItem> GetByIdAsync(int id);
-        Task<List<TaskItem>> GetAllAsync();
+        Task<TaskItem?> GetByIdAsync(int id);
+        Task<List<TaskItem>?> GetAllAsync();
         Task<TaskItem> AddTaskAsync(TaskItem taskModel);
         Task<List<TaskItem>?> GetAllTasksForTestAsync(int testId);
         Task<List<TasksForSolvingDto>?> GetAllTasksForSolvingAsync(int appId);
