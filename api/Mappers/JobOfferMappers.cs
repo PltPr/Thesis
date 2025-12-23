@@ -20,6 +20,7 @@ namespace api.Mappers
                 Salary = model.Salary,
                 ProgrammingLanguage = model.ProgrammingLanguage,
                 Description = model.Description,
+                isVisible=model.isVisible,
                 JobOfferTechnologyRequired = model.JobOfferTechnologyRequired
                 .Select(t => t.Technology.asDto()).ToList(),
                 JobOfferTechnologyNiceToHave = model.JobOfferTechnologyNiceToHave
@@ -28,7 +29,7 @@ namespace api.Mappers
             };
         }
 
-        public static JobOffer ToJobOffer(AddJobOfferDto model, List<Technology> technologiesRequired, List<Technology>technologiesAdditional)
+        public static JobOffer ToJobOffer(this AddJobOfferDto model, List<Technology> technologiesRequired, List<Technology>technologiesAdditional)
         {
             return new JobOffer
             {

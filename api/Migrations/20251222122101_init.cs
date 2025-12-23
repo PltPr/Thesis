@@ -96,7 +96,8 @@ namespace api.Migrations
                     JobType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salary = table.Column<int>(type: "int", nullable: false),
                     ProgrammingLanguage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isVisible = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

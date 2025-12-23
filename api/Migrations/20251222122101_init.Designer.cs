@@ -12,7 +12,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20251127095935_init")]
+    [Migration("20251222122101_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -434,6 +434,9 @@ namespace api.Migrations
 
                     b.Property<int>("Salary")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isVisible")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

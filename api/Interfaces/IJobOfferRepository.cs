@@ -19,5 +19,8 @@ namespace api.Interfaces
         Task<List<string>>GetJobOffersTitlesAsync();
         Task<bool>DeleteTechnologyFromOfferAsync(DeleteTechnologyDto dto);
         Task<bool>AddTechnologyToOfferAsync(AddTechnologyDto dto);
+        Task<JobOffer>UpdateJobOfferAsync(int id,UpdateJobOfferDto dto);
+        Task<bool>DeleteJobOffer(int id);
+        Task<bool>ChangeVisibilityAsync(int offerId,bool visibility);
     }
 }

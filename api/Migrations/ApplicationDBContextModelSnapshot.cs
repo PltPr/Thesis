@@ -432,6 +432,9 @@ namespace api.Migrations
                     b.Property<int>("Salary")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isVisible")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("JobOffers");

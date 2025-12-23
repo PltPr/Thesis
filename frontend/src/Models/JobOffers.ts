@@ -9,6 +9,7 @@ export type JobOfferGet ={
     salary:number,
     programmingLanguage:string,
     description:string,
+    isVisible:boolean,
     jobOfferTechnologyRequired: Technology[]
     jobOfferTechnologyNiceToHave:Technology[]
 }

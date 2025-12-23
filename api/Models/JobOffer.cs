@@ -16,6 +16,7 @@ namespace api.Models
         public int Salary { get; set; }
         public string ProgrammingLanguage { get; set; }
         public string? Description { get; set; }
+        public bool isVisible { get; set; } = true;
 
         public ICollection<JobOfferTechnologyRequired> JobOfferTechnologyRequired { get; set; } = new List<JobOfferTechnologyRequired>();
         public ICollection<JobOfferTechnologyNiceToHave> JobOfferTechnologyNiceToHave { get; set; } = new List<JobOfferTechnologyNiceToHave>();

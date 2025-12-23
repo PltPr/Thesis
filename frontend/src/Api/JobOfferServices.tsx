@@ -1,5 +1,6 @@
 import axios from "axios";
 import { JobOfferGet, JobOfferQuery, Technology } from "../Models/JobOffers";
+import { P } from "framer-motion/dist/types.d-BJcRxCew";
 
 const api ="http://localhost:5116/api/jobOffer"
 
@@ -72,4 +73,56 @@ export const AddTechnologyToJobOffer = async(offerId:number,technology:string,ty
         console.error("AddTechnologyToJobOfferError: ",err)
         throw err
     }
+}
+
+export const UpdateOffer = async (offerId:number,jobTitle:string,jobType:string,salary:number,programmingLanguage:string,description:string)=>{
+    try{
+        const response = await axios.put(`http://localhost:5116/api/jobOffer/${offerId}`,{
+            jobTitle:jobTitle,
+            jobType:jobType,
+            salary:salary,
+            programmingLanguage:programmingLanguage,
+            description:description
+        })
+        return response.data
+    }catch(err){
+        console.error("UpdateOfferError: ",err)
+        throw err;
+    }
+}
+
+export const AddJobOffer = async (jobTitle:string,jobType:string,salary:number,programmingLanguage:string,description:string,requiredTechnologies:Technology[],niceToHaveTechnologies:Technology[])=>{
+    try{
+        const response = await axios.post("http://localhost:5116/api/jobOffer",{
+            jobTitle:jobTitle,
+            jobType:jobType,
+            salary:salary,
+            programmingLanguage:programmingLanguage,
+            description:description,
+            technologyNamesRequired:requiredTechnologies.map(t => t.name),
+            technologyNamesNiceToHave:niceToHaveTechnologies.map(t => t.name)
+        })
+    }catch(err){
+        console.error("AddJobOfferError: ",err)
+        throw err;
+    }
+}
+
+export const ChangeVisibility = async (offerId:number,visibility:boolean)=>{
+    try{
+        const response = await axios.put(`http://localhost:5116/api/jobOffer/ChangeVisibility/${offerId}?visibility=${visibility}`)
+    }catch(err){
+        console.error("ChangeVisibilityError: ",err)
+        throw err
+    }
+}
+
+export const DeleteJobOffer = async (offerId:number)=>{
+    try{
+        const response = await axios.delete(`http://localhost:5116/api/jobOffer/${offerId}`)
+    }catch(err){
+        console.error("DeleteJobOfferError: ",err)
+        throw err;
+    }
+    
 }

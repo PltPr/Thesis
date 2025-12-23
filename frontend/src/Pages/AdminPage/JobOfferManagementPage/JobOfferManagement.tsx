@@ -1,5 +1,6 @@
 import { getJobOffersApi } from 'Api/JobOfferServices'
 import { JobOfferGet } from 'Models/JobOffers'
+import AddJobOfferModal from 'Modules/AdminPage/AddJobOfferModal'
 import JobOfferManagementModal from 'Modules/AdminPage/JobOfferManagementModal'
 import React, { useEffect, useState } from 'react'
 
@@ -9,6 +10,7 @@ const JobOfferManagement = (props: Props) => {
     const[jobOffers,setJobOffers]=useState<JobOfferGet[]|null>(null)
 
     const[modalOpen,setModalOpen]=useState<boolean>(false);
+    const[addJobOfferModalOpen,setAddJobOfferModalOpen]=useState<boolean>(false)
     const[selectedJobOffer,setSelectedJobOffer]=useState<JobOfferGet|null>(null);
 
     const getData = async()=>{
@@ -27,6 +29,10 @@ const JobOfferManagement = (props: Props) => {
     const handleClose=()=>{
       setModalOpen(false)
       setSelectedJobOffer(null)
+      getData()
+    }
+    const handleCloseAddOfferModal=()=>{
+      setAddJobOfferModalOpen(false)
       getData()
     }
 
@@ -53,8 +59,13 @@ const JobOfferManagement = (props: Props) => {
             </button>
           </li>
         ))}
+        <button 
+        className="px-3 py-2 m-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        onClick={()=>{setAddJobOfferModalOpen(true)}}
+        >Add offer</button>
       </ul>
       {modalOpen && selectedJobOffer && (<JobOfferManagementModal onClose={handleClose} JobOfferData={selectedJobOffer}/>)};
+      {addJobOfferModalOpen &&(<AddJobOfferModal onClose={handleCloseAddOfferModal}/>)}
     </div>
   )
 }

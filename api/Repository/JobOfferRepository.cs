@@ -29,13 +29,45 @@ namespace api.Repository
             {throw new ArgumentException("Offer must contains technologies");}
 
 
-            var requiredTechnologies = await _context.Technologies.Where(t=>jobOfferDto.TechnologyNamesRequired.Contains(t.Name)).ToListAsync();
-            var additionalTechnologies = await _context.Technologies.Where(t=>jobOfferDto.TechnologyNamesNiceToHave.Contains(t.Name)).ToListAsync();
-            var jobOffer=JobOfferMappers.ToJobOffer(jobOfferDto, requiredTechnologies,additionalTechnologies);
+            var allTechnologies = jobOfferDto.TechnologyNamesNiceToHave.Concat(jobOfferDto.TechnologyNamesRequired);
+            var requiredTechnologiesList = new List<Technology>();
+            var niceToHaveTechnologiesList = new List<Technology>();
 
-            _context.JobOffers.Add(jobOffer);
+            foreach(var techName in jobOfferDto.TechnologyNamesRequired)
+            {
+                var tech = await _context.Technologies.Where(x=>x.Name.ToLower()==techName.ToLower()).FirstOrDefaultAsync();
+                if(tech==null)
+                {
+                    var newTechnology = new Technology
+                    {
+                        Name=techName
+                    };
+                    await _context.Technologies.AddAsync(newTechnology);
+                    requiredTechnologiesList.Add(newTechnology);
+                }
+                else requiredTechnologiesList.Add(tech);
+            }
+            foreach(var techName in jobOfferDto.TechnologyNamesNiceToHave)
+            {
+                var tech = await _context.Technologies.Where(x=>x.Name.ToLower()==techName.ToLower()).FirstOrDefaultAsync();
+                if(tech==null)
+                {
+                    var newTechnology = new Technology
+                    {
+                        Name=techName
+                    };
+                    await _context.Technologies.AddAsync(newTechnology);
+                    niceToHaveTechnologiesList.Add(newTechnology);
+                }
+                else niceToHaveTechnologiesList.Add(tech);
+            }
             await _context.SaveChangesAsync();
-            return jobOffer;
+
+            var offer = jobOfferDto.ToJobOffer(requiredTechnologiesList,niceToHaveTechnologiesList);
+            await _context.JobOffers.AddAsync(offer);
+            await _context.SaveChangesAsync();
+            return offer;
+            
         }
 
         public async Task<bool> AddTechnologyToOfferAsync(AddTechnologyDto dto)
@@ -78,6 +110,29 @@ namespace api.Repository
                 return true;
             }
             throw new Exception("Type error");
+        }
+
+        public async Task<bool> ChangeVisibilityAsync(int offerId, bool visibility)
+        {
+            var offer = await _context.JobOffers.FirstOrDefaultAsync(x=>x.Id==offerId);
+            if(offer==null)
+                throw new KeyNotFoundException("Job offer not found");
+            
+            offer.isVisible=visibility;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteJobOffer(int id)
+        {
+            var offer = await _context.JobOffers.FirstOrDefaultAsync(x=>x.Id==id);
+            if(offer==null)
+                return false;
+            
+            _context.JobOffers.Remove(offer);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> DeleteTechnologyFromOfferAsync(DeleteTechnologyDto dto)
@@ -166,6 +221,22 @@ namespace api.Repository
             }
 
             return offer.JobOfferTechnologyRequired.Select(jot => jot.Technology).ToList();
+        }
+
+        public async Task<JobOffer> UpdateJobOfferAsync(int id, UpdateJobOfferDto dto)
+        {
+            var offer = await _context.JobOffers.FirstOrDefaultAsync(x=>x.Id==id);
+            if(offer==null)
+                throw new Exception("Job offer not found");
+
+            offer.JobTitle=dto.JobTitle;
+            offer.JobType=dto.JobType;
+            offer.Salary=dto.Salary;
+            offer.ProgrammingLanguage=dto.ProgrammingLanguage;
+            offer.Description=dto.Description;
+
+            await _context.SaveChangesAsync();
+            return offer;
         }
     }
 }

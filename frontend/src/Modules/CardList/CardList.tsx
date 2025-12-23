@@ -27,7 +27,8 @@ const CardList: React.FC<Props> = ({JobTitleQuery,ProgrammingLanguage}) => {
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-      {jobOffer.map((offer) => (
+      {jobOffer.filter(offer=>offer.isVisible)
+      .map((offer) => (
         <motion.div
           key={offer.id}
           initial={{ opacity: 0, y: 15 }}

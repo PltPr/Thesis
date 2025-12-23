@@ -92,5 +92,53 @@ namespace api.Controllers
             }
             
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult>UpdateJobOffer(int id,UpdateJobOfferDto dto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            try
+            {
+                var result = await _offerRepository.UpdateJobOfferAsync(id,dto);
+                return Ok(result.ToJobOfferDto());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
+            
+        }
+        [HttpDelete("{id}")]
+        public async Task <IActionResult> DeleteJobOffer(int id)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            try
+            {
+                var result = await _offerRepository.DeleteJobOffer(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error" });
+            }
+        }
+        [HttpPut("ChangeVisibility/{id}")]
+        public async Task<IActionResult>ChangeVisibility(int id,bool visibility)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+            try
+            {
+                var result = await _offerRepository.ChangeVisibilityAsync(id,visibility);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return NotFound(new {message=ex.Message});
+            }
+        }
     }
 }
