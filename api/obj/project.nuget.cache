@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BwaIRjf5ImI=",
+  "dgSpecHash": "jv5mSxCKTeda7tt0aNAIdxIaCP+DTr++6HpP9dZod6rdanb0+Nw/3jufyd1NRl2z9reSQ8EkAB9VfxlojiOhjw==",
   "success": true,
-  "projectFilePath": "C:\\Thesis\\api\\api.csproj",
+  "projectFilePath": "C:\\Users\\etzy\\Documents\\GitHub\\Thesis\\api\\api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\etzy\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\etzy\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

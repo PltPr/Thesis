@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\api",
-    "\\api\\Controllers"
+    "\\api\\Controllers",
+    "\\api\\Repository"
   ],
-  "SelectedNode": "\\api\\Controllers\\AccountController.cs",
+  "SelectedNode": "\\api\\Repository\\TaskRepository.cs",
   "PreviewInSolutionExplorer": false
 }
