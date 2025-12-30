@@ -35,6 +35,7 @@ namespace api.Mappers
                 ApplicationId = dto.ApplicationId,
                 TaskId = dto.TaskId,
                 Code = dto.Code,
+                Language=dto.Language,
                 SubmissionDate = DateTime.Now
             };
         }
@@ -59,7 +60,6 @@ namespace api.Mappers
                 Code = codeSubmission.Code,
                 Evaluation=codeSubmission.Evaluation,
                 SubmissionDate = codeSubmission.SubmissionDate,
-                CompilationResult = codeSubmission.CompilationResult,
                 ExecutionResult = codeSubmission.ExecutionResult
             };
         }

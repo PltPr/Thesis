@@ -10,5 +10,6 @@ namespace api.Dtos.TaskDto
         public int ApplicationId { get; set; }
         public int TaskId { get; set; }
         public string Code { get; set; }
+        public string Language { get; set; }
     }
 }

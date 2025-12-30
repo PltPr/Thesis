@@ -382,13 +382,13 @@ namespace api.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompilationResult")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("Evaluation")
                         .HasColumnType("int");
 
                     b.Property<string>("ExecutionResult")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SubmissionDate")

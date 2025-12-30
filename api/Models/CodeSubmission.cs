@@ -10,8 +10,8 @@ namespace api.Models
     {
         public int Id { get; set; }
         public string? Code { get; set; } 
+        public string? Language { get; set; }
         public DateTime SubmissionDate { get; set; }
-        public string? CompilationResult { get; set; }
         public string? ExecutionResult { get; set; }
         public int? Evaluation { get; set; }
         public int ApplicationId { get; set; }

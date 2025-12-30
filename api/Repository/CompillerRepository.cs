@@ -16,7 +16,7 @@ namespace api.Repository
         public async Task<CompileResult> CompileAsync(CompileRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Code) || string.IsNullOrWhiteSpace(request.Language))
-                return new CompileResult { Success = false, Error = "Language and code are required" };
+                return new CompileResult { Success = false, Output = "Language and code are required" };
 
             var processId = Guid.NewGuid().ToString();
 
@@ -37,7 +37,7 @@ namespace api.Repository
             catch (Exception ex)
             {
                 Cleanup(tempFolder);
-                return new CompileResult { Success = false, Error = ex.Message };
+                return new CompileResult { Success = false, Output = ex.Message };
             }
 
             var dockerFilePath = Path.Combine(tempFolder, "Dockerfile");
@@ -55,8 +55,7 @@ namespace api.Repository
                 {
                     Success = false,
                     ProcessId = processId,
-                    Output = buildResult.Output,
-                    Error = buildErrorSummary
+                    Output = buildErrorSummary
                 };
             }
             var runResult = await RunProcessAsync("docker", $"run --rm {imageTag}", processId);
@@ -68,8 +67,8 @@ namespace api.Repository
             {
                 Success = runResult.ExitCode == 0,
                 ProcessId = processId,
-                Output = runResult.Output,
-                Error = runResult.ExitCode != 0 ? errorSummary : null
+                Output = runResult.ExitCode == 0 ? runResult.Output
+                : errorSummary
             };
         }
         private string GetDefaultFileName(string language)

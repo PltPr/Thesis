@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20251222122101_init")]
-    partial class init
+    [Migration("20251228211752_i")]
+    partial class i
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -385,13 +385,13 @@ namespace api.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompilationResult")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("Evaluation")
                         .HasColumnType("int");
 
                     b.Property<string>("ExecutionResult")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SubmissionDate")

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using api.Data;
+using api.Extensions;
 using api.Interfaces;
 using api.Models;
 using api.Repository;
@@ -104,8 +105,9 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<INoteMessageRepository, NoteMessageRepository>();
 builder.Services.AddScoped<ICompillerRepository, CompillerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
-
+builder.Services.AddHostedService<CodeExecutionWorker>();
 
 builder.Services.AddCors(options =>
 {

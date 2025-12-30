@@ -14,9 +14,11 @@ namespace api.Repository
     public class TaskRepository :ITaskRepository
     {
         private readonly ApplicationDBContext _context;
-        public TaskRepository(ApplicationDBContext context)
+        private readonly IBackgroundTaskQueue _queue;
+        public TaskRepository(ApplicationDBContext context,IBackgroundTaskQueue queue)
         {
             _context = context;
+            _queue=queue;
         }
 
         public async Task<CodeSubmission?> AddEvaluationForSolutionAsync(AddEvaluationForSolutionDto dto)
@@ -46,6 +48,9 @@ namespace api.Repository
         {
             await _context.CodeSubmissions.AddAsync(model);
             await _context.SaveChangesAsync();
+
+            _queue.Enqueue(model.Id);
+
             return model;
         }
 
