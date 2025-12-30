@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using api.Data;
 using api.Extensions;
 using api.Interfaces;
@@ -94,7 +95,23 @@ builder.Services.AddAuthentication(options=>{
     };
 });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("fixed",context =>
+    {
+      var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
+      return RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey:ip,
+        factory: _=>new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 100,
+            Window=TimeSpan.FromSeconds(30)
+        }
+      ); 
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
 
 builder.Services.AddScoped<IJobOfferRepository,JobOfferRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -160,7 +177,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-
+app.UseRateLimiter();
 app.MapControllers();
 
 app.Run();
