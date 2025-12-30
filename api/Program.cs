@@ -105,11 +105,12 @@ builder.Services.AddRateLimiter(options =>
         partitionKey:ip,
         factory: _=>new FixedWindowRateLimiterOptions
         {
-            PermitLimit = 100,
+            PermitLimit = 5,
             Window=TimeSpan.FromSeconds(30)
         }
       ); 
     });
+
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
@@ -178,7 +179,7 @@ app.UseAuthorization();
 
 
 app.UseRateLimiter();
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("fixed");
 
 app.Run();
 
