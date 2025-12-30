@@ -5,6 +5,12 @@ import { ApplicationQuery, GroupedApplications, Applications } from 'Models/Appl
 import { Test } from 'Models/Test'
 import ApplicationDetailModal from 'Modules/AdminPage/ApplicationDetailModal'
 import React, { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+}
 
 const ApplicationPage = () => {
   const [grApp, setGrApp] = useState<GroupedApplications[]>([])
@@ -37,16 +43,14 @@ const ApplicationPage = () => {
 
   return (
     <>
-      <div className="p-6 space-y-8">
-
+      <div className="p-6 space-y-8 bg-gradient-to-b rounded-2xl from-blue-50 to-white min-h-screen">
         {/* Filters */}
-        <div className="flex gap-4">
-
+        <div className="flex flex-wrap gap-4 mb-8">
           <select
             value={jobTitleQuery ?? ""}
-            onChange={(e) => setJobTitleQuery(e.target.value)}
+            onChange={(e) => setJobTitleQuery(e.target.value || null)}
             className="
-              w-1/5
+              w-48
               rounded-xl
               border
               border-gray-300
@@ -59,9 +63,10 @@ const ApplicationPage = () => {
               focus:ring-2
               focus:ring-blue-300
               transition
+              cursor-pointer
             "
           >
-            <option value="" disabled>JobTitles</option>
+            <option value="" disabled>Job Titles</option>
             <option value="">All</option>
             {jobOfferTitles.map((title) => (
               <option key={title} value={title}>{title}</option>
@@ -70,9 +75,9 @@ const ApplicationPage = () => {
 
           <select
             value={statusQuery ?? ""}
-            onChange={(e) => setStatusQuery(e.target.value)}
+            onChange={(e) => setStatusQuery(e.target.value || null)}
             className="
-              w-1/5
+              w-48
               rounded-xl
               border
               border-gray-300
@@ -85,6 +90,7 @@ const ApplicationPage = () => {
               focus:ring-2
               focus:ring-blue-300
               transition
+              cursor-pointer
             "
           >
             <option value="" disabled>Status</option>
@@ -96,83 +102,87 @@ const ApplicationPage = () => {
             <option value="Interview">Interview</option>
             <option value="Rejected">Rejected</option>
           </select>
-
         </div>
 
         {/* Applications */}
-        {grApp.map((offer, idx) => (
-          <div 
-            key={idx} 
-            className="rounded-xl bg-white border border-gray-200 shadow-lg p-6"
-          >
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              {offer.jobOfferTitle}
-            </h2>
+        <div>
+          {grApp.map((offer, idx) => (
+            <div
+              key={idx}
+              className="rounded-2xl bg-white border border-gray-200 shadow-lg p-6"
+            >
+              <h2 className="text-3xl font-semibold text-gray-800 mb-6">
+                {offer.jobOfferTitle}
+              </h2>
 
-            <ul className="space-y-4">
-              {offer.applications.map((app) => (
-                <li
-                  key={app.cvId}
-                  className="
-                    p-4
-                    rounded-lg
-                    border
-                    bg-gray-50
-                    flex
-                    justify-between
-                    items-center
-                    hover:shadow-md
-                    transition
-                  "
-                >
-
-                  <div className="space-y-1 text-gray-700">
-                    <p><strong>Name:</strong> {app.name} {app.surname}</p>
-                    <p><strong>Opis:</strong> {app.aboutYourself}</p>
-                    <p><strong>Data:</strong> {new Date(app.date).toLocaleString("pl-PL")}</p>
-                    <p><strong>Status:</strong> {app.status}</p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setSelectedApp(app)
-                      setShowModal(true)
-                    }}
+              <ul className="space-y-4">
+                {offer.applications.map((app) => (
+                  <li
+                    key={app.cvId}
                     className="
-                      px-4
-                      py-2
-                      rounded-lg
-                      bg-blue-600
-                      text-white
-                      font-medium
-                      shadow
-                      hover:bg-blue-700
+                      p-5
+                      rounded-xl
+                      border
+                      border-gray-200
+                      bg-gray-50
+                      flex
+                      flex-col md:flex-row
+                      justify-between
+                      items-start md:items-center
+                      hover:shadow-lg
                       transition
+                      cursor-pointer
                     "
                   >
-                    Details
-                  </button>
+                    <div className="space-y-1 text-gray-700 flex-1">
+                      <p><span className="font-semibold">Name:</span> {app.name} {app.surname}</p>
+                      <p><span className="font-semibold">Description:</span> {app.aboutYourself}</p>
+                      <p><span className="font-semibold">Date:</span> {new Date(app.date).toLocaleString("pl-PL")}</p>
+                      <p><span className="font-semibold">Status:</span> {app.status}</p>
+                    </div>
 
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-
+                    <button
+                      onClick={() => {
+                        setSelectedApp(app)
+                        setShowModal(true)
+                      }}
+                      className="
+                        mt-4 md:mt-0
+                        px-5
+                        py-3
+                        rounded-xl
+                        bg-blue-600
+                        text-white
+                        font-semibold
+                        shadow-md
+                        hover:bg-blue-700
+                        transition
+                      "
+                    >
+                      Details
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Modal */}
-      {showModal && selectedApp && (
-        <ApplicationDetailModal
-          TestsList={testList}
-          UserData={selectedApp}
-          onClose={async () => {
-            setShowModal(false)
-            setSelectedApp(null)
-            await getData()
-          }}
-        />
-      )}
+
+        {showModal && selectedApp && (
+          <ApplicationDetailModal
+            TestsList={testList}
+            UserData={selectedApp}
+            onClose={async () => {
+              setShowModal(false)
+              setSelectedApp(null)
+              await getData()
+            }}
+          />
+        )}
+
     </>
   )
 }

@@ -96,7 +96,7 @@ const SolveTestPage = (props: Props) => {
     setSubmitting(true)
     try {
       if (tasksList) {
-        await addSolutionForTask(Number(appId), tasksList[currentIndex]?.id, userCode)
+        await addSolutionForTask(Number(appId), tasksList[currentIndex]?.id, userCode,language)
         return true
       }
     } catch (err) {
@@ -257,14 +257,14 @@ const SolveTestPage = (props: Props) => {
           Console Output
         </h2>
         <pre className="bg-gray-900 text-green-400 font-mono p-6 rounded-lg max-h-64 overflow-auto whitespace-pre-wrap shadow-lg">
-          {compilationResult?.success && (
+          {compilationResult?.success==true&& (
             <div className="mb-2">✅ {compilationResult.success}</div>
           )}
-          {compilationResult?.output && (
+          {compilationResult?.success==true&&compilationResult?.output && (
             <div className="mb-2">{compilationResult.output}</div>
           )}
-          {compilationResult?.error && (
-            <div className="text-red-500 font-semibold">❌ {compilationResult.error}</div>
+          {compilationResult?.success==false&&compilationResult?.output && (
+            <div className="text-red-500 font-semibold">❌ {compilationResult.output}</div>
           )}
           {!compilationResult && (
             <div className="text-gray-500 italic">No output yet.</div>

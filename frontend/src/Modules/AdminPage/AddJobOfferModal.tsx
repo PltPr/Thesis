@@ -3,7 +3,6 @@ import { Technology } from "Models/JobOffers";
 import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { toast } from "react-toastify";
-// import { CreateJobOffer, AddTechnologyToJobOffer } from "Api/JobOfferServices";
 
 type Props = {
   onClose: () => void;
@@ -12,14 +11,10 @@ type Props = {
 const JobOfferCreateModal = ({ onClose }: Props) => {
   const [processing, setProcessing] = useState(false);
 
-  // TECH SELECT STATE
   const [technologies, setTechnologies] = useState<{ label: string; value: string }[]>([]);
   const [selectedRequiredTech, setSelectedRequiredTech] = useState<{ label: string; value: string } | null>(null);
-  const [selectedNiceToHaveTech, setSelectedNiceToHaveTech] = useState<{ label: string; value: string } | null>(
-    null
-  );
+  const [selectedNiceToHaveTech, setSelectedNiceToHaveTech] = useState<{ label: string; value: string } | null>(null);
 
-  // NEW DATA STATE
   const [jobTitle, setJobTitle] = useState("");
   const [jobType, setJobType] = useState("Full-Time");
   const [salary, setSalary] = useState<number | "">("");
@@ -29,7 +24,6 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
   const [requiredTech, setRequiredTech] = useState<Technology[]>([]);
   const [niceToHaveTech, setNiceToHaveTech] = useState<Technology[]>([]);
 
-  // LOAD TECHNOLOGIES FOR SELECT
   useEffect(() => {
     const getData = async () => {
       const data = await GetAllTechnologies();
@@ -38,7 +32,6 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
     getData();
   }, []);
 
-  // ADD REQUIRED TECH
   const handleAddRequiredTech = (newValue: any) => {
     if (!newValue) return setSelectedRequiredTech(null);
     if (requiredTech.some(t => t.name.toLowerCase() === newValue.value.toLowerCase())) {
@@ -49,7 +42,6 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
     setSelectedRequiredTech(null);
   };
 
-  // ADD NICE TO HAVE TECH
   const handleAddNiceToHaveTech = (newValue: any) => {
     if (!newValue) return setSelectedNiceToHaveTech(null);
     if (niceToHaveTech.some(t => t.name.toLowerCase() === newValue.value.toLowerCase())) {
@@ -60,7 +52,6 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
     setSelectedNiceToHaveTech(null);
   };
 
-  // REMOVE TECH
   const removeRequiredTech = (name: string) => {
     setRequiredTech(requiredTech.filter(t => t.name !== name));
   };
@@ -69,7 +60,6 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
     setNiceToHaveTech(niceToHaveTech.filter(t => t.name !== name));
   };
 
-  // CREATE OFFER
   const handleCreate = async () => {
     if (!jobTitle.trim()) return toast.error("Job title required");
     if (!salary || salary <= 0) return toast.error("Salary required");
@@ -77,8 +67,7 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
 
     setProcessing(true);
     try {
-      
-      const newOffer = await AddJobOffer(
+      await AddJobOffer(
         jobTitle,
         jobType,
         salary,
@@ -87,11 +76,9 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
         requiredTech,
         niceToHaveTech
       );
-      
-
       toast.success("Offer created!");
       onClose();
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setProcessing(false);
@@ -105,10 +92,7 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
         {/* HEADER */}
         <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
           <h2 className="text-xl font-semibold">Create Job Offer</h2>
-
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">
-            ×
-          </button>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
         </div>
 
         {/* BODY */}
@@ -116,80 +100,65 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
 
           {/* JOB INFO */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">Stanowisko</p>
-              <input
-                type="text"
-                value={jobTitle}
-                onChange={e => setJobTitle(e.target.value)}
-                className="w-full border rounded px-2 py-1"
-              />
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Typ pracy</p>
-              <select
-                value={jobType}
-                onChange={e => setJobType(e.target.value)}
-                className="w-full border rounded px-2 py-1"
-              >
-                <option value="Full-Time">Full-Time</option>
-                <option value="Part-Time">Part-Time</option>
-                <option value="Contract">Contract</option>
-                <option value="Internship">Internship</option>
-              </select>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Wynagrodzenie</p>
-              <input
-                type="number"
-                value={salary}
-                onChange={e => setSalary(Number(e.target.value))}
-                className="w-full border rounded px-2 py-1"
-              />
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Język programowania</p>
-              <select
-                value={programmingLanguage}
-                onChange={e => setProgrammingLanguage(e.target.value)}
-                className="w-full border rounded px-2 py-1"
-              >
-                <option value="N/A">N/A</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
-                <option value="C#">C#</option>
-              </select>
-            </div>
-          </div>
-
-          {/* DESCRIPTION */}
-          <div>
-            <p className="text-sm text-gray-500">Opis stanowiska</p>
-            <textarea
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              className="mt-1 w-full border rounded-lg p-2 bg-white text-gray-700"
-              rows={5}
+            <input
+              type="text"
+              value={jobTitle}
+              onChange={e => setJobTitle(e.target.value)}
+              placeholder="Stanowisko"
+              className="w-full border rounded px-2 py-1"
             />
+
+            <select
+              value={jobType}
+              onChange={e => setJobType(e.target.value)}
+              className="w-full border rounded px-2 py-1"
+            >
+              <option value="Full-Time">Full-Time</option>
+              <option value="Part-Time">Part-Time</option>
+              <option value="Contract">Contract</option>
+              <option value="Internship">Internship</option>
+            </select>
+
+            <input
+              type="number"
+              value={salary}
+              onChange={e => setSalary(Number(e.target.value))}
+              placeholder="Wynagrodzenie"
+              className="w-full border rounded px-2 py-1"
+            />
+
+            <select
+              value={programmingLanguage}
+              onChange={e => setProgrammingLanguage(e.target.value)}
+              className="w-full border rounded px-2 py-1"
+            >
+              <option value="N/A">N/A</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="Python">Python</option>
+              <option value="Java">Java</option>
+              <option value="C#">C#</option>
+            </select>
           </div>
+
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Opis stanowiska"
+            rows={5}
+            className="w-full border rounded-lg p-2 bg-white"
+          />
 
           {/* TECHNOLOGIE */}
           <div>
             <p className="text-sm text-gray-500">Wymagane technologie</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {requiredTech.map((tech, index) => (
+            <div className="flex flex-wrap gap-2 mt-2 items-center">
+              {requiredTech.map((tech, i) => (
                 <div
-                  key={index}
+                  key={i}
                   className="flex items-center h-8 gap-2 px-3 py-1 bg-blue-600 text-white rounded-full text-sm"
                 >
                   <span>{tech.name}</span>
-                  <button onClick={() => removeRequiredTech(tech.name)} className="hover:text-gray-200 ml-1">
-                    ✕
-                  </button>
+                  <button onClick={() => removeRequiredTech(tech.name)} className="hover:text-gray-200 ml-1">✕</button>
                 </div>
               ))}
 
@@ -200,22 +169,21 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
                 onChange={handleAddRequiredTech}
                 menuPlacement="top"
                 placeholder="Add technology"
+                className="min-w-[200px] flex-grow"
               />
             </div>
           </div>
 
           <div>
             <p className="text-sm text-gray-500">Mile widziane</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {niceToHaveTech.map((tech, index) => (
+            <div className="flex flex-wrap gap-2 mt-2 items-center">
+              {niceToHaveTech.map((tech, i) => (
                 <div
-                  key={index}
+                  key={i}
                   className="flex items-center h-8 gap-2 px-3 py-1 bg-indigo-600 text-white rounded-full text-sm"
                 >
                   <span>{tech.name}</span>
-                  <button onClick={() => removeNiceToHaveTech(tech.name)} className="hover:text-gray-200 ml-1">
-                    ✕
-                  </button>
+                  <button onClick={() => removeNiceToHaveTech(tech.name)} className="hover:text-gray-200 ml-1">✕</button>
                 </div>
               ))}
 
@@ -226,6 +194,7 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
                 onChange={handleAddNiceToHaveTech}
                 menuPlacement="top"
                 placeholder="Add technology"
+                className="min-w-[200px] flex-grow"
               />
             </div>
           </div>
@@ -239,11 +208,10 @@ const JobOfferCreateModal = ({ onClose }: Props) => {
           >
             Anuluj
           </button>
-
           <button
             onClick={handleCreate}
             disabled={processing}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className={`px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${processing ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Utwórz ofertę
           </button>

@@ -42,12 +42,13 @@ export const getTasksForTestSolution = async (appId:number)=>{
     }
 }
 
-export const addSolutionForTask = async (appId:number,taskId:number,code:string)=>{
+export const addSolutionForTask = async (appId:number,taskId:number,code:string,language:string)=>{
     try{
         const response = await axios.post("http://localhost:5116/api/Task/AddSolutionForTask",{
             applicationId:appId,
             taskId:taskId,
-            code:code
+            code:code,
+            language:language
         })
         return response.data
     }catch(err){

@@ -1,52 +1,42 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-
-
-interface Props {}
+import { Link, useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
+  const location = useLocation();
+
+  // Funkcja do ustalania klasy aktywnego linku
+  const linkClass = (path: string) =>
+    `block px-4 py-3 rounded-lg font-semibold uppercase transition-colors ${
+      location.pathname.includes(path)
+        ? 'bg-blue-600 text-white shadow-md'
+        : 'text-gray-700 hover:bg-blue-100 hover:text-blue-700'
+    }`
+
   return (
-    <nav className="w-64 bg-white shadow-xl h-screen flex flex-col px-6 py-4  mt-3 border border-red-700 ">
-        <div className='flex justify-center '>
-        <h1 className='mb-10 font-bold text-red-700 border-b'>Admin Page</h1>
-        </div>
-      <div className="flex flex-col flex-1 space-y-4">
-        
-        <Link
-          to="application-page"
-          className="text-blueGray-700 font-semibold uppercase"
-        >
+    <nav className="w-64 bg-white shadow-xl h-screen flex flex-col px-6 py-6 mt-6 rounded-2xl border border-blue-200">
+      <div className="flex justify-center mb-10 border-b border-blue-200 pb-4">
+        <h1 className="text-2xl font-extrabold text-blue-700">Admin Panel</h1>
+      </div>
+
+      <div className="flex flex-col flex-1 space-y-3">
+        <Link to="application-page" className={linkClass('application-page')}>
           Applications
         </Link>
-        <Link
-          to="classification-page"
-          className="text-blueGray-700 font-semibold uppercase"
-        >
+        <Link to="classification-page" className={linkClass('classification-page')}>
           Classification
         </Link>
-        <Link
-          to="creator-page"
-          className="text-blueGray-700 font-semibold uppercase"
-        >
+        <Link to="creator-page" className={linkClass('creator-page')}>
           Tests
         </Link>
-
-        <Link
-          to="users-management-page"
-          className="text-red-500 font-semibold uppercase"
-        >
+        <Link to="users-management-page" className={linkClass('users-management-page')}>
           Users
         </Link>
-        <Link
-          to="job-offer-management-page"
-          className="text-red-500 font-semibold uppercase"
-        >
-          JobOffers
+        <Link to="job-offer-management-page" className={linkClass('job-offer-management-page')}>
+          Job Offers
         </Link>
       </div>
     </nav>
   )
 }
-
 
 export default Sidebar

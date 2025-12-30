@@ -82,9 +82,6 @@ const TaskNavigator = ({
           <strong>Expected Output:</strong> {task.taskExpectedOutput}
         </p>
         <p>
-          <strong>Compilation Result:</strong> {task.compilationResult}
-        </p>
-        <p>
           <strong>Execution Result:</strong> {task.executionResult}
         </p>
         <p>

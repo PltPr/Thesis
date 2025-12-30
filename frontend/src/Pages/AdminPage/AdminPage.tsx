@@ -3,17 +3,15 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 const AdminPage = () => {
-
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
-      
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-white">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main content */}
-      <div className="flex-1 m-3 rounded-xl bg-white shadow-2xl p-8 overflow-auto">
+      <main className="flex-1 m-6 rounded-2xl bg-white shadow-xl p-10 overflow-auto">
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }
