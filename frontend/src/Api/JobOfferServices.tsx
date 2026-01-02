@@ -1,6 +1,6 @@
 import axios from "axios";
 import { JobOfferGet, JobOfferQuery, Technology } from "../Models/JobOffers";
-import { P } from "framer-motion/dist/types.d-BJcRxCew";
+
 
 const api ="http://localhost:5116/api/jobOffer"
 

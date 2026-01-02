@@ -57,7 +57,8 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
-builder.Services.AddDbContext<ApplicationDBContext>(options=>{
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections"));
 });
 
@@ -74,21 +75,23 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 .AddDefaultTokenProviders()
 .AddEntityFrameworkStores<ApplicationDBContext>();
 
-builder.Services.AddAuthentication(options=>{
-    options.DefaultAuthenticateScheme=
-    options.DefaultChallengeScheme=
-    options.DefaultForbidScheme=
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme =
+    options.DefaultChallengeScheme =
+    options.DefaultForbidScheme =
     options.DefaultScheme =
-    options.DefaultSignInScheme = 
-    options.DefaultSignOutScheme=JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options=>{
+    options.DefaultSignInScheme =
+    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer=true,
-        ValidIssuer=builder.Configuration["JWT:Issuer"],
-        ValidateAudience=true,
-        ValidAudience=builder.Configuration["JWT:Audience"],
-        ValidateIssuerSigningKey=true,
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
             System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
         )
@@ -97,24 +100,24 @@ builder.Services.AddAuthentication(options=>{
 
 builder.Services.AddRateLimiter(options =>
 {
-    options.AddPolicy("fixed",context =>
+    options.AddPolicy("fixed", context =>
     {
-      var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-      return RateLimitPartition.GetFixedWindowLimiter(
-        partitionKey:ip,
-        factory: _=>new FixedWindowRateLimiterOptions
-        {
-            PermitLimit = 5,
-            Window=TimeSpan.FromSeconds(30)
-        }
-      ); 
+        return RateLimitPartition.GetFixedWindowLimiter(
+          partitionKey: ip,
+          factory: _ => new FixedWindowRateLimiterOptions
+          {
+              PermitLimit = 100,
+              Window = TimeSpan.FromSeconds(30)
+          }
+        );
     });
 
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
-builder.Services.AddScoped<IJobOfferRepository,JobOfferRepository>();
+builder.Services.AddScoped<IJobOfferRepository, JobOfferRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -137,24 +140,32 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
-    
+
 
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
-    DatabaseSeeder.Seed(context);
-}//Wczytajnie danych do bazy
+    await app.Services.MigrateDatabaseWithRetryAsync();
+}
+else
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+        DatabaseSeeder.Seed(context);
+    }
+}
+
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 

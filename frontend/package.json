@@ -11,7 +11,7 @@
     "@uiw/react-codemirror": "^4.25.3",
     "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
-    "daisyui": "^5.3.7",
+    "daisyui": "^4.12.24",
     "framer-motion": "^12.23.24",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.546.0",
@@ -22,8 +22,7 @@
     "react-router-dom": "^7.1.5",
     "react-scripts": "5.0.1",
     "react-select": "^5.10.2",
-    "react-toastify": "^11.0.5",
-    "tailwind": "^3.1.0"
+    "react-toastify": "^11.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -51,6 +50,7 @@
   },
   "devDependencies": {
     "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3"
+    "@types/react-dom": "^19.0.3",
+    "tailwindcss": "^3.4.19"
   }
 }
