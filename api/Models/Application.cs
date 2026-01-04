@@ -27,8 +27,6 @@ namespace api.Models
         public DateTime? TestStartTime { get; set; }
         public DateTime? TestEndTime { get; set; }
         public DateTime? AssignTestDate { get; set; }
-        public List<Note> Notes { get; set; }
-        public List<Message> Messages { get; set; }
     }
 
     public class CV

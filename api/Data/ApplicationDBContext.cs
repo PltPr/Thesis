@@ -29,8 +29,6 @@ namespace api.Data
         public DbSet<TestTask> TestTasks { get; set; }
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<Test> Tests { get; set; }
-        public DbSet<Note> Notes { get; set; }
-        public DbSet<Message> Messages { get; set; }
         public DbSet<CodeSubmission> CodeSubmissions { get; set; }
         public DbSet<ApplicationEvaluation> ApplicationEvaluations { get; set; }
         
@@ -78,30 +76,7 @@ namespace api.Data
                 .WithMany()
                 .HasForeignKey(ts => ts.TaskId);
 
-            modelBuilder.Entity<Note>()
-                .HasOne(n => n.Application)
-                .WithMany(a => a.Notes)
-                .HasForeignKey(n => n.ApplicationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Note>()
-                .HasOne(n => n.Adder)
-                .WithMany()
-                .HasForeignKey(n => n.AdderId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Application)
-                .WithMany(a => a.Messages)
-                .HasForeignKey(m => m.ApplicationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Adder)
-                .WithMany()
-                .HasForeignKey(m => m.AdderId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+           
 
 
 

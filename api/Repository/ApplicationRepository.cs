@@ -31,10 +31,10 @@ namespace api.Repository
         {
             await _context.Applications.AddAsync(model);
             await _context.SaveChangesAsync();
-                await _context.Entry(model).Reference(a => a.AppUser).LoadAsync();
-    await _context.Entry(model).Reference(a => a.CV).LoadAsync();
-    await _context.Entry(model).Reference(a => a.JobOffer).LoadAsync();
-    await _context.Entry(model).Reference(a => a.Test).LoadAsync();
+            await _context.Entry(model).Reference(a => a.AppUser).LoadAsync();
+            await _context.Entry(model).Reference(a => a.CV).LoadAsync();
+            await _context.Entry(model).Reference(a => a.JobOffer).LoadAsync();
+            await _context.Entry(model).Reference(a => a.Test).LoadAsync();
             return model;
         }
 
@@ -99,15 +99,15 @@ namespace api.Repository
 
             foreach(var group in grouped)
             {
-                var app = group.Select(async app =>
+                var applicationsWithUpdatedScore = new List<GetClassificationDto>();
+                foreach(var app in group)
                 {
                     var dto = app.toGetClassificationDto();
                     var testRating = await _testRepo.GetOverallTestRatingAsync(app.Id);
                     dto.EvaluationScore=Math.Round(dto.EvaluationScore+(testRating*0.2),2);
-                    return dto;
-                });
+                    applicationsWithUpdatedScore.Add(dto);
+                };
 
-                var applicationsWithUpdatedScore = await Task.WhenAll(app);
 
                 result.Add(new GetClassificationGroupDto
                 {

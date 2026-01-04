@@ -123,7 +123,6 @@ builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-builder.Services.AddScoped<INoteMessageRepository, NoteMessageRepository>();
 builder.Services.AddScoped<ICompillerRepository, CompillerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();

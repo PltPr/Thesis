@@ -27,14 +27,14 @@ namespace api.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly IAccountRepository _accRepo;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IEmailSender emailSender,IAccountRepository accRepo)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IEmailSender emailSender, IAccountRepository accRepo)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            _accRepo=accRepo;
-            
+            _accRepo = accRepo;
+
         }
 
         [HttpPost("register")]
@@ -45,7 +45,7 @@ namespace api.Controllers
                 if (!ModelState.IsValid) return BadRequest();
 
                 var existingUser = await _userManager.FindByEmailAsync(registerDto.Email);
-                if(existingUser!=null) return BadRequest(new {message = "Email is already taken"});
+                if (existingUser != null) return BadRequest(new { message = "Email is already taken" });
 
                 var appUser = new AppUser
                 {
@@ -53,8 +53,8 @@ namespace api.Controllers
                     Email = registerDto.Email,
                     PhoneNumber = registerDto.PhoneNumber,
                     Name = registerDto.Name,
-                    Surname=registerDto.Surname
-                    
+                    Surname = registerDto.Surname
+
                 };
 
 
@@ -68,22 +68,22 @@ namespace api.Controllers
                         var roles = new List<string> { "User" };
 
                         var token = _tokenService.CreateToken(appUser, roles);
-                        Response.Cookies.Append("jwt",token, new CookieOptions
+                        Response.Cookies.Append("jwt", token, new CookieOptions
                         {
-                            HttpOnly=true,
-                            Secure=false,
-                            SameSite=SameSiteMode.Lax,
-                            Expires=DateTime.UtcNow.AddDays(7)
+                            HttpOnly = true,
+                            Secure = false,
+                            SameSite = SameSiteMode.Lax,
+                            Expires = DateTime.UtcNow.AddDays(7)
                         });
 
                         return Ok(
                             new NewUserDto
                             {
-                                Name=appUser.Name,
-                                Surname=appUser.Surname,
-                                PhoneNumber=appUser.PhoneNumber,
+                                Name = appUser.Name,
+                                Surname = appUser.Surname,
+                                PhoneNumber = appUser.PhoneNumber,
                                 Email = appUser.Email,
-                                Roles=roles.ToArray()
+                                Roles = roles.ToArray()
                             }
                         );
                     }
@@ -111,30 +111,30 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email.ToLower());
-            if (user == null) return Unauthorized(new{message = "Email not found and/or password is incorrect"});
+            if (user == null) return Unauthorized(new { message = "Email not found and/or password is incorrect" });
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-            if (!result.Succeeded) return Unauthorized(new{message = "Email not found and/or password is incorrect"});
+            if (!result.Succeeded) return Unauthorized(new { message = "Email not found and/or password is incorrect" });
 
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = _tokenService.CreateToken(user, roles);
-            Response.Cookies.Append("jwt",token, new CookieOptions
-                {
-                    HttpOnly=true,
-                    Secure=false,
-                    SameSite=SameSiteMode.Lax,
-                    Expires=DateTime.UtcNow.AddDays(7)
-                });
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.UtcNow.AddDays(7)
+            });
 
             return Ok(
                 new NewUserDto
                 {
-                    Name=user.Name,
-                    Surname=user.Surname,
-                    PhoneNumber=user.PhoneNumber,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
-                    Roles=roles.ToArray()
+                    Roles = roles.ToArray()
                 }
             );
         }
@@ -173,90 +173,94 @@ namespace api.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
-            return Ok(new{message="Logged out successfully"});
+            return Ok(new { message = "Logged out successfully" });
         }
 
         [HttpPut("AccountEdit")]
         public async Task<IActionResult> AccountEdit([FromBody] EditAccountDetailsDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if(userId==null)
+            if (userId == null)
                 return Unauthorized();
 
-            var result = await _accRepo.EditAccountAsync(userId,dto);
-            if(result==null)
+            var result = await _accRepo.EditAccountAsync(userId, dto);
+            if (result == null)
                 return Unauthorized();
 
             return Ok(result);
         }
         [HttpGet("GetUserAboutMe")]
-        public async Task<IActionResult>GetUserAboutMe()
+        public async Task<IActionResult> GetUserAboutMe()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if(userId==null)
+            if (userId == null)
                 return Unauthorized();
 
             var result = await _accRepo.GetUserAboutMeAsync(userId);
-            if(result==null)
+            if (result == null)
                 return NotFound();
 
             return Ok(result);
         }
         [HttpGet("GetAllUsers")]
-        public async Task<IActionResult>GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
-            
-            var tasks = users.Select(u => u.toAllUserWithRolesDto(_userManager));
-            
-            var result = await Task.WhenAll(tasks);
+
+            var result = new List<AllUsersDto>();
+
+            foreach (var user in users)
+            {
+                var dto = await user.toAllUserWithRolesDto(_userManager);
+                result.Add(dto);
+            }
 
             return Ok(result);
         }
 
         [HttpPost("AddRole")]
-        public async Task<IActionResult>AddRole([FromBody]AddRoleDto dto)
+        public async Task<IActionResult> AddRole([FromBody] AddRoleDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
             var user = await _userManager.FindByIdAsync(dto.UserId);
-            if(user==null)
+            if (user == null)
                 return NotFound();
-            
-            if(dto.Role!="Admin" && dto.Role!="Examiner")
+
+            if (dto.Role != "Admin" && dto.Role != "Examiner")
                 return BadRequest($"Role {dto.Role} not exist");
 
             if (await _userManager.IsInRoleAsync(user, dto.Role))
                 return BadRequest(new { message = $"User already has role '{dto.Role}'" });
 
-            var result = await _userManager.AddToRoleAsync(user,dto.Role);
+            var result = await _userManager.AddToRoleAsync(user, dto.Role);
 
-            return Ok(new {message = "Role added"});
+            return Ok(new { message = "Role added" });
         }
         [HttpPost("DeleteRole")]
-        public async Task<IActionResult>DeleteRole([FromBody]RemoveRoleDto dto)
+        public async Task<IActionResult> DeleteRole([FromBody] RemoveRoleDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             var user = await _userManager.FindByIdAsync(dto.UserId);
-            if(user==null)
+            if (user == null)
                 return NotFound();
-            
-            if(dto.Role!="Admin" && dto.Role!="Examiner")
+
+            if (dto.Role != "Admin" && dto.Role != "Examiner")
                 return BadRequest($"Role {dto.Role} not exist");
 
             if (!await _userManager.IsInRoleAsync(user, dto.Role))
                 return BadRequest(new { message = $"User already has not role '{dto.Role}'" });
 
-            var result = await _userManager.RemoveFromRoleAsync(user,dto.Role);
+            var result = await _userManager.RemoveFromRoleAsync(user, dto.Role);
 
-            return Ok(new {message = "Role deleted"});
+            return Ok(new { message = "Role deleted" });
         }
-        
+
     }
-    
+
 }
