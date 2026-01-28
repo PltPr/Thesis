@@ -13,7 +13,7 @@ const fadeInUp = {
 }
 
 const ApplicationPage = () => {
-  const [grApp, setGrApp] = useState<GroupedApplications[]>([])
+  const [grApp, setGrApp] = useState<GroupedApplications[]|null>(null)
   const [showModal, setShowModal] = useState(false)
   const [selectedApp, setSelectedApp] = useState<Applications | null>(null)
   const [testList, setTestList] = useState<Test[]>([])
@@ -40,6 +40,13 @@ const ApplicationPage = () => {
   useEffect(() => {
     getData()
   }, [jobTitleQuery, statusQuery])
+  
+if(!grApp)
+  return (
+      <div className="flex items-start h-64 m-5 min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white p-6">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    );
 
   return (
     <>

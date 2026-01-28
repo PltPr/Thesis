@@ -13,7 +13,7 @@ namespace api.Mappers
         {
             return new Test
             {
-                Tittle=model.Tittle,
+                Tittle = model.Tittle,
                 Description = model.Description
             };
         }
@@ -26,9 +26,11 @@ namespace api.Mappers
                 Tittle = model.Tittle,
                 Description = model.Description,
                 TaskIds = model.TestTasks.Select(t => t.TaskId).ToList(),
-                TotalDurationMinutes = model.TestTasks.Sum(t=>t.Task.DurationMinutes)
+                TotalDurationMinutes = model.TestTasks != null
+                ? model.TestTasks.Sum(t => t?.Task?.DurationMinutes ?? 0)
+                : 0
             };
         }
-        
+
     }
 }

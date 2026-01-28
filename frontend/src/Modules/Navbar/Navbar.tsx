@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 type Props = {};
 
 const Navbar = (props: Props) => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout,isAdmin,isExaminer } = useAuth();
 
   return (
     <div className="navbar flex justify-between items-center bg-white px-[50px] h-[30px] text-black border-b-2">
@@ -47,15 +47,18 @@ const Navbar = (props: Props) => {
                 <span>My Applications</span>
               </Link>
             </li>
-            <li>
+            {(isAdmin() || isExaminer()) &&(
+              <li>
               <Link
                 to="/admin-page"
                 className="no-underline cursor-pointer flex gap-2 items-center text-red-500"
               >
                 <ShieldBan />
-                <span className="text-red-500">Admin</span>
+                <span className="text-red-500">{isAdmin() ? "Admin" : "Examiner"}</span>
               </Link>
-            </li>
+            </li> 
+            )}
+             
 
 
           </>

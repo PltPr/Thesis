@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos.TestDto;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ namespace api.Controllers
             _testRepo = testRepo;
         }
         [HttpPost("CreateTest")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult> CreateTest(AddTestDto testDto)
         {
             if (!ModelState.IsValid)

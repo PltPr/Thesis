@@ -1,5 +1,4 @@
 import { addAppEvaluationApi, assignTestToAppApi, getAppEvaluationApi, getCv, rejectApp } from 'Api/ApplicationService';
-import { AddMessage, AddNote } from 'Api/NoteMessageService';
 import { addEvaluationForSolutionApi, getSolutionForAllTasks } from 'Api/TaskService';
 import { Applications } from 'Models/Application';
 import { TaskWithSolution } from 'Models/Task';
@@ -8,6 +7,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import TaskNavigator from './TaskNavigator';
+import { JobOfferGet } from 'Models/JobOffers';
+import { GetJobOfferByAppId, GetJobOfferById} from 'Api/JobOfferServices';
 
 type Props = {
   UserData: Applications;
@@ -34,10 +35,12 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
 
   const [selectedTest, setSelectedTest] = useState<number | null>(null);
   const [status, setStatus] = useState(UserData.status);
-  const [decision, setDecision] = useState<"none" | "accepting" | "rejecting" | "testAssigned" | "rejected" | "testEvaluating">("none");
+  const [decision, setDecision] = useState<"none" | "testAssigned" | "rejected" | "testEvaluating">("none");
   const assignedTest = UserData ? TestsList.find(t => t.id == UserData.testId) : null;
   const [solutionForAllTasks, setSolutionForAllTasks] = useState<TaskWithSolution[] | null>(null);
 
+  const [jobOffer, setJobOffer] = useState<JobOfferGet | null>(null);
+  const [isLoadingJobOffer, setIsLoadingJobOffer] = useState<boolean>(false);
   const handleClose = () => {
     setActiveTab("rate");
     onClose();
@@ -63,30 +66,45 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
 
   // ⭐ SAVE TASK EVALUATION
   const saveTaskEvaluation = async () => {
-  if (!currentSubmissionId) return toast.error("No task selected!");
+    if (!currentSubmissionId) return toast.error("No task selected!");
+    if (taskRating === 0) {
+      toast.warn("Select a rating before saving");
+      return;
+    }
 
-  try {
-    await addEvaluationForSolutionApi(currentSubmissionId, taskRating);
-    toast.success("Task evaluated!");
+    try {
+      await addEvaluationForSolutionApi(currentSubmissionId, taskRating);
+      toast.success("Task evaluated!");
 
-    // Aktualizujemy lokalnie ocenę dla aktualnego zadania:
-    setSolutionForAllTasks((prev) => {
-      if (!prev) return prev;
+      // Aktualizujemy lokalnie ocenę dla aktualnego zadania:
+      setSolutionForAllTasks((prev) => {
+        if (!prev) return prev;
 
-      const newSolutions = [...prev];
-      newSolutions[currentTaskIndex] = {
-        ...newSolutions[currentTaskIndex],
-        evaluation: taskRating,  // tutaj aktualizacja oceny
-      };
-      return newSolutions;
-    });
-  } catch (err) {
-    toast.error("Failed to save task evaluation");
-    console.error(err);
+        const newSolutions = [...prev];
+        newSolutions[currentTaskIndex] = {
+          ...newSolutions[currentTaskIndex],
+          evaluation: taskRating,  // tutaj aktualizacja oceny
+        };
+        return newSolutions;
+      });
+    } catch (err) {
+      toast.error("Failed to save task evaluation");
+      console.error(err);
+    }
+  };
+
+  const fetchJobOffer = async () => {
+    console.log(UserData.id)
+    try {
+      setIsLoadingJobOffer(true)
+      const data = await GetJobOfferByAppId(UserData.id);
+      if (data) setJobOffer(data);
+    } catch (err) {
+      
+    } finally {
+      setIsLoadingJobOffer(false)
+    }
   }
-};
-
-
 
   // ⭐ CHANGE TASK + LOAD EXISTING EVALUATION
   const handleTaskChange = (taskId: number, index: number) => {
@@ -158,27 +176,6 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
   };
 
 
-  // ⭐ NOTES / MESSAGES FORM
-  const { register, handleSubmit } = useForm<NoteMessage>({
-    defaultValues: { noteContent: "", messageContent: "" },
-  });
-
-  const sendNoteMessage = async (form: NoteMessage) => {
-    try {
-      if (form.noteContent.trim()) {
-        await AddNote(UserData.id, form.noteContent);
-      }
-      if (form.messageContent.trim()) {
-        await AddMessage(UserData.id, form.messageContent);
-      }
-      toast.success("Saved");
-    } catch (err) {
-      console.error("Something went wrong:", err);
-      toast.error("Something went wrong!");
-    }
-  };
-
-
   // ⭐ LOAD TASK SOLUTIONS
   const getTasksWithSolutions = async () => {
     try {
@@ -241,13 +238,23 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
   };
 
 
-  // ⭐ REJECT APPLICATION
   const handleReject = async () => {
-    setDecision("rejecting");
-    await rejectApp(UserData.id);
-    setStatus("Rejected");
-    toast.info("Application rejected.");
+    if (status === "Rejected") return;
+
+    try {
+      setDecision("rejected");
+      setStatus("Rejected");
+      UserData.status = "Rejected";
+
+      await rejectApp(UserData.id);
+
+      toast.info("Application rejected.");
+    } catch (err) {
+      toast.error("Failed to reject application");
+      console.error(err);
+    }
   };
+
 
 
   // ⭐ TAB CHANGE EFFECT
@@ -258,10 +265,11 @@ const ApplicationDetailModal = ({ onClose, UserData, TestsList }: Props) => {
     }
     if (activeTab === "rate") {
       fetchExistingEvaluation();
+      fetchJobOffer();
     }
   }, [activeTab]);
 
-return (
+  return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       {/* ZMIANA 1: Ustawiona wysokość, dodany flex i flex-col */}
       <div className="bg-white rounded-xl w-11/12 max-w-6xl h-[90vh] shadow-xl overflow-hidden flex flex-col">
@@ -316,24 +324,24 @@ return (
             <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
               <h3 className="text-base font-semibold mb-2">User data</h3>
               <p className="text-sm">
-                <span className="font-medium">Name:</span> {UserData.name} {UserData.surname}
+                <span className="font-bold">Name:</span> {UserData.name} {UserData.surname}
               </p>
               <p className="text-sm">
-                <span className="font-medium">About:</span> {UserData.aboutYourself}
+                <span className="font-bold">About:</span> {UserData.aboutYourself}
               </p>
               <p className="text-sm">
-                <span className="font-medium">Experience:</span> {UserData.similarExperience}
+                <span className="font-bold">Experience:</span> {UserData.similarExperience} years
               </p>
               <p className="text-sm">
-                <span className="font-medium">Expected salary:</span> {UserData.expectedMonthlySalary}
+                <span className="font-bold">Expected salary:</span> {UserData.expectedMonthlySalary}$
               </p>
               <p className="text-sm">
-                <span className="font-medium">Date:</span>{" "}
+                <span className="font-bold">Date:</span>{" "}
                 {new Date(UserData.date).toLocaleString("pl-PL")}
               </p>
               <div className="mt-2 flex items-center gap-2">
                 <p className="text-sm">
-                  <span className="font-medium">CV:</span> {UserData.cvFileName}
+                  <span className="font-bold">CV:</span> {UserData.cvFileName}
                 </p>
                 <button
                   onClick={() => getCv(UserData.cvId, UserData.cvFileName)}
@@ -343,7 +351,7 @@ return (
                 </button>
               </div>
               <p className="mt-2 text-sm">
-                <span className="font-medium">Status:</span> {status}
+                <span className="font-bold">Status:</span> {status}
               </p>
             </div>
 
@@ -366,13 +374,28 @@ return (
                         <div key={field.key} className="flex items-center justify-between">
                           <span className="text-sm font-medium w-40">{field.label}:</span>
                           <div className="rating rating-lg">
+                            {/* ZERO – musi istnieć */}
+                            <input
+                              type="radio"
+                              name={`rating-${field.key}`}
+                              className="hidden"
+                              checked={
+                                {
+                                  userExperience: rating.userExperience === 0,
+                                  criteriaMatch: rating.criteriaMatch === 0,
+                                  technicalSkill: rating.technicalSkill === 0,
+                                  education: rating.education === 0,
+                                }[field.key]
+                              }
+                              readOnly
+                            />
+
                             {[1, 2, 3, 4, 5].map((num) => (
                               <input
                                 key={num}
                                 type="radio"
                                 name={`rating-${field.key}`}
                                 className="mask mask-star-2 bg-yellow-400"
-                                aria-label={`${num} stars`}
                                 checked={
                                   {
                                     userExperience: rating.userExperience === num,
@@ -388,6 +411,7 @@ return (
                               />
                             ))}
                           </div>
+
                         </div>
                       ))}
                     </div>
@@ -430,20 +454,21 @@ return (
                   <button
                     onClick={assignTest}
                     className="btn btn-primary p-2"
-                    disabled={!selectedTest || !!UserData.testId}
+                    disabled={!selectedTest || !!UserData.testId || UserData.status === "Rejected"}
                   >
                     Assign
                   </button>
                   <button
                     onClick={handleReject}
                     className="btn btn-error bg-red-700 text-white p-2"
-                    disabled={!!UserData.testId}
+                    disabled={!!UserData.testId || UserData.status === "Rejected"}
                   >
                     Reject
                   </button>
                 </div>
               </div>
             )}
+
 
             {/* --- EVALUATE TAB --- */}
             {activeTab === "evaluate" && (
@@ -454,38 +479,47 @@ return (
                   browse solutions.
                 </p>
                 {currentSubmissionId && (
-  <div className="mt-4 border rounded p-4 bg-gray-50">
-    <h4 className="font-semibold mb-3">Evaluate task #{currentTaskIndex + 1}</h4>
+                  <div className="mt-4 border rounded p-4 bg-gray-50">
+                    <h4 className="font-semibold mb-3">Evaluate task #{currentTaskIndex + 1}</h4>
 
-    <div className="flex items-center gap-2 mb-4">
-      <span className="font-medium">Rating:</span>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="font-medium">Rating:</span>
 
-      <div className="rating rating-lg">
-        {[1, 2, 3, 4, 5].map((num) => (
-          <input
-  key={num}
-  type="radio"
-  name="task-rating"
-  className="mask mask-star-2 bg-yellow-400"
-  checked={taskRating === num}
-  onChange={() => setTaskRating(num)}
-  disabled={!!solutionForAllTasks?.[currentTaskIndex]?.evaluation}
-/>
+                      <div className="rating rating-lg">
+                        {/* ZERO */}
+                        <input
+                          type="radio"
+                          name="task-rating"
+                          className="hidden"
+                          checked={taskRating === 0}
+                          readOnly
+                        />
 
-        ))}
-      </div>
-    </div>
+                        {[1, 2, 3, 4, 5].map((num) => (
+                          <input
+                            key={num}
+                            type="radio"
+                            name="task-rating"
+                            className="mask mask-star-2 bg-yellow-400"
+                            checked={taskRating === num}
+                            onChange={() => setTaskRating(num)}
+                            disabled={!!solutionForAllTasks?.[currentTaskIndex]?.evaluation}
+                          />
+                        ))}
+                      </div>
 
-    {/* Jeśli ocenione → pokazujemy “Already evaluated” */}
-    {solutionForAllTasks?.[currentTaskIndex]?.evaluation ? (
-      <p className="text-green-600 font-medium mt-2">Already evaluated ✅</p>
-    ) : (
-      <button className="btn btn-primary mt-3" onClick={saveTaskEvaluation}>
-        Save task evaluation
-      </button>
-    )}
-  </div>
-)}
+                    </div>
+
+                    {/* Jeśli ocenione → pokazujemy “Already evaluated” */}
+                    {solutionForAllTasks?.[currentTaskIndex]?.evaluation ? (
+                      <p className="text-green-600 font-medium mt-2">Already evaluated ✅</p>
+                    ) : (
+                      <button className="btn btn-primary mt-3" onClick={saveTaskEvaluation}>
+                        Save task evaluation
+                      </button>
+                    )}
+                  </div>
+                )}
 
 
               </div>
@@ -499,7 +533,7 @@ return (
                 <h4 className="font-semibold mb-3">Available tests</h4>
 
                 {UserData.testId ? (
-                  // ✅ Jeśli test jest przypisany – pokazujemy informację o nim
+                  // Jeśli test jest przypisany – pokazujemy informację o nim
                   <div className="p-4 border rounded-md bg-gray-50">
                     <p className="text-sm text-gray-700">
                       <span className="font-semibold">Assigned test ID:</span>{" "}
@@ -525,8 +559,13 @@ return (
                       ✅ Test already assigned
                     </p>
                   </div>
+                ) : status === "Rejected" ? (
+                  // Jeśli aplikacja odrzucona i nie ma testu przypisanego
+                  <div className="text-red-600 font-semibold text-center mt-10">
+                    Application rejected — test assignment disabled.
+                  </div>
                 ) : (
-                  // 🧠 Jeśli test NIE jest przypisany – pokazujemy listę do wyboru
+                  // Jeśli test NIE jest przypisany i aplikacja nie jest odrzucona – pokazujemy listę do wyboru
                   <div className="space-y-2">
                     {TestsList.map((test) => (
                       <div
@@ -549,6 +588,67 @@ return (
                       </div>
                     ))}
                   </div>
+                )}
+
+              </div>
+            )}
+            {activeTab === "rate" && (
+              <div className="bg-white p-4 rounded-md border border-gray-200 h-[70vh] overflow-auto">
+                <h4 className="font-semibold mb-3">Job offer details</h4>
+
+                {isLoadingJobOffer && (
+                  <p className="text-gray-500 text-sm">Loading job offer...</p>
+                )}
+
+                {!isLoadingJobOffer && jobOffer && (
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <p className="font-semibold">Title</p>
+                      <p>{jobOffer.jobTitle}</p>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold">Type</p>
+                      <p>{jobOffer.jobType}</p>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold">Salary</p>
+                      <p>{jobOffer.salary}$</p>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold">Main language</p>
+                      <p>{jobOffer.programmingLanguage}</p>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold">Description</p>
+                      <p className="text-gray-600">{jobOffer.description}</p>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold">Required technologies</p>
+                      <ul className="list-disc list-inside text-gray-700">
+                        {jobOffer.jobOfferTechnologyRequired.map((tech, idx) => (
+                          <li key={idx}>{tech.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p className="font-semibold">Nice to have</p>
+                      <ul className="list-disc list-inside text-gray-500">
+                        {jobOffer.jobOfferTechnologyNiceToHave.map((tech, idx) => (
+                          <li key={idx}>{tech.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {!isLoadingJobOffer && !jobOffer && (
+                  <p className="text-gray-500 text-sm">No job offer data.</p>
                 )}
               </div>
             )}
@@ -574,10 +674,10 @@ return (
                   </div>
                 )}
 
-                {decision === "testEvaluating" &&
+                {(UserData.status == 'Test completed' || UserData.status == 'Test evaluated') &&
                   solutionForAllTasks &&
                   solutionForAllTasks.length > 0 &&
-                  UserData.status == 'Test completed' && <TaskNavigator
+                  <TaskNavigator
                     solutions={solutionForAllTasks}
                     onTaskChange={handleTaskChange}
                   />

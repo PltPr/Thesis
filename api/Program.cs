@@ -64,11 +64,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
-    options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 1;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
 
     options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
 })
@@ -171,18 +171,18 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 
-app.Use(async (context, next) =>
-{
-    if (context.Request.Cookies.ContainsKey("jwt"))
-    {
-        var token = context.Request.Cookies["jwt"];
-        if (!string.IsNullOrEmpty(token))
-        {
-            context.Request.Headers.Add("Authorization", "Bearer " + token);
-        }
-    }
-    await next();
-});
+// app.Use(async (context, next) =>
+// {
+//     if (context.Request.Cookies.ContainsKey("jwt"))
+//     {
+//         var token = context.Request.Cookies["jwt"];
+//         if (!string.IsNullOrEmpty(token))
+//         {
+//             context.Request.Headers.Add("Authorization", "Bearer " + token);
+//         }
+//     }
+//     await next();
+// });
 
 app.UseAuthentication();
 app.UseAuthorization();

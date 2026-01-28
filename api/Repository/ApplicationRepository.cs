@@ -112,7 +112,7 @@ namespace api.Repository
                 result.Add(new GetClassificationGroupDto
                 {
                     JobTitle=group.Key,
-                    Applications=applicationsWithUpdatedScore.ToList()
+                    Applications=applicationsWithUpdatedScore.OrderByDescending(x=>x.EvaluationScore).ToList()
                 });
             }
             return result;

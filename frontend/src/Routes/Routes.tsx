@@ -18,6 +18,8 @@ import JobOfferPage from "Pages/JobOfferPage/JobOfferPage"
 import UserPage from "Pages/UserPage/UserPage"
 import UsersManagementPage from "Pages/AdminPage/UsersManagementPage/UsersManagementPage"
 import JobOfferManagement from "Pages/AdminPage/JobOfferManagementPage/JobOfferManagement"
+import { AdminProtectedRoutes, ProtectedRoutes } from "./ProtectedRoutes"
+
 
 export const router = createBrowserRouter([
     {
@@ -37,14 +39,14 @@ export const router = createBrowserRouter([
             {path:"solve-test-page/:appId/:testId",element:<SolveTestPage/>},
             {
                 path: "admin-page",
-                element: <AdminPage />,
+                element: <ProtectedRoutes><AdminPage /></ProtectedRoutes>,
                 children:
                     [
                         { path: "creator-page", element: <CreatorPage /> },
                         { path: "application-page", element: <ApplicationPage /> },
                         { path: "classification-page", element: <ClassificationPage /> },
-                        { path: "users-management-page", element: <UsersManagementPage /> },
-                        { path: "job-offer-management-page", element: <JobOfferManagement /> },
+                        { path: "users-management-page", element: <AdminProtectedRoutes><UsersManagementPage /></AdminProtectedRoutes> },
+                        { path: "job-offer-management-page", element: <AdminProtectedRoutes><JobOfferManagement /></AdminProtectedRoutes> },
 
                     ]
             }

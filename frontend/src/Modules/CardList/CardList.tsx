@@ -10,7 +10,7 @@ interface Props{
 }
 
 const CardList: React.FC<Props> = ({JobTitleQuery,ProgrammingLanguage}) => {
-  const [jobOffer, setJobOffer] = useState<JobOfferGet[]>([]);
+  const [jobOffer, setJobOffer] = useState<JobOfferGet[] | null>(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -24,6 +24,13 @@ const CardList: React.FC<Props> = ({JobTitleQuery,ProgrammingLanguage}) => {
     };
     getData();
   }, [JobTitleQuery,ProgrammingLanguage]);
+
+if (!jobOffer)
+    return (
+      <div className="flex items-start h-64">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    );
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">

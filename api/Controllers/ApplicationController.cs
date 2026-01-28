@@ -115,6 +115,7 @@ namespace api.Controllers
         }
 
         [HttpGet("GroupedApps")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult> GetApplicationsGrouped([FromQuery] ApplicationsQueryObject query)
         {
             var result = await _appRepo.GroupedApplications(query);
@@ -124,6 +125,7 @@ namespace api.Controllers
         }
 
         [HttpPut("AssignTestToApp")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult> AssignTestToApp(int appId, int testId)
         {
             if (!ModelState.IsValid)
@@ -134,6 +136,7 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpPut("RejectApp")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult> RejectApp([FromBody] RejectAppDto dto)
         {
             if (!ModelState.IsValid)
@@ -146,6 +149,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.ToDto());
         }
         [HttpPost("AddAppEvaluation")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult> AddEvaluationForApp([FromBody] AddAppEvaluationDto dto)
         {
             if (!ModelState.IsValid)
@@ -158,6 +162,7 @@ namespace api.Controllers
             return Ok(dto);
         }
         [HttpGet("GetAppEvaluation")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task <IActionResult>GetEvaluationForApp(int appId)
         {
             if (!ModelState.IsValid)
@@ -173,6 +178,7 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpGet("GetClassification")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult>GetClassification()
         {
             var result = await _appRepo.GetClassificationAsync();
@@ -180,6 +186,7 @@ namespace api.Controllers
         }   
 
         [HttpPut("InviteToInterview")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult>InviteToInterview(int appId)
         {
             if(!ModelState.IsValid)
@@ -192,6 +199,7 @@ namespace api.Controllers
             return Ok(new{ Status=result.Status});
         }
         [HttpGet("UserSummary/{userId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult>GetUserSummary([FromRoute]string userId)
         {
             if(!ModelState.IsValid)

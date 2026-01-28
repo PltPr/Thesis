@@ -193,9 +193,33 @@ namespace api.Repository
             return result;
         }
 
-        public async Task<JobOffer> GetById(int id)
+        public async Task<JobOffer?> GetByAppIdAsync(int id)
+        {
+            var application = await _context.Applications.FindAsync(id);
+            if(application==null)
+                return null;
+            
+            var offerId= application.JobOfferId;
+            var offer = await _context.JobOffers.Include(x=>x.JobOfferTechnologyNiceToHave).ThenInclude(x=>x.Technology).Include(x=>x.JobOfferTechnologyRequired).ThenInclude(x=>x.Technology).FirstOrDefaultAsync(x=>x.Id==offerId);
+            if(offer==null)
+                return null;
+            return offer;
+        }
+
+        public async Task<JobOffer?> GetById(int id)
         {
             var offer = await _context.JobOffers.FindAsync(id);
+            if(offer==null)
+                return null;
+            return offer;
+        }
+
+        public async Task<JobOffer?> GetByTitleAsync(string title)
+        {
+            var offer = await _context.JobOffers.Where(x=>x.JobTitle==title).FirstOrDefaultAsync();
+            if(offer==null)
+                return null;
+
             return offer;
         }
 

@@ -2,6 +2,7 @@ import { createTestApi } from 'Api/ApplicationService';
 import { taskItem } from 'Models/Task';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 type FormData = {
   title: string;
@@ -29,8 +30,10 @@ const CreateTaskModal: React.FC<Props> = ({ tasks, onClose, onCreate }) => {
       await createTestApi(data.title, data.description, data.selectedTasks);
       onCreate();
       onClose();
+      toast.success("Test created!")
     } catch (err) {
       console.error('Failed to create test', err);
+      toast.error("Something went wrong!")
     }
   };
 

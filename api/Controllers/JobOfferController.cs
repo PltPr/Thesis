@@ -8,6 +8,7 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,49 @@ namespace api.Controllers
 
             return Ok(result);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult>GetById([FromRoute]int id)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var offer = await _offerRepository.GetById(id);
+            if(offer==null)
+                return NotFound();
+            
+            var result = offer.ToJobOfferDto();
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetByTitle/{title}")]
+        public async Task<IActionResult>GetByTitle([FromRoute]string title)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var offer = await _offerRepository.GetByTitleAsync(title);
+            if(offer==null)
+                return NotFound();
+            
+            var result = offer.ToJobOfferDto();
+
+            return Ok(result);
+        }
+        [HttpGet("GetByAppId/{id}")]
+        public async Task<IActionResult>GetByAppId([FromRoute]int id)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var offer = await _offerRepository.GetByAppIdAsync(id);
+            if(offer==null)
+                return NotFound();
+            
+            var result = offer.ToJobOfferDto();
+
+            return Ok(result);
+        }
 
         [HttpGet("technologies")]
         public async Task<IActionResult> GetAllTechnologies()
@@ -45,6 +89,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddJobOffer(AddJobOfferDto jobOfferDto)
         {
             if (!ModelState.IsValid)
@@ -63,6 +108,7 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpDelete("DeleteTechnologyFromOffer")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult>DeleteTechnologyFromOffer([FromBody]DeleteTechnologyDto dto)
         {
             if(!ModelState.IsValid)
@@ -78,6 +124,7 @@ namespace api.Controllers
             }
         }
         [HttpPost("AddTechnologyToOffer")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult>AddTechnologyToOffer([FromBody]AddTechnologyDto dto)
         {
             if(!ModelState.IsValid)
@@ -93,6 +140,7 @@ namespace api.Controllers
             
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult>UpdateJobOffer(int id,UpdateJobOfferDto dto)
         {
             if(!ModelState.IsValid)
@@ -110,6 +158,7 @@ namespace api.Controllers
             
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task <IActionResult> DeleteJobOffer(int id)
         {
             if(!ModelState.IsValid)
@@ -126,6 +175,7 @@ namespace api.Controllers
             }
         }
         [HttpPut("ChangeVisibility/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult>ChangeVisibility(int id,bool visibility)
         {
             if(!ModelState.IsValid)

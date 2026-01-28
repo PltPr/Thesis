@@ -13,7 +13,7 @@ const fadeInUp = {
 };
 
 const MyApplicationPage = (props: Props) => {
-  const [applications, setApplications] = useState<applicationModel[]>([])
+  const [applications, setApplications] = useState<applicationModel[]|null>(null)
 
   useEffect(() => {
     const getData = async () => {
@@ -41,6 +41,14 @@ const MyApplicationPage = (props: Props) => {
         return <FilePlus className="inline-block w-5 h-5 text-gray-500" />;
     }
   };
+
+
+  if (!applications)
+    return (
+      <div className="flex items-start h-64 m-5 min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white p-6">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    );
 
 
   return (

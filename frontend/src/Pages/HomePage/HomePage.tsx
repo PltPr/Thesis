@@ -1,15 +1,17 @@
 import React from 'react';
 import { useAuth } from 'Context/useAuth';
 import { FileText, CheckCircle, Code, Trophy, Paperclip, TrendingUp } from 'lucide-react';
-import { motion } from 'framer-motion';  // Import Framer Motion
+import { motion } from 'framer-motion';  
 
 const HomePage = () => {
 
-  // Framer Motion variants for fade-in and slide-up effects
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
+
+  var token = localStorage.getItem("token");
+  console.log(token)
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white">

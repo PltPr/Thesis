@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.CompilerDto;
 using api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -18,6 +19,7 @@ namespace api.Controllers
             _compRepo = compRepo;
         }
         [HttpPost("Compile")]
+        [Authorize]
         public async Task<IActionResult>Compile(CompileRequest request)
         {
             if (!ModelState.IsValid)

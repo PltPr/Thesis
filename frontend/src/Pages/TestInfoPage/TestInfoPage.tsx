@@ -8,7 +8,7 @@ type Props = {
 }
 
 const TestInfoPage = (props: Props) => {
-  const [test, setTest] = useState<Test>()
+  const [test, setTest] = useState<Test | null>(null)
   const { appId,testId } = useParams<{ appId:string,testId: string }>();
   
 
@@ -33,6 +33,12 @@ const TestInfoPage = (props: Props) => {
       console.error("StartTestError: ",err)
     }
   }
+  if(!test)
+    return (
+      <div className="flex items-start h-64 m-5 min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white p-6">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    );
 
 
   return (

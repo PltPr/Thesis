@@ -23,13 +23,17 @@ const ClassificationPage = () => {
     await getData();
   };
 
+
+
   return (
     <>
       <div className="p-6 max-w-6xl mx-auto bg-gradient-to-b from-blue-50 to-white min-h-screen rounded-3xl shadow-lg">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">Classification Results</h1>
 
         {!classifications && (
-          <p className="text-gray-500">Loading classification...</p>
+          <div className="flex items-start h-64 m-5 min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white p-6">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
         )}
 
         {classifications?.map((group, idx) => (

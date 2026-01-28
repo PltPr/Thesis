@@ -15,7 +15,9 @@ namespace api.Interfaces
         Task<List<Technology>> GetRequiredTechnologiesForOffer(int id);
         Task<List<Technology>> GetAllTechnologiesAsync();
         Task<JobOffer> AddJobOfferAsync(AddJobOfferDto jobOfferDto);
-        Task<JobOffer> GetById(int id);
+        Task<JobOffer?> GetById(int id);
+        Task<JobOffer?> GetByAppIdAsync(int id);
+        Task<JobOffer?> GetByTitleAsync(string title);
         Task<List<string>>GetJobOffersTitlesAsync();
         Task<bool>DeleteTechnologyFromOfferAsync(DeleteTechnologyDto dto);
         Task<bool>AddTechnologyToOfferAsync(AddTechnologyDto dto);

@@ -99,10 +99,16 @@ const RegisterPage = () => {
               className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-blue-500"
               {...register("password", {
                 required: "Hasło jest wymagane",
-                minLength: { value: 6, message: "Minimum 6 znaków" }
+                minLength: { value: 8, message: "Minimum 8 znaków" },
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                  message:
+                    "Hasło musi zawierać co najmniej jedną małą literę, jedną wielką literę oraz cyfrę"
+                }
               })}
             />
             {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
+
           </div>
 
           {/* Repeat Password */}

@@ -1,9 +1,10 @@
+import { useAuth } from 'Context/useAuth';
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
   const location = useLocation();
-
+  const {isAdmin,isExaminer}=useAuth();
   // Funkcja do ustalania klasy aktywnego linku
   const linkClass = (path: string) =>
     `block px-4 py-3 rounded-lg font-semibold uppercase transition-colors ${
@@ -15,7 +16,7 @@ const Sidebar = () => {
   return (
     <nav className="w-64 bg-white shadow-xl h-screen flex flex-col px-6 py-6 mt-6 rounded-2xl border border-blue-200">
       <div className="flex justify-center mb-10 border-b border-blue-200 pb-4">
-        <h1 className="text-2xl font-extrabold text-blue-700">Admin Panel</h1>
+        <h1 className="text-2xl font-extrabold text-blue-700">{isAdmin() ? "Admin Panel" : "Examiner Panel"}</h1>
       </div>
 
       <div className="flex flex-col flex-1 space-y-3">
@@ -28,12 +29,18 @@ const Sidebar = () => {
         <Link to="creator-page" className={linkClass('creator-page')}>
           Tests
         </Link>
-        <Link to="users-management-page" className={linkClass('users-management-page')}>
+        {isAdmin()&&(
+          <>
+          <Link to="users-management-page" className={linkClass('users-management-page')}>
           Users
         </Link>
         <Link to="job-offer-management-page" className={linkClass('job-offer-management-page')}>
           Job Offers
         </Link>
+          </>
+          
+        )}
+        
       </div>
     </nav>
   )

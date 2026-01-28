@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos.TaskDto;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -119,6 +120,7 @@ namespace api.Controllers
 
         }
         [HttpPut("AddEvaluationForSolution")]
+        [Authorize(Roles = "Admin,Examiner")]
         public async Task<IActionResult>AddEvaluationForSolution([FromBody] AddEvaluationForSolutionDto dto)
         {
             if(!ModelState.IsValid)

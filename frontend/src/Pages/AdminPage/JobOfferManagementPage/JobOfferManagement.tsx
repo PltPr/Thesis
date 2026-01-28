@@ -15,7 +15,7 @@ const JobOfferManagement = () => {
       const jobOfferData = await getJobOffersApi();
       if (jobOfferData) setJobOffers(jobOfferData);
     } catch (err) {
-      // Handle error if needed
+      // optional error handling
     }
   };
 
@@ -36,17 +36,19 @@ const JobOfferManagement = () => {
 
   if (!jobOffers)
     return (
-      <div className="flex justify-center items-center h-48">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white">
         <span className="loading loading-spinner loading-lg text-blue-500"></span>
       </div>
     );
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gradient-to-b from-blue-50 to-white rounded-3xl shadow-lg min-h-screen">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Zarządzanie ofertami pracy</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800">
+        Job Offer Management
+      </h2>
 
       {jobOffers.length === 0 ? (
-        <p className="text-gray-600 text-lg">Brak ofert pracy.</p>
+        <p className="text-gray-600 text-lg">No job offers available.</p>
       ) : (
         <ul className="divide-y divide-gray-300 rounded-xl border border-gray-300 bg-white shadow-md">
           {jobOffers.map((offer) => (
@@ -54,7 +56,9 @@ const JobOfferManagement = () => {
               key={offer.id}
               className="flex justify-between items-center px-6 py-4 hover:bg-blue-50 transition cursor-pointer"
             >
-              <span className="text-lg font-medium text-gray-900">{offer.jobTitle}</span>
+              <span className="text-lg font-medium text-gray-900">
+                {offer.jobTitle}
+              </span>
               <button
                 onClick={() => {
                   setModalOpen(true);
@@ -76,14 +80,20 @@ const JobOfferManagement = () => {
           className="bg-green-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition"
           aria-label="Add new job offer"
         >
-          Add Offer
+          Add Job Offer
         </button>
       </div>
 
       {modalOpen && selectedJobOffer && (
-        <JobOfferManagementModal onClose={handleClose} JobOfferData={selectedJobOffer} />
+        <JobOfferManagementModal
+          onClose={handleClose}
+          JobOfferData={selectedJobOffer}
+        />
       )}
-      {addJobOfferModalOpen && <AddJobOfferModal onClose={handleCloseAddOfferModal} />}
+
+      {addJobOfferModalOpen && (
+        <AddJobOfferModal onClose={handleCloseAddOfferModal} />
+      )}
     </div>
   );
 };

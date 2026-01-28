@@ -7,8 +7,8 @@ import TaskList from 'Modules/AdminPage/TaskList/TaskList'
 import TestList from 'Modules/AdminPage/TestList/TestList'
 import React, { useEffect, useState } from 'react'
 
-const CreatorPage = () => {
-  const [tasks, setTasks] = useState<taskItem[]>([])
+const CreatorPage: React.FC = () => {
+  const [tasks, setTasks] = useState<taskItem[] | null>(null)
   const [tests, setTests] = useState<Test[]>([])
   const [showModal, setShowModal] = useState(false)
 
@@ -20,6 +20,7 @@ const CreatorPage = () => {
       if (tasksData) setTasks(tasksData)
       if (testsData) setTests(testsData)
     }
+
     getData()
   }, [])
 
@@ -28,9 +29,18 @@ const CreatorPage = () => {
     if (testsData) setTests(testsData)
   }
 
+  if (!tasks) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br rounded-2xl from-blue-50 via-slate-100 to-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+
         {/* --- TEST PANEL --- */}
         <section className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 flex flex-col">
           <header className="flex justify-between items-center mb-8">
@@ -38,7 +48,6 @@ const CreatorPage = () => {
             <button
               onClick={() => setShowModal(true)}
               className="bg-blue-600 text-white px-5 py-2 rounded-xl shadow-md hover:bg-blue-700 transition"
-              aria-label="Create new test"
             >
               Create Test
             </button>
@@ -53,7 +62,6 @@ const CreatorPage = () => {
         </section>
       </div>
 
-      {/* --- MODAL --- */}
       {showModal && (
         <CreateTaskModal
           tasks={tasks}

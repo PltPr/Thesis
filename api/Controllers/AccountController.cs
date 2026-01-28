@@ -8,6 +8,7 @@ using api.Dtos.AccountDto;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Identity;
@@ -68,13 +69,7 @@ namespace api.Controllers
                         var roles = new List<string> { "User" };
 
                         var token = _tokenService.CreateToken(appUser, roles);
-                        Response.Cookies.Append("jwt", token, new CookieOptions
-                        {
-                            HttpOnly = true,
-                            Secure = false,
-                            SameSite = SameSiteMode.Lax,
-                            Expires = DateTime.UtcNow.AddDays(7)
-                        });
+                        
 
                         return Ok(
                             new NewUserDto
@@ -83,7 +78,8 @@ namespace api.Controllers
                                 Surname = appUser.Surname,
                                 PhoneNumber = appUser.PhoneNumber,
                                 Email = appUser.Email,
-                                Roles = roles.ToArray()
+                                Roles = roles.ToArray(),
+                                Token=token
                             }
                         );
                     }
@@ -119,13 +115,7 @@ namespace api.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = _tokenService.CreateToken(user, roles);
-            Response.Cookies.Append("jwt", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.Lax,
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
+            
 
             return Ok(
                 new NewUserDto
@@ -134,7 +124,8 @@ namespace api.Controllers
                     Surname = user.Surname,
                     PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
-                    Roles = roles.ToArray()
+                    Roles = roles.ToArray(),
+                    Token=token
                 }
             );
         }
@@ -206,6 +197,7 @@ namespace api.Controllers
             return Ok(result);
         }
         [HttpGet("GetAllUsers")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -222,6 +214,7 @@ namespace api.Controllers
         }
 
         [HttpPost("AddRole")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> AddRole([FromBody] AddRoleDto dto)
         {
             if (!ModelState.IsValid)
@@ -241,6 +234,7 @@ namespace api.Controllers
             return Ok(new { message = "Role added" });
         }
         [HttpPost("DeleteRole")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteRole([FromBody] RemoveRoleDto dto)
         {
             if (!ModelState.IsValid)

@@ -67,22 +67,30 @@ const SolveTestPage = (props: Props) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const tasksData = await getTasksForTestSolution(Number(appId))
-        if (tasksData) {
-          const unsolvedTasks = tasksData.filter((task) => !task.isSolved)
-          setTasksList(unsolvedTasks)
-        }
-      } catch (err) {
-        console.error('GetTasksList error', err)
-        toast.error('Failed to load tasks.')
-      } finally {
-        setLoading(false)
+  const getTasks = async () => {
+    try {
+      setLoading(true)
+
+      const tasksData = await getTasksForTestSolution(Number(appId))
+
+      if (tasksData) {
+        const unsolvedTasks = tasksData.filter(task => !task.isSolved)
+        setTasksList(unsolvedTasks)
+      } else {
+        setTasksList([])
       }
+    } catch (err) {
+      console.error('GetTasksList error', err)
+      toast.error('Failed to load tasks.')
+      setTasksList([])
+    } finally {
+      setLoading(false)
     }
-    getTasks()
-  }, [appId, testId])
+  }
+
+  getTasks()
+}, [appId])
+
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const lang = e.target.value
@@ -138,7 +146,12 @@ const SolveTestPage = (props: Props) => {
   }
 
   if (loading)
-    return <div className="p-5 text-gray-500 text-center">Loading tasks...</div>
+    return (
+      <div className="flex items-start h-64 m-5 min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-white p-6">
+        <span className="loading loading-spinner loading-lg text-blue-500"></span>
+      </div>
+    );
+
   if (!tasksList || tasksList.length === 0)
     return (
       <div className="p-5 text-gray-500 text-center">

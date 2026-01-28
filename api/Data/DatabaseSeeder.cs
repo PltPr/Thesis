@@ -8,7 +8,7 @@ namespace api.Data
         public static void Seed(ApplicationDBContext context)
         {
             // =====================================================================
-            //  TECHNOLOGIES (ROZSZERZONE)
+            //  TECHNOLOGIES
             // =====================================================================
             if (!context.Technologies.Any())
             {
@@ -21,7 +21,7 @@ namespace api.Data
                     new Technology { Name = "AWS" },
                     new Technology { Name = "HTML/CSS" },
 
-                    new Technology { Name = "Tailwind" },
+                    new Technology { Name = "Tailwind CSS" },
                     new Technology { Name = "Docker" },
                     new Technology { Name = "T-SQL" },
                     new Technology { Name = "Go" },
@@ -41,87 +41,134 @@ namespace api.Data
                 context.SaveChanges();
             }
 
-            
+            // =====================================================================
+            //  JOB OFFERS
+            // =====================================================================
             if (!context.JobOffers.Any())
             {
                 var jobOffers = new[]
                 {
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Junior Backend Developer",
                         JobType = "Full-Time",
                         Salary = 1300,
                         ProgrammingLanguage = "C#",
-                        Description = "Poszukujemy Junior Backend Developera znającego podstawy C#, REST API oraz SQL. Kandydat będzie rozwijał mikroserwisy w środowisku opartym o .NET i Docker. Oferujemy wsparcie mentora oraz realny wpływ na kod."
+                        Description =
+                            "We are looking for a Junior Backend Developer who has a basic understanding of C#, RESTful APIs and relational databases. " +
+                            "You will work on developing and maintaining backend services built with .NET, participate in code reviews and learn best practices. " +
+                            "The role includes working with Dockerized applications and collaborating closely with more experienced developers. " +
+                            "We offer strong mentorship, structured onboarding and the opportunity to grow into a mid-level role."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Mid Backend Developer",
                         JobType = "Full-Time",
                         Salary = 2500,
                         ProgrammingLanguage = "C#",
-                        Description = "Praca nad budową i utrzymaniem systemów backendowych w .NET 8, integracje systemów, optymalizacja zapytań SQL i projektowanie architektury usług."
+                        Description =
+                            "As a Mid Backend Developer, you will be responsible for building, maintaining and optimizing backend services using .NET 8. " +
+                            "Your daily tasks will include designing APIs, integrating external systems, improving database performance and ensuring code quality. " +
+                            "You will actively contribute to architectural decisions and work in an agile, cross-functional team environment."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Senior Backend Developer",
                         JobType = "Full-Time",
                         Salary = 3800,
                         ProgrammingLanguage = "C#",
-                        Description = "Wymagamy głębokiej wiedzy o architekturze mikroserwisów, projektowaniu API, optymalizacji systemów wysokiej dostępności oraz mentoringu młodszych programistów."
+                        Description =
+                            "We expect deep expertise in backend development, including microservice architecture, API design and high-availability systems. " +
+                            "The role involves making architectural decisions, improving system scalability and reliability, and mentoring junior developers. " +
+                            "You will have a significant impact on the technical direction of the product and work closely with DevOps and product teams."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Frontend Developer",
                         JobType = "Full-Time",
                         Salary = 2300,
                         ProgrammingLanguage = "JavaScript",
-                        Description = "Tworzenie interfejsów użytkownika przy użyciu React + TypeScript. Praca obejmuje projektowanie komponentów, optymalizację wydajności i współpracę z backendem."
+                        Description =
+                            "You will be responsible for developing modern user interfaces using React and TypeScript. " +
+                            "Your work will focus on reusable components, application performance, accessibility and seamless integration with backend APIs. " +
+                            "Close collaboration with designers and backend developers is an essential part of this role."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Junior Frontend Developer",
                         JobType = "Full-Time",
                         Salary = 1500,
                         ProgrammingLanguage = "JavaScript",
-                        Description = "Rozwój i utrzymanie aplikacji React. Dużo pracy z CSS, dostępnością, komponentami UI oraz testami jednostkowymi."
+                        Description =
+                            "This position is ideal for developers at the beginning of their frontend career. " +
+                            "You will work on maintaining and extending React applications, focusing on clean UI implementation, CSS styling and accessibility. " +
+                            "You will gain hands-on experience with component-based architecture and frontend testing."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Full Stack Developer",
                         JobType = "Full-Time",
                         Salary = 2900,
                         ProgrammingLanguage = "JavaScript",
-                        Description = "Praca obejmuje Node.js, React, SQL oraz Docker. Kandydat musi czuć się swobodnie zarówno we frontendzie, jak i backendzie."
+                        Description =
+                            "As a Full Stack Developer, you will work across the entire application stack, including Node.js, React and SQL databases. " +
+                            "The role requires confidence in both frontend and backend development, API design and containerized environments. " +
+                            "You will take part in designing features end-to-end, from database schema to user interface."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Senior Software Engineer",
                         JobType = "Contract",
                         Salary = 5000,
                         ProgrammingLanguage = "Java",
-                        Description = "Projektowanie architektury systemów wysokiej skalowalności, praca z Kubernetes, CI/CD, monitoringiem i integracjami enterprise."
+                        Description =
+                            "This role focuses on designing and developing highly scalable enterprise systems. " +
+                            "You will work with Kubernetes, CI/CD pipelines, monitoring tools and cloud infrastructure. " +
+                            "The position requires strong system design skills and experience with large, distributed architectures."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Junior QA Engineer",
                         JobType = "Full-Time",
                         Salary = 1400,
                         ProgrammingLanguage = "JavaScript",
-                        Description = "Pisanie testów automatycznych, testowanie API, praca z Postmanem i narzędziami CI/CD."
+                        Description =
+                            "You will be responsible for writing and maintaining automated tests, testing APIs and validating application functionality. " +
+                            "The role includes working with tools such as Postman and CI/CD pipelines to ensure software quality. " +
+                            "This position offers a strong foundation for a career in quality assurance and test automation."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "Data Scientist",
                         JobType = "Full-Time",
                         Salary = 3200,
                         ProgrammingLanguage = "Python",
-                        Description = "Modelowanie danych, budowa modeli ML, analiza danych, praca z SQL i dużymi zbiorami danych (BigQuery, pandas)."
+                        Description =
+                            "The Data Scientist role focuses on data analysis, statistical modeling and machine learning. " +
+                            "You will work with large datasets, build predictive models and collaborate with engineering teams to deploy solutions. " +
+                            "Experience with SQL and data processing libraries such as pandas is required."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "DevOps Engineer",
                         JobType = "Full-Time",
                         Salary = 4000,
                         ProgrammingLanguage = "Go",
-                        Description = "Budowa pipelines CI/CD, automatyzacja infrastruktury Terraform, konteneryzacja oraz orkiestracja Kubernetes."
+                        Description =
+                            "You will be responsible for building and maintaining CI/CD pipelines and automating cloud infrastructure. " +
+                            "The role includes working with Terraform, Docker and Kubernetes to ensure reliable deployments. " +
+                            "You will collaborate closely with development teams to improve system stability and deployment processes."
                     },
-                    new JobOffer {
+                    new JobOffer
+                    {
                         JobTitle = "UI/UX Designer",
                         JobType = "Full-Time",
                         Salary = 2500,
                         ProgrammingLanguage = "N/A",
-                        Description = "Projektowanie intuicyjnych interfejsów użytkownika, praca z Figma, prototypowaniem oraz optymalizacją użyteczności."
+                        Description =
+                            "You will design intuitive and visually appealing user interfaces. " +
+                            "Your responsibilities include creating wireframes, prototypes and design systems using tools such as Figma. " +
+                            "You will work closely with developers to ensure a consistent and user-friendly experience."
                     }
                 };
 
@@ -130,18 +177,18 @@ namespace api.Data
             }
 
             // =====================================================================
-            //  REQUIRED TECHNOLOGIES (ROZBUDOWANE)
+            //  REQUIRED TECHNOLOGIES
             // =====================================================================
             if (!context.JobOfferTechnologiesRequired.Any())
             {
                 var required = new[]
                 {
-                    new JobOfferTechnologyRequired { JobOfferId = 1, TechnologyIdRequired = 7 }, 
-                    new JobOfferTechnologyRequired { JobOfferId = 1, TechnologyIdRequired = 3 }, 
+                    new JobOfferTechnologyRequired { JobOfferId = 1, TechnologyIdRequired = 7 },
+                    new JobOfferTechnologyRequired { JobOfferId = 1, TechnologyIdRequired = 3 },
                     new JobOfferTechnologyRequired { JobOfferId = 2, TechnologyIdRequired = 7 },
                     new JobOfferTechnologyRequired { JobOfferId = 2, TechnologyIdRequired = 16 },
                     new JobOfferTechnologyRequired { JobOfferId = 3, TechnologyIdRequired = 7 },
-                    new JobOfferTechnologyRequired { JobOfferId = 3, TechnologyIdRequired = 14 }, 
+                    new JobOfferTechnologyRequired { JobOfferId = 3, TechnologyIdRequired = 14 },
                     new JobOfferTechnologyRequired { JobOfferId = 4, TechnologyIdRequired = 1 },
                     new JobOfferTechnologyRequired { JobOfferId = 4, TechnologyIdRequired = 11 },
                     new JobOfferTechnologyRequired { JobOfferId = 5, TechnologyIdRequired = 1 },
@@ -158,7 +205,7 @@ namespace api.Data
             }
 
             // =====================================================================
-            //  NICE TO HAVE TECHNOLOGIES (ROZBUDOWANE)
+            //  NICE TO HAVE TECHNOLOGIES
             // =====================================================================
             if (!context.JobOfferTechnologiesNiceToHave.Any())
             {
@@ -176,22 +223,22 @@ namespace api.Data
             }
 
             // =====================================================================
-            //  TASK ITEMS (PROSTE, TERMINALOWE, PROGRAMISTYCZNE)
+            //  TASK ITEMS
             // =====================================================================
             if (!context.TaskItems.Any())
             {
                 var tasks = new[]
                 {
-                    new TaskItem { Description = "Napisz funkcję, która odwraca stringa podanego jako argument", ExpectedOutput = "'abc' -> 'cba'", DurationMinutes = 5 },
-                    new TaskItem { Description = "Wypisz liczby od 1 do 100, każdą w nowej linii", ExpectedOutput = "1 2 3 ... 100", DurationMinutes = 4 },
-                    new TaskItem { Description = "Policz sumę wszystkich liczb w podanym zbiorze", ExpectedOutput = "[1,2,3] -> 6", DurationMinutes = 5 },
-                    new TaskItem { Description = "Zaimplementuj sortowanie bąbelkowe", ExpectedOutput = "Posortowana tablica", DurationMinutes = 10 },
-                    new TaskItem { Description = "Wypisz wszystkie pliki w bieżącym katalogu", ExpectedOutput = "lista plików", DurationMinutes = 4 },
-                    new TaskItem { Description = "Stwórz plik o nazwie 'test.txt' i wpisz do niego dowolny tekst", ExpectedOutput = "plik utworzony + treść", DurationMinutes = 3 },
-                    new TaskItem { Description = "Wypisz długość każdego elementu tablicy stringów", ExpectedOutput = "['a','bb','ccc'] -> [1,2,3]", DurationMinutes = 6 },
-                    new TaskItem { Description = "Pobierz dane z endpointu HTTP i wypisz je w konsoli", ExpectedOutput = "dane JSON", DurationMinutes = 12 },
-                    new TaskItem { Description = "Napisz program, który liczy ilość wystąpień każdego znaku w stringu", ExpectedOutput = "a:2, b:1", DurationMinutes = 7 },
-                    new TaskItem { Description = "Wygeneruj 20 losowych liczb i wypisz największą z nich", ExpectedOutput = "max value", DurationMinutes = 6 },
+                    new TaskItem { Description = "Write a function that reverses a given string", ExpectedOutput = "'abc' -> 'cba'", DurationMinutes = 5 },
+                    new TaskItem { Description = "Print numbers from 1 to 100, each on a new line", ExpectedOutput = "1 2 3 ... 100", DurationMinutes = 4 },
+                    new TaskItem { Description = "Calculate the sum of all numbers in a given collection", ExpectedOutput = "[1,2,3] -> 6", DurationMinutes = 5 },
+                    new TaskItem { Description = "Implement the bubble sort algorithm", ExpectedOutput = "Sorted array", DurationMinutes = 10 },
+                    new TaskItem { Description = "List all files in the current directory", ExpectedOutput = "File list", DurationMinutes = 4 },
+                    new TaskItem { Description = "Create a file named 'test.txt' and write any text into it", ExpectedOutput = "File created with content", DurationMinutes = 3 },
+                    new TaskItem { Description = "Print the length of each string in an array", ExpectedOutput = "['a','bb','ccc'] -> [1,2,3]", DurationMinutes = 6 },
+                    new TaskItem { Description = "Fetch data from an HTTP endpoint and print it to the console", ExpectedOutput = "JSON data", DurationMinutes = 12 },
+                    new TaskItem { Description = "Count the occurrences of each character in a string", ExpectedOutput = "a:2, b:1", DurationMinutes = 7 },
+                    new TaskItem { Description = "Generate 20 random numbers and print the maximum value", ExpectedOutput = "Max value", DurationMinutes = 6 },
                 };
 
                 context.TaskItems.AddRange(tasks);
@@ -199,16 +246,16 @@ namespace api.Data
             }
 
             // =====================================================================
-            //  TESTS + RELATIONS (ROZSZERZONE)
+            //  TESTS AND RELATIONS
             // =====================================================================
             if (!context.Tests.Any())
             {
                 var tests = new[]
                 {
-                    new Test { Tittle = "Test Backend C#", Description = "Wiedza z zakresu .NET, API, algorytmów oraz SQL." },
-                    new Test { Tittle = "Test Frontend JS", Description = "Pytania + praktyczne zadania z JavaScript, React i TypeScript." },
-                    new Test { Tittle = "Test Data Science", Description = "Analiza danych, SQL, manipulacja danymi, modele ML." },
-                    new Test { Tittle = "Test DevOps", Description = "Kubernetes, Docker, CI/CD, automatyzacja infrastruktury." }
+                    new Test { Tittle = "Backend C# Test", Description = "Knowledge of .NET, APIs, algorithms and SQL." },
+                    new Test { Tittle = "Frontend JavaScript Test", Description = "JavaScript fundamentals, React and TypeScript tasks." },
+                    new Test { Tittle = "Data Science Test", Description = "Data analysis, SQL queries and machine learning basics." },
+                    new Test { Tittle = "DevOps Test", Description = "Docker, Kubernetes, CI/CD pipelines and infrastructure automation." }
                 };
 
                 context.Tests.AddRange(tests);

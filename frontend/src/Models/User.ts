@@ -3,7 +3,8 @@ export type UserProfileToken={
     surname:string;
     phoneNumber:string;
     email:string;
-    roles:string[]
+    roles:string[];
+    token:string;
 }
 export type UserProfile={
     name:string,

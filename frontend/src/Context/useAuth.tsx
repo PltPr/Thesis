@@ -5,7 +5,8 @@ import { loginAPI, logoutApi, registerAPI } from "../Api/AuthService";
 import { toast } from "react-toastify";
 import React from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode"
+import api from "Api/api";
+
 
 type UserContextType={
     user:UserProfile | null;
@@ -14,11 +15,21 @@ type UserContextType={
     logout:()=>void;
     isLoggedIn:()=>boolean;
     isAdmin:()=>boolean;
+    isExaminer:()=>boolean;
 }
 
 type Props={children:React.ReactNode};
 
 const UserContext=createContext<UserContextType>({} as UserContextType)
+
+export const setAxiosToken = (token: string | null) => {
+  if (token) {
+    api.defaults.headers.common["Authorization"] = "Bearer " + token;
+  } else {
+    delete api.defaults.headers.common["Authorization"];
+  }
+};
+
 
 export const UserProvider=({children}:Props)=>{
     const navigate = useNavigate();
@@ -28,11 +39,15 @@ export const UserProvider=({children}:Props)=>{
 
 useEffect(() => {
   const userStr = localStorage.getItem("user");
+  const token = localStorage.getItem("token");
+  console.log("Loaded token from storage:", token);
   if (userStr) {
     setUser(JSON.parse(userStr));
   }
+  if (token) setAxiosToken(token);
   setIsReady(true);
 }, []);
+
 
 
 const registerUser = async(name:string,surname:string,phoneNumber:string,email:string,password:string,repeatPassword:string)=>{
@@ -47,6 +62,8 @@ const registerUser = async(name:string,surname:string,phoneNumber:string,email:s
                 roles:res?.data.roles
             };
             localStorage.setItem("user", JSON.stringify(userObj));
+            localStorage.setItem("token", res.data.token);
+            setAxiosToken(res.data.token);
             setUser(userObj!);
             toast.success("Register success");
             navigate("/");
@@ -75,6 +92,8 @@ const loginUser = async (email: string, password: string) => {
                 roles:res?.data.roles
             };
             localStorage.setItem("user", JSON.stringify(userObj));
+            localStorage.setItem("token", res.data.token);
+            setAxiosToken(res.data.token);
 
             setUser(userObj!);
             toast.success("Login success");
@@ -102,17 +121,24 @@ const isAdmin=()=>{
         return true;
     return false;
 }
+const isExaminer =()=>{
+    if(user?.roles&&user.roles.includes("Examiner")&&!user.roles.includes("Admin"))
+        return true;
+    return false;
+}
 
 const logout=async ()=>{
     localStorage.removeItem("user");
     setUser(null);
     await logoutApi();
+    localStorage.removeItem("token");
+    setAxiosToken(null);
     navigate("/");
     
 }
 
 return (
-<UserContext.Provider value={{loginUser,user,logout,isLoggedIn,registerUser,isAdmin}}>
+<UserContext.Provider value={{loginUser,user,logout,isLoggedIn,registerUser,isAdmin,isExaminer}}>
     {isReady ? children : null}
 </UserContext.Provider>
 )
