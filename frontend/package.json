@@ -9,7 +9,7 @@
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "@uiw/react-codemirror": "^4.25.3",
-    "axios": "^1.7.9",
+    "axios": "^1.13.5",
     "cra-template-typescript": "1.2.0",
     "daisyui": "^4.12.24",
     "framer-motion": "^12.23.24",
